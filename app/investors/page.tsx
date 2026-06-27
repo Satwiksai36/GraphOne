@@ -365,7 +365,7 @@ export default function InvestorsDiscoveryPage() {
             <div
               key={idx}
               onClick={() => toast(`Opening Report: ${report.title}`, 'info')}
-              className={`p-4 rounded-xl border bg-gradient-to-br ${report.bg} flex flex-col justify-between h-[180px] hover:shadow-xs transition-shadow cursor-pointer relative overflow-hidden`}
+              className={`p-4 rounded-xl border bg-linear-to-br ${report.bg} flex flex-col justify-between h-[180px] hover:shadow-xs transition-shadow cursor-pointer relative overflow-hidden`}
             >
               <div className="absolute right-0 bottom-0 w-1/2 h-1/2 opacity-20 pointer-events-none">
                 <FileText className="w-full h-full" />

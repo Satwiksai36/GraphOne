@@ -119,7 +119,7 @@ export default function ProductsPage() {
           <div className="space-y-4 relative z-10 flex-1">
             <span className="text-[10px] uppercase font-black tracking-widest text-primary leading-none block">Live AI Intelligence</span>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-tight">
-              The Global Intelligence <br />Layer <span className="text-red-500 bg-linear-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">for AI</span>.
+              The Global Intelligence <br />Layer <span className="bg-linear-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">for AI</span>.
             </h1>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-lg">
               One graph connecting companies, founders, investors, products, funding and talent.

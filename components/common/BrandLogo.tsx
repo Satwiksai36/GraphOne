@@ -136,7 +136,7 @@ export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
   if (normId.includes('anthropic')) {
     return (
       <div className={`rounded-xl bg-[#191919] flex items-center justify-center text-[#cc9f7a] font-extrabold border border-[#cc9f7a]/25 shrink-0 ${className}`}>
-        <svg className="w-6 h-6 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+        <svg className="w-6 h-6 stroke-current fill-none stroke-2.5" viewBox="0 0 24 24">
           <path d="M4 20L12 4L20 20M6 16H18" />
         </svg>
       </div>
@@ -146,7 +146,7 @@ export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
   if (normId.includes('perplexity')) {
     return (
       <div className={`rounded-xl bg-[#002f2b] flex items-center justify-center text-[#20e8d5] p-1.5 shrink-0 border border-[#20e8d5]/20 ${className}`}>
-        <svg className="w-full h-full fill-none stroke-current stroke-[2]" viewBox="0 0 24 24">
+        <svg className="w-full h-full fill-none stroke-current stroke-2" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" />
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
           <path d="M2 12h20" />
@@ -166,7 +166,7 @@ export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
   if (normId.includes('midjourney')) {
     return (
       <div className={`rounded-xl bg-[#080710] flex items-center justify-center text-white p-1.5 shrink-0 border border-white/10 ${className}`}>
-        <svg className="w-full h-full fill-none stroke-current stroke-[1.5]" viewBox="0 0 24 24">
+        <svg className="w-full h-full fill-none stroke-current stroke-1.5" viewBox="0 0 24 24">
           <path d="M12 2a10 10 0 0 0-10 10c0 5.5 4.5 10 10 10s10-4.5 10-10A10 10 0 0 0 12 2zm1 14.5c-2 0-3.5-.8-4.5-2 .5-1.5 2-2 3.5-2s3 .5 3.5 2c-1 1.2-2.5 2-2.5 2z" />
           <path d="M12 4l-4 7h8l-4-7z" fill="currentColor" />
         </svg>

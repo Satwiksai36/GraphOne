@@ -326,7 +326,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
                 { year: 2025, text: 'Growth Equity Expansion' }
               ].map((row) => (
                 <div key={row.year} className="relative text-xs flex flex-col gap-0.5">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-primary border border-white" />
+                  <span className="absolute left-[-21px] top-1.5 w-2 h-2 rounded-full bg-primary border border-white" />
                   <span className="font-bold text-foreground leading-none">{row.year}</span>
                   <span className="text-muted-foreground text-[10px] leading-relaxed">{row.text}</span>
                 </div>
