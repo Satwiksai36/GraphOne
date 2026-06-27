@@ -16,9 +16,9 @@ export function Navbar() {
     { name: 'Companies', href: '/' },
     { name: 'Products', href: '/products' },
     { name: 'Investors', href: '/investors' },
-    { name: 'Funding', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'News', href: '#' }
+    { name: 'Funding', href: '/funding' },
+    { name: 'Jobs', href: '/jobs' },
+    { name: 'News', href: '/news' }
   ];
 
   return (
@@ -29,7 +29,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/20 transition-transform group-hover:scale-105 duration-200">
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z"/>
+                <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z" />
               </svg>
             </span>
             <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary leading-none">
@@ -40,10 +40,10 @@ export function Navbar() {
           {/* Nav Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = 
-                (link.href === '/' && pathname === '/') || 
+              const isActive =
+                (link.href === '/' && pathname === '/') ||
                 (link.href !== '/' && pathname.startsWith(link.href));
-              
+
               return (
                 <Link
                   key={link.name}

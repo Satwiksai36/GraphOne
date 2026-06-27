@@ -230,30 +230,65 @@ export default function CompaniesHomePage() {
             </div>
           </div>
 
-          {/* Right Floating Diagram Column */}
-          <div className="lg:col-span-5 hidden lg:flex justify-center relative select-none">
-            {/* Custom SVG Nodes Simulation */}
+          {/* Right Floating Diagram Column (Matching mockup design) */}
+          <div className="lg:col-span-5 hidden lg:flex justify-center relative select-none h-[380px]">
             <div className="relative w-80 h-80 flex items-center justify-center">
-              <div className="absolute inset-0 border border-dashed rounded-full border-muted-foreground/20 animate-spin [animation-duration:40s]" />
-              <div className="absolute inset-8 border border-dashed rounded-full border-muted-foreground/30 animate-spin [animation-duration:20s] [animation-direction:reverse]" />
               
-              {/* Central Core */}
-              <div className="w-16 h-16 rounded-2xl bg-primary text-white shadow-xl shadow-primary/20 flex items-center justify-center z-10">
-                <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z"/>
+              {/* Concentric circles and line guidelines - Further expanded for extra spacing */}
+              <svg className="absolute inset-0 w-full h-full stroke-zinc-200/30 dark:stroke-zinc-800/20 fill-none pointer-events-none" viewBox="-160 -160 320 320">
+                {/* Rings */}
+                <circle cx="0" cy="0" r="145" strokeDasharray="3 3" />
+                <circle cx="0" cy="0" r="105" strokeDasharray="4 4" />
+                <circle cx="0" cy="0" r="65" strokeDasharray="2 2" />
+                
+                {/* Guideline connections and intersection dot handles */}
+                {[270, 200, 340, 145, 35].map((angle) => {
+                  const rad = (angle * Math.PI) / 180;
+                  const rx145 = Math.cos(rad) * 145;
+                  const ry145 = Math.sin(rad) * 145;
+                  const rx105 = Math.cos(rad) * 105;
+                  const ry105 = Math.sin(rad) * 105;
+                  const rx65 = Math.cos(rad) * 65;
+                  const ry65 = Math.sin(rad) * 65;
+                  return (
+                    <React.Fragment key={angle}>
+                      <line x1="0" y1="0" x2={rx145} y2={ry145} stroke="#fca5a5" strokeWidth="1" strokeDasharray="2 2" className="opacity-50" />
+                      <circle cx={rx145} cy={ry145} r="2.5" fill="#ef4444" className="opacity-80" />
+                      <circle cx={rx105} cy={ry105} r="2" fill="#ef4444" className="opacity-60" />
+                      <circle cx={rx65} cy={ry65} r="1.5" fill="#ef4444" className="opacity-40" />
+                    </React.Fragment>
+                  );
+                })}
+              </svg>
+
+              {/* Central Core: Red Hexagon with Layer Stack Icon */}
+              <div className="w-16 h-16 relative flex items-center justify-center z-10 filter drop-shadow-[0_4px_8px_rgba(239,68,68,0.2)]">
+                <svg className="absolute w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="core-hex-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ff4b5a" />
+                      <stop offset="100%" stopColor="#ef4444" />
+                    </linearGradient>
+                  </defs>
+                  <polygon points="50,5 93,30 93,80 50,95 7,80 7,30" fill="url(#core-hex-gradient)" />
+                </svg>
+                <svg className="w-7 h-7 text-white z-20 relative" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
                 </svg>
               </div>
 
-              {/* Orbiting Points */}
+              {/* Orbiting Points - Styled as vertical logo cards */}
               {[
-                { label: 'OpenAI', angle: 0, delay: 0 },
-                { label: 'Anthropic', angle: 72, delay: 0.5 },
-                { label: 'Perplexity', angle: 144, delay: 1 },
-                { label: 'Midjourney', angle: 216, delay: 1.5 },
-                { label: 'Cursor', angle: 288, delay: 2 }
-              ].map((orbit, i) => {
+                { label: 'OpenAI', angle: 270, delay: 0 },
+                { label: 'Midjourney', angle: 200, delay: 1.5 },
+                { label: 'Anthropic', angle: 340, delay: 2 },
+                { label: 'Perplexity', angle: 145, delay: 1 },
+                { label: 'Cursor', angle: 35, delay: 0.5 }
+              ].map((orbit) => {
                 const radian = (orbit.angle * Math.PI) / 180;
-                const radius = 110;
+                const radius = 145;
                 const x = Math.cos(radian) * radius;
                 const y = Math.sin(radian) * radius;
 
@@ -261,12 +296,19 @@ export default function CompaniesHomePage() {
                   <motion.div
                     key={orbit.label}
                     initial={{ scale: 0 }}
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ repeat: Infinity, duration: 4, delay: orbit.delay }}
-                    style={{ x, y }}
-                    className="absolute cursor-pointer"
+                    animate={{ scale: [1, 1.03, 1] }}
+                    transition={{ repeat: Infinity, duration: 5, delay: orbit.delay }}
+                    style={{ 
+                      left: `calc(50% + ${x}px - 48px)`, 
+                      top: `calc(50% + ${y}px - 48px)` 
+                    }}
+                    onClick={() => toast(`Opening ${orbit.label}`, 'info')}
+                    className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-2xl p-2.5 flex flex-col items-center justify-center w-[96px] h-[96px] cursor-pointer hover:border-zinc-300 transition-all select-none"
                   >
-                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-10 h-10 border shadow-md" />
+                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-10 h-10 border-none shrink-0" />
+                    <span className="text-[11px] font-black text-zinc-800 mt-2 leading-none text-center truncate w-full">
+                      {orbit.label}
+                    </span>
                   </motion.div>
                 );
               })}

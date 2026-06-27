@@ -355,6 +355,40 @@ export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10
     );
   }
 
+  if (normId.includes('lightspeed')) {
+    return (
+      <div className={`rounded-xl bg-[#ff3b30] flex items-center justify-center text-white font-extrabold shrink-0 ${className}`}>
+        <svg className="w-full h-full p-1.5 fill-current" viewBox="0 0 24 24">
+          <path d="M8 2l8 6-5 2 7 8-12 4 3-8-5-2z" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (normId.includes('accel')) {
+    return (
+      <div className={`rounded-xl bg-[#df1921] flex items-center justify-center text-white font-black shrink-0 ${className}`}>
+        <span className="text-[11px] font-black tracking-tighter uppercase">Accel</span>
+      </div>
+    );
+  }
+
+  if (normId.includes('general-catalyst') || normId.includes('general catalyst')) {
+    return (
+      <div className={`rounded-xl bg-[#4b2f89] flex items-center justify-center text-white font-black shrink-0 ${className}`}>
+        <span className="text-xs font-black">G</span>
+      </div>
+    );
+  }
+
+  if (normId.includes('khosla')) {
+    return (
+      <div className={`rounded-xl bg-[#111111] flex items-center justify-center text-white font-black shrink-0 ${className}`}>
+        <span className="text-[9px] font-black tracking-tight text-[#8cc63f]">KHOSLA</span>
+      </div>
+    );
+  }
+
   if (normId.includes('y-combinator') || normId === 'yc') {
     return (
       <div className={`rounded-xl bg-[#ff6600] flex items-center justify-center text-white font-extrabold shrink-0 ${className}`}>

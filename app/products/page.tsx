@@ -160,50 +160,75 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Right Side Node Network SVG */}
-          <div className="w-full md:w-1/3 flex items-center justify-center relative select-none pointer-events-none shrink-0">
-            <svg className="w-[180px] h-[180px]" viewBox="0 0 200 200">
-              {/* Outer ring */}
-              <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="1" strokeDasharray="3,3" />
-              <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" strokeOpacity="0.05" strokeWidth="1" />
+          {/* Right Side Node Network SVG - Upgraded with CompanyLogo cards */}
+          <div className="w-full md:w-1/3 hidden md:flex justify-center relative select-none h-[280px] shrink-0">
+            <div className="relative w-[280px] h-[280px] flex items-center justify-center">
               
-              {/* Connecting lines */}
-              <line x1="100" y1="100" x2="100" y2="40" stroke="var(--primary)" strokeOpacity="0.3" strokeWidth="1" />
-              <line x1="100" y1="100" x2="150" y2="70" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
-              <line x1="100" y1="100" x2="140" y2="140" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
-              <line x1="100" y1="100" x2="60" y2="140" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
-              <line x1="100" y1="100" x2="50" y2="70" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
+              {/* Concentric circles and line guidelines - Moved back from center */}
+              <svg className="absolute inset-0 w-full h-full stroke-zinc-200/35 dark:stroke-zinc-800/20 fill-none pointer-events-none" viewBox="-120 -120 240 240">
+                {/* Rings */}
+                <circle cx="0" cy="0" r="102" strokeDasharray="3 3" />
+                <circle cx="0" cy="0" r="68" strokeDasharray="4 4" />
+                <circle cx="0" cy="0" r="40" strokeDasharray="2 2" />
+                
+                {/* Connections */}
+                {[270, 342, 54, 126, 198].map((angle) => {
+                  const rad = (angle * Math.PI) / 180;
+                  const rx102 = Math.cos(rad) * 102;
+                  const ry102 = Math.sin(rad) * 102;
+                  return (
+                    <line key={angle} x1="0" y1="0" x2={rx102} y2={ry102} stroke="#fca5a5" strokeWidth="1" strokeDasharray="2 2" className="opacity-50" />
+                  );
+                })}
+              </svg>
 
-              {/* Central Core Node */}
-              <circle cx="100" cy="100" r="16" fill="var(--primary)" />
-              <path d="M96 95h8v2h-8zm0 4h8v2h-8zm0 4h8v2h-8z" fill="white" />
+              {/* Central Core: Red Hexagon with Layer Stack Icon */}
+              <div className="w-12 h-12 relative flex items-center justify-center z-10 filter drop-shadow-[0_4px_6px_rgba(239,68,68,0.2)]">
+                <svg className="absolute w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="50,5 93,30 93,80 50,95 7,80 7,30" fill="#ef4444" />
+                </svg>
+                <svg className="w-5.5 h-5.5 text-white z-20 relative" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
+                </svg>
+              </div>
 
-              {/* Outer Nodes */}
-              {/* OpenAI (top) */}
-              <circle cx="100" cy="40" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
-              <circle cx="100" cy="40" r="3" fill="var(--primary)" />
-              <text x="100" y="25" textAnchor="middle" fontSize="8" fontWeight="bold" fill="currentColor">OpenAI</text>
+              {/* Orbiting Company logo cards */}
+              {[
+                { label: 'OpenAI', angle: 270, delay: 0 },
+                { label: 'Cursor', angle: 342, delay: 0.5 },
+                { label: 'Perplexity', angle: 54, delay: 1 },
+                { label: 'Midjourney', angle: 126, delay: 1.5 },
+                { label: 'Anthropic', angle: 198, delay: 2 }
+              ].map((orbit) => {
+                const radian = (orbit.angle * Math.PI) / 180;
+                const radius = 102;
+                const x = Math.cos(radian) * radius;
+                const y = Math.sin(radian) * radius;
 
-              {/* Cursor (top-right) */}
-              <circle cx="150" cy="70" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
-              <circle cx="150" cy="70" r="3" fill="currentColor" fillOpacity="0.4" />
-              <text x="165" y="73" textAnchor="start" fontSize="8" fontWeight="bold" fill="currentColor">Cursor</text>
+                return (
+                  <motion.div
+                    key={orbit.label}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: [1, 1.03, 1] }}
+                    transition={{ repeat: Infinity, duration: 5, delay: orbit.delay }}
+                    style={{ 
+                      left: `calc(50% + ${x}px - 38px)`, 
+                      top: `calc(50% + ${y}px - 38px)` 
+                    }}
+                    onClick={() => toast(`Opening ${orbit.label}`, 'info')}
+                    className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-xl p-1.5 flex flex-col items-center justify-center w-[76px] h-[76px] cursor-pointer hover:border-zinc-350 transition-all select-none"
+                  >
+                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-7 h-7 border-none shrink-0" />
+                    <span className="text-[9px] font-black text-zinc-800 mt-1 leading-none text-center truncate w-full">
+                      {orbit.label}
+                    </span>
+                  </motion.div>
+                );
+              })}
 
-              {/* Perplexity (bottom-right) */}
-              <circle cx="140" cy="140" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
-              <circle cx="140" cy="140" r="3" fill="currentColor" fillOpacity="0.4" />
-              <text x="153" y="148" textAnchor="start" fontSize="8" fontWeight="bold" fill="currentColor">Perplexity</text>
-
-              {/* Midjourney (bottom-left) */}
-              <circle cx="60" cy="140" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
-              <circle cx="60" cy="140" r="3" fill="currentColor" fillOpacity="0.4" />
-              <text x="47" y="148" textAnchor="end" fontSize="8" fontWeight="bold" fill="currentColor">Midjourney</text>
-
-              {/* Anthropic (top-left) */}
-              <circle cx="50" cy="70" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
-              <circle cx="50" cy="70" r="3" fill="currentColor" fillOpacity="0.4" />
-              <text x="35" y="73" textAnchor="end" fontSize="8" fontWeight="bold" fill="currentColor">Anthropic</text>
-            </svg>
+            </div>
           </div>
         </section>
 
