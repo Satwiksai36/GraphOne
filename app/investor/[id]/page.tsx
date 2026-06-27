@@ -84,7 +84,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
                 </h1>
                 {investor.isVerified && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold border border-emerald-500/20 select-none">
-                    <Check className="w-3 h-3 stroke-[3]" /> Verified Investor
+                    <Check className="w-3 h-3 stroke-3" /> Verified Investor
                   </span>
                 )}
               </div>
