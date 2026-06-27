@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { Company } from '@/types';
 import { MiniGrowthChart } from '../charts/MiniGrowthChart';
 
+import { CompanyLogo } from '../common/BrandLogo';
+
 interface GrowthCardProps {
   company: Company;
   index: number;
@@ -40,9 +42,7 @@ export function GrowthCard({ company, index }: GrowthCardProps) {
         {/* Content Area */}
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground select-none shrink-0">
-              {company.name[0]}
-            </div>
+            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
             <div className="min-w-0">
               <h4 className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
                 {company.name}

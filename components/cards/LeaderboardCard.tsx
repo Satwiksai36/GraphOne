@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { CompanyLogo } from '@/components/common/BrandLogo';
+
 export interface LeaderboardItem {
   id: string;
   name: string;
@@ -40,9 +42,7 @@ export function LeaderboardCard({ title, number, subtitle, items }: LeaderboardC
           <Link key={item.id} href={item.route} className="block group">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-secondary border flex items-center justify-center font-bold text-xs text-muted-foreground shrink-0 select-none">
-                  {item.name[0]}
-                </div>
+                <CompanyLogo id={item.id} name={item.name} className="w-8 h-8 shrink-0" />
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
                     {item.name}

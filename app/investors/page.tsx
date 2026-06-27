@@ -3,11 +3,12 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, Sparkles, ShieldCheck, FileText, ArrowRight, Brain, Cpu, Bot, Heart, Shield, Terminal, Film, ArrowDownRight, Globe } from 'lucide-react';
+import { Search, Sparkles, ShieldCheck, FileText, ArrowRight, Brain, Cpu, Bot, Heart, Shield, Terminal, Film, ArrowDownRight, Globe, DollarSign, Users, Briefcase, Flame } from 'lucide-react';
 import { investors, companies } from '@/data/mockDb';
 import { InvestorCard } from '@/components/cards/InvestorCard';
 import { MostActiveCard } from '@/components/cards/MostActiveCard';
 import { useToast } from '@/components/ui/Toast';
+import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
 export default function InvestorsDiscoveryPage() {
   const { toast } = useToast();
@@ -268,9 +269,7 @@ export default function InvestorsDiscoveryPage() {
                 <div className="space-y-3">
                   {winner.backedBy.map((backer, idx) => (
                     <div key={idx} className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-secondary border flex items-center justify-center font-bold text-[10px] text-muted-foreground select-none shrink-0">
-                        {backer.logo}
-                      </span>
+                      <InvestorLogo id={backer.logo} name={backer.name} className="w-8 h-8 shrink-0" />
                       <span className="text-xs font-semibold text-foreground truncate">{backer.name}</span>
                     </div>
                   ))}
@@ -332,9 +331,7 @@ export default function InvestorsDiscoveryPage() {
             { name: 'South Park', type: 'Commons', stage: 'Operator led investments', logo: 'S' }
           ].map((firm) => (
             <div key={firm.name} className="w-[180px] p-5 rounded-2xl border bg-card flex flex-col justify-between h-[155px] shrink-0 hover:shadow-xs transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center font-black text-lg text-muted-foreground select-none">
-                {firm.logo}
-              </div>
+              <InvestorLogo id={firm.name} name={firm.name} className="w-10 h-10 shrink-0" />
               <div className="mt-4">
                 <h4 className="text-sm font-black text-foreground leading-none">{firm.name}</h4>
                 <p className="text-[10px] text-muted-foreground mt-1">{firm.type}</p>
@@ -413,24 +410,27 @@ export default function InvestorsDiscoveryPage() {
           <div className="lg:col-span-7 flex justify-center py-4">
             <div className="flex items-center justify-between gap-2 relative w-full max-w-lg select-none">
               {[
-                { name: 'Investor', bg: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
-                { name: 'Founder', bg: 'bg-purple-500/10 text-purple-400 border-purple-500/30' },
-                { name: 'Company', bg: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
-                { name: 'Funding Round', bg: 'bg-teal-500/10 text-teal-400 border-teal-500/30' },
-                { name: 'Product', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' }
-              ].map((step, idx) => (
-                <React.Fragment key={step.name}>
-                  {idx > 0 && (
-                    <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
-                  )}
-                  <div className="flex flex-col items-center gap-2">
-                    <span className={`w-12 h-12 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 shadow-lg ${step.bg}`}>
-                      {step.name[0]}
-                    </span>
-                    <span className="text-[10px] font-bold text-white/70 text-center truncate w-16">{step.name}</span>
-                  </div>
-                </React.Fragment>
-              ))}
+                { name: 'Investor', bg: 'bg-rose-500/10 text-rose-400 border-rose-500/30', icon: DollarSign },
+                { name: 'Founder', bg: 'bg-purple-500/10 text-purple-400 border-purple-500/30', icon: Users },
+                { name: 'Company', bg: 'bg-blue-500/10 text-blue-400 border-blue-500/30', icon: Briefcase },
+                { name: 'Funding Round', bg: 'bg-teal-500/10 text-teal-400 border-teal-500/30', icon: Flame },
+                { name: 'Product', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30', icon: Cpu }
+              ].map((step, idx) => {
+                const Icon = step.icon;
+                return (
+                  <React.Fragment key={step.name}>
+                    {idx > 0 && (
+                      <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
+                    )}
+                    <div className="flex flex-col items-center gap-2">
+                      <span className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 shadow-lg ${step.bg}`}>
+                        <Icon className="w-5 h-5" />
+                      </span>
+                      <span className="text-[10px] font-bold text-white/70 text-center truncate w-16">{step.name}</span>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
             </div>
           </div>
         </div>

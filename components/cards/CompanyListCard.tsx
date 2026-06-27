@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Check, MapPin, Users, DollarSign } from 'lucide-react';
 import { Company } from '@/types';
 import { cn } from '@/lib/utils';
+import { CompanyLogo } from '@/components/common/BrandLogo';
 
 interface CompanyListCardProps {
   company: Company;
@@ -24,9 +25,7 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors"
         >
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-10 h-10 rounded-lg bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground shrink-0 select-none">
-              {company.name[0]}
-            </div>
+            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
                 <h4 className="text-sm font-bold text-foreground truncate leading-none">
@@ -76,9 +75,7 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
         <div>
           {/* Header Row */}
           <div className="flex items-start justify-between gap-2">
-            <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground shrink-0 select-none">
-              {company.name[0]}
-            </div>
+            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
             
             <span className="px-2 py-0.5 rounded-full bg-secondary text-[9px] font-black uppercase tracking-wider text-muted-foreground">
               {company.categories[0] || 'AI Platform'}

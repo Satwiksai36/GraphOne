@@ -6,6 +6,7 @@ import { ChevronRight, ArrowUpRight, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Company } from '@/types';
 import { formatViews } from '@/lib/utils';
+import { CompanyLogo } from '@/components/common/BrandLogo';
 
 interface FeaturedProps {
   company: Company;
@@ -51,9 +52,7 @@ export function TrendingCardFeatured({ company, rank }: FeaturedProps) {
 
         {/* Company Name & Sector */}
         <div className="mt-6 flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 shrink-0 text-white font-bold text-lg select-none">
-            {company.name[0]}
-          </div>
+          <CompanyLogo id={company.id} name={company.name} className="w-12 h-12 shrink-0 border border-white/10" />
           <div>
             <h3 className="text-xl font-bold text-white leading-tight flex items-center gap-1.5 group-hover:text-primary transition-colors">
               {company.name}
@@ -96,9 +95,7 @@ export function TrendingCardSimple({ company, rank }: { company: Company; rank?:
               0{rank}
             </span>
           )}
-          <div className="w-10 h-10 rounded-lg bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground shrink-0 select-none">
-            {company.name[0]}
-          </div>
+          <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
           <div className="min-w-0">
             <h4 className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
               {company.name}

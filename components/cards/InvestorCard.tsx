@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { Investor } from '@/types';
+import { InvestorLogo } from '@/components/common/BrandLogo';
 
 interface InvestorCardProps {
   investor: Investor;
@@ -35,9 +36,7 @@ export function InvestorCard({ investor, index }: InvestorCardProps) {
         
         <div>
           {/* Logo Placeholder */}
-          <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center font-black text-lg select-none">
-            {investor.name[0]}
-          </div>
+          <InvestorLogo id={investor.id} name={investor.name} className="w-10 h-10 shrink-0 border border-white/20" />
 
           <h3 className="text-lg font-black mt-6 leading-tight group-hover:underline">
             {investor.name}

@@ -13,6 +13,7 @@ import { investors, companies } from '@/data/mockDb';
 import { OwnershipDonutChart } from '@/components/charts/OwnershipDonutChart';
 import { useToast } from '@/components/ui/Toast';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -55,9 +56,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
           {/* Logo & Bio Info */}
           <div className="flex items-start gap-4 min-w-0 flex-1">
-            <div className="w-16 h-16 rounded-xl border bg-secondary flex items-center justify-center font-black text-xl shrink-0 select-none text-muted-foreground">
-              {investor.name[0]}
-            </div>
+            <InvestorLogo id={investor.id} name={investor.name} className="w-16 h-16 shrink-0" />
             
             <div className="min-w-0 space-y-2">
               <div className="flex items-center gap-2">
@@ -219,9 +218,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
               <div key={idx} className="w-[220px] p-5 rounded-xl border bg-card flex flex-col justify-between h-[150px] shrink-0">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="w-8 h-8 rounded-lg bg-secondary border flex items-center justify-center font-bold text-xs text-muted-foreground shrink-0 select-none capitalize">
-                      {companyName[0]}
-                    </span>
+                    <CompanyLogo id={deal.companyId} name={companyName} className="w-8 h-8 shrink-0" />
                     {deal.lead && (
                       <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 leading-none">
                         Lead
@@ -348,9 +345,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
         <div className="flex flex-wrap items-center gap-4">
           {investor.coInvestors.map((co, idx) => (
             <div key={idx} className="flex items-center gap-2 px-4 py-2 border rounded-xl bg-secondary/30 text-xs font-bold text-foreground">
-              <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-[9px] select-none">
-                {co.name[0]}
-              </span>
+              <InvestorLogo id={co.name} name={co.name} className="w-4 h-4 shrink-0 rounded-full text-[9px]" />
               <span>{co.name}</span>
               <span className="text-[10px] font-bold text-muted-foreground ml-1.5">({co.count} joints)</span>
             </div>

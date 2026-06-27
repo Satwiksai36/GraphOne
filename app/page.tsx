@@ -21,6 +21,7 @@ import { LeaderboardCard, LeaderboardItem } from '@/components/cards/Leaderboard
 import { UnicornCard } from '@/components/cards/UnicornCard';
 import { CompanyListCard } from '@/components/cards/CompanyListCard';
 import { useToast } from '@/components/ui/Toast';
+import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
 export default function CompaniesHomePage() {
   const { toast } = useToast();
@@ -263,9 +264,9 @@ export default function CompaniesHomePage() {
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ repeat: Infinity, duration: 4, delay: orbit.delay }}
                     style={{ x, y }}
-                    className="absolute w-10 h-10 rounded-xl bg-card border shadow-md flex items-center justify-center font-bold text-xs text-foreground cursor-pointer"
+                    className="absolute cursor-pointer"
                   >
-                    {orbit.label[0]}
+                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-10 h-10 border shadow-md" />
                   </motion.div>
                 );
               })}
@@ -529,9 +530,7 @@ export default function CompaniesHomePage() {
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {frontierLabs.map((lab) => (
               <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                <span className="w-6 h-6 rounded bg-white/10 flex items-center justify-center font-bold text-xs select-none">
-                  {lab.name[0]}
-                </span>
+                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
@@ -563,9 +562,7 @@ export default function CompaniesHomePage() {
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {openSourceLeaders.map((lab) => (
               <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                <span className="w-6 h-6 rounded bg-white/10 flex items-center justify-center font-bold text-xs select-none">
-                  {lab.name[0]}
-                </span>
+                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
@@ -626,9 +623,7 @@ export default function CompaniesHomePage() {
         <div className="flex flex-wrap items-center gap-6">
           {companies.slice(15, 22).map((c) => (
             <Link key={c.id} href={`/company/${c.id}`} className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-full border bg-card hover:border-primary transition-all flex items-center justify-center font-bold text-sm text-muted-foreground shadow-xs shrink-0 select-none">
-                {c.name[0]}
-              </div>
+              <CompanyLogo id={c.id} name={c.name} className="w-12 h-12 shrink-0 border" />
               <span className="text-[10px] font-bold text-muted-foreground group-hover:text-primary transition-colors leading-none">{c.name.split(' ')[0]}</span>
             </Link>
           ))}

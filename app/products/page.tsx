@@ -12,6 +12,7 @@ import { products } from '@/data/mockDb';
 import { Product } from '@/types';
 import { LeftSidebar } from '@/components/layout/LeftSidebar';
 import { useToast } from '@/components/ui/Toast';
+import { CompanyLogo } from '@/components/common/BrandLogo';
 
 export default function ProductsPage() {
   const { toast } = useToast();
@@ -253,9 +254,7 @@ export default function ProductsPage() {
                 className="w-[180px] p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors flex flex-col justify-between h-[120px] shrink-0 cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="w-7 h-7 rounded-lg bg-secondary border flex items-center justify-center font-bold text-xs text-muted-foreground select-none">
-                    {p.name[0]}
-                  </span>
+                  <CompanyLogo id={p.id} name={p.name} className="w-7 h-7 shrink-0" />
                   <span className="text-[9px] font-bold text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 leading-none">
                     <ArrowUp className="w-3 h-3" /> {p.votesCount}
                   </span>
@@ -304,9 +303,7 @@ export default function ProductsPage() {
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     {/* Logo/Icon */}
-                    <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground shrink-0 select-none">
-                      {p.name[0]}
-                    </div>
+                    <CompanyLogo id={p.id} name={p.name} className="w-10 h-10 shrink-0" />
                     {/* Info */}
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
