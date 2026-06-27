@@ -468,11 +468,11 @@ const baseCompanies: Company[] = [
       { year: 2025, event: 'Operator Released' }
     ],
     fundingTimeline: [
-      { round: 'Seed', date: '2015', amount: '$1.0B', valuation: '$1B', leadInvestors: ['Y Combinator', 'Sam Altman'] },
-      { round: 'Series A', date: '2019', amount: '$100M', valuation: '$2B', leadInvestors: ['Microsoft'] },
+      { round: 'Seed', date: '2016', amount: '$10M', valuation: '$80M', leadInvestors: ['Y Combinator', 'Sam Altman'] },
+      { round: 'Series A', date: '2019', amount: '$100M', valuation: '$1B', leadInvestors: ['Microsoft'] },
       { round: 'Series B', date: '2021', amount: '$300M', valuation: '$14B', leadInvestors: ['Tiger Global'] },
       { round: 'Growth', date: '2023', amount: '$10B', valuation: '$29B', leadInvestors: ['Microsoft'] },
-      { round: 'Growth II', date: '2025', amount: '$6.6B', valuation: '$157B', leadInvestors: ['Thrive Capital', 'SoftBank'] }
+      { round: 'Growth II', date: '2025', amount: '$40B', valuation: '$157B', leadInvestors: ['Thrive Capital', 'SoftBank'] }
     ],
     ownership: [
       { category: 'Microsoft', percentage: 49 },
@@ -492,7 +492,7 @@ const baseCompanies: Company[] = [
     products: ['chatgpt', 'gpt-4o', 'codex', 'sora', 'operator', 'openai-agents'],
     acquisitions: [
       { company: 'Rockset', date: '2024', focus: 'Database technology', amount: '$500M' },
-      { company: 'Global Illumination', date: '2023', focus: 'AI device startup', amount: '$100M' }
+      { company: 'io', date: '2025', focus: 'AI device startup', amount: '$100M' }
     ],
     investments: [
       { company: 'Figure', focus: 'Humanoid Robotics', stage: 'Series B', amount: '$675M' },

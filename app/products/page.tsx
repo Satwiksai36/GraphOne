@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, ArrowUp, MessageSquare, Flame, Star, Trophy, Sparkles, 
-  ChevronRight, Send, Compass, Cpu, Bot, Terminal, Code
+  ChevronRight, Send, Compass, Cpu, Bot, Terminal, Code, ArrowRight
 } from 'lucide-react';
 
 import { products } from '@/data/mockDb';
@@ -113,29 +113,90 @@ export default function ProductsPage() {
       {/* 2. CENTER SCROLLABLE FEED */}
       <div className="flex-1 space-y-8 min-w-0">
         
-        {/* Hero Banner with search */}
-        <section className="p-6 rounded-2xl border bg-card shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[200px]">
-          <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
-          
-          <div className="space-y-3 relative z-10 max-w-xl">
+        {/* Hero Banner with search and SVG radiating network */}
+        <section className="p-6 rounded-2xl border bg-card shadow-xs relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6 min-h-[240px]">
+          <div className="space-y-4 relative z-10 flex-1">
             <span className="text-[10px] uppercase font-black tracking-widest text-primary leading-none block">Live AI Intelligence</span>
-            <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-tight">
-              The Global Intelligence <br />Layer <span className="bg-linear-to-r from-primary to-pink-500 bg-clip-text text-transparent">for AI</span>.
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-tight">
+              The Global Intelligence <br />Layer <span className="text-red-500 bg-linear-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">for AI</span>.
             </h1>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Discover real-time user upvotes, bookmark tools, and analyze active developer frameworks in the AI economy.
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-lg">
+              One graph connecting companies, founders, investors, products, funding and talent.
             </p>
+            
+            <div className="relative max-w-md mt-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search companies, founders, investors, products or funding rounds..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-12 py-2.5 text-xs border rounded-full bg-background text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors"
+              />
+              <button className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors">
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Most searched */}
+            <div className="flex flex-wrap items-center gap-2 pt-2 text-[10px] text-muted-foreground">
+              <span className="font-bold">Most searched:</span>
+              {['Databricks', 'Notion', 'Pinecone', 'Weaviate', 'LangChain'].map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setSearchQuery(tag)}
+                  className="px-2 py-0.5 rounded border bg-secondary hover:bg-primary/5 hover:text-primary transition-colors cursor-pointer"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="relative max-w-md mt-6 z-10">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search products, builders, frameworks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 text-xs border rounded-full bg-background text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors"
-            />
+          {/* Right Side Node Network SVG */}
+          <div className="w-full md:w-1/3 flex items-center justify-center relative select-none pointer-events-none shrink-0">
+            <svg className="w-[180px] h-[180px]" viewBox="0 0 200 200">
+              {/* Outer ring */}
+              <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="1" strokeDasharray="3,3" />
+              <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" strokeOpacity="0.05" strokeWidth="1" />
+              
+              {/* Connecting lines */}
+              <line x1="100" y1="100" x2="100" y2="40" stroke="var(--primary)" strokeOpacity="0.3" strokeWidth="1" />
+              <line x1="100" y1="100" x2="150" y2="70" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
+              <line x1="100" y1="100" x2="140" y2="140" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
+              <line x1="100" y1="100" x2="60" y2="140" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
+              <line x1="100" y1="100" x2="50" y2="70" stroke="currentColor" strokeOpacity="0.15" strokeWidth="1" />
+
+              {/* Central Core Node */}
+              <circle cx="100" cy="100" r="16" fill="var(--primary)" />
+              <path d="M96 95h8v2h-8zm0 4h8v2h-8zm0 4h8v2h-8z" fill="white" />
+
+              {/* Outer Nodes */}
+              {/* OpenAI (top) */}
+              <circle cx="100" cy="40" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
+              <circle cx="100" cy="40" r="3" fill="var(--primary)" />
+              <text x="100" y="25" textAnchor="middle" fontSize="8" fontWeight="bold" fill="currentColor">OpenAI</text>
+
+              {/* Cursor (top-right) */}
+              <circle cx="150" cy="70" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
+              <circle cx="150" cy="70" r="3" fill="currentColor" fillOpacity="0.4" />
+              <text x="165" y="73" textAnchor="start" fontSize="8" fontWeight="bold" fill="currentColor">Cursor</text>
+
+              {/* Perplexity (bottom-right) */}
+              <circle cx="140" cy="140" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
+              <circle cx="140" cy="140" r="3" fill="currentColor" fillOpacity="0.4" />
+              <text x="153" y="148" textAnchor="start" fontSize="8" fontWeight="bold" fill="currentColor">Perplexity</text>
+
+              {/* Midjourney (bottom-left) */}
+              <circle cx="60" cy="140" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
+              <circle cx="60" cy="140" r="3" fill="currentColor" fillOpacity="0.4" />
+              <text x="47" y="148" textAnchor="end" fontSize="8" fontWeight="bold" fill="currentColor">Midjourney</text>
+
+              {/* Anthropic (top-left) */}
+              <circle cx="50" cy="70" r="10" fill="var(--card)" stroke="var(--border)" strokeWidth="1" />
+              <circle cx="50" cy="70" r="3" fill="currentColor" fillOpacity="0.4" />
+              <text x="35" y="73" textAnchor="end" fontSize="8" fontWeight="bold" fill="currentColor">Anthropic</text>
+            </svg>
           </div>
         </section>
 
@@ -257,6 +318,19 @@ export default function ProductsPage() {
                             {tag}
                           </span>
                         ))}
+                        {/* Trending status badge */}
+                        {(() => {
+                          let badge = { label: 'Trending', style: 'text-zinc-600 bg-zinc-50 border-zinc-100 dark:bg-zinc-800/40 dark:border-zinc-700/30 dark:text-zinc-400' };
+                          if (p.name.includes('Cursor')) badge = { label: 'Trending in Coding', style: 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-950/20 dark:border-amber-900/30 dark:text-amber-400' };
+                          else if (p.name.includes('Claude') || p.name.includes('ChatGPT')) badge = { label: 'Most used this week', style: 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-400' };
+                          else if (p.name.includes('Midjourney')) badge = { label: 'Top rated in Image', style: 'text-pink-600 bg-pink-50 border-pink-100 dark:bg-pink-950/20 dark:border-pink-900/30 dark:text-pink-400' };
+                          else if (p.name.includes('Runway') || p.name.includes('Sora')) badge = { label: 'Fastest growing', style: 'text-blue-600 bg-blue-50 border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/30 dark:text-blue-400' };
+                          return (
+                            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border leading-none ${badge.style}`}>
+                              {badge.label}
+                            </span>
+                          );
+                        })()}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1.5 truncate max-w-sm sm:max-w-md leading-none">
                         {p.tagline}
@@ -265,26 +339,38 @@ export default function ProductsPage() {
                   </div>
 
                   {/* Actions Area */}
-                  <div className="flex items-center gap-3 shrink-0">
-                    <button
-                      onClick={(e) => handleBookmark(p.id, e)}
-                      className={`p-1.5 rounded-lg border hover:bg-secondary cursor-pointer transition-colors ${
-                        p.bookmarkedByUser ? 'text-primary border-primary/20' : 'text-muted-foreground'
-                      }`}
-                    >
-                      <Star className={`w-3.5 h-3.5 ${p.bookmarkedByUser ? 'fill-current' : ''}`} />
-                    </button>
-
+                  <div className="flex items-center gap-4.5 shrink-0">
+                    {/* Upvote Heart Button */}
                     <button
                       onClick={(e) => handleVote(p.id, e)}
-                      className={`flex items-center gap-1.5 px-3 py-2 border rounded-xl transition-all cursor-pointer select-none leading-none text-xs font-bold ${
+                      className={`flex items-center gap-1 cursor-pointer select-none text-xs font-bold transition-all hover:text-red-500 ${
                         p.upvotedByUser
-                          ? 'bg-primary border-primary text-white shadow-xs scale-105'
-                          : 'bg-card text-foreground hover:bg-secondary'
+                          ? 'text-red-500 scale-105'
+                          : 'text-muted-foreground'
                       }`}
+                      title="Upvote"
                     >
-                      <ArrowUp className="w-3.5 h-3.5 shrink-0" />
-                      <span>{p.votesCount}</span>
+                      <svg className={`w-4 h-4 ${p.upvotedByUser ? 'fill-red-500 stroke-red-500' : 'stroke-current fill-none'}`} viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                      </svg>
+                      <span>{(p.votesCount / 1000).toFixed(1)}K</span>
+                    </button>
+
+                    {/* Comment Indicator */}
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground font-semibold">
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>{Math.floor((p.votesCount * 0.02) + 12)}</span>
+                    </div>
+
+                    {/* Bookmark Star Button */}
+                    <button
+                      onClick={(e) => handleBookmark(p.id, e)}
+                      className={`p-1 rounded-lg border hover:bg-secondary cursor-pointer transition-colors ${
+                        p.bookmarkedByUser ? 'text-primary border-primary/20' : 'text-muted-foreground'
+                      }`}
+                      title="Bookmark"
+                    >
+                      <Star className={`w-3.5 h-3.5 ${p.bookmarkedByUser ? 'fill-current' : ''}`} />
                     </button>
                   </div>
                 </div>

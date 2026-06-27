@@ -182,38 +182,47 @@ export default function CompaniesHomePage() {
               Explore AI startups, unicorns, frontier labs, and emerging teams shaping the future of artificial intelligence. Monitor growth velocity, funding stages, and tech stacks.
             </p>
 
-            {/* Hero Search Box */}
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md">
-              <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search categories, tags, founders..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 text-sm border rounded-full bg-card text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors shadow-xs"
-                />
-              </div>
+            {/* Hero Search Box (rounded input with absolute pink search button) */}
+            <div className="relative max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search companies, categories, founders, investors..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-11 pr-12 py-3.5 text-sm border rounded-full bg-card text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors shadow-sm"
+              />
               <button 
                 onClick={() => {
                   directoryRef.current?.scrollIntoView({ behavior: 'smooth' });
                   toast('Search parameters applied to directory', 'info');
                 }}
-                className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/95 transition-all text-sm shrink-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#ff385c] hover:bg-[#e0314f] text-white flex items-center justify-center transition-colors shadow-xs cursor-pointer select-none"
               >
-                Find Startups <ArrowRight className="w-4 h-4" />
+                <Search className="w-4.5 h-4.5" />
               </button>
             </div>
 
             {/* Badges shortcuts */}
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-xs text-muted-foreground font-semibold">Shortcuts:</span>
-              {['AI Agents', 'AI Coding', 'AI Search', 'AI Video', 'AI Infrastructure'].map((badge) => (
+              {['AI Agents', 'AI Coding', 'AI Search', 'AI Video', 'AI Voice', 'AI Infrastructure', 'More'].map((badge) => (
                 <button
                   key={badge}
-                  onClick={() => handleCategorySelect(badge)}
-                  className="px-3 py-1 rounded-full border bg-card hover:bg-secondary text-xs text-muted-foreground font-medium transition-all cursor-pointer"
+                  onClick={() => {
+                    if (badge === 'More') {
+                      directoryRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      handleCategorySelect(badge);
+                    }
+                  }}
+                  className="px-3.5 py-1.5 rounded-full border bg-card hover:bg-secondary text-xs text-muted-foreground font-semibold transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
                 >
+                  {badge === 'AI Agents' && <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />}
+                  {badge === 'AI Coding' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />}
+                  {badge === 'AI Search' && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                  {badge === 'AI Video' && <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />}
+                  {badge === 'AI Voice' && <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />}
+                  {badge === 'AI Infrastructure' && <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />}
                   {badge}
                 </button>
               ))}
@@ -270,9 +279,14 @@ export default function CompaniesHomePage() {
           ======================================================== */}
       <section className="space-y-6">
         <div className="flex items-end justify-between border-b pb-4">
-          <div>
-            <h2 className="text-xl font-black text-foreground">Trending AI Companies</h2>
-            <p className="text-xs text-muted-foreground mt-1">Most searched, viewed, and discussed teams right now.</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+              1
+            </span>
+            <div>
+              <h2 className="text-xl font-black text-foreground">Trending AI Companies</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">The most searched, viewed and discussed AI companies right now.</p>
+            </div>
           </div>
           <button 
             onClick={() => {
@@ -281,7 +295,7 @@ export default function CompaniesHomePage() {
             }}
             className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer leading-none"
           >
-            View list <ArrowRight className="w-3.5 h-3.5" />
+            View all <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -299,10 +313,11 @@ export default function CompaniesHomePage() {
 
           {/* Simple Trending List (Grid Col 4) */}
           <div className="lg:col-span-4 flex flex-col justify-between gap-4">
-            {trendingSimple.map((company) => (
+            {trendingSimple.map((company, index) => (
               <TrendingCardSimple 
                 key={company.id} 
                 company={company} 
+                rank={index + 4}
               />
             ))}
             <div className="flex-1 rounded-2xl border border-dashed border-muted-foreground/20 flex flex-col items-center justify-center p-6 text-center text-xs text-muted-foreground">
@@ -318,9 +333,14 @@ export default function CompaniesHomePage() {
           ======================================================== */}
       <section className="space-y-6">
         <div className="flex items-end justify-between border-b pb-4">
-          <div>
-            <h2 className="text-xl font-black text-foreground">Fastest Growing AI Companies</h2>
-            <p className="text-xs text-muted-foreground mt-1">Teams exhibiting strong growth signals in search and employee metrics.</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+              2
+            </span>
+            <div>
+              <h2 className="text-xl font-black text-foreground">Fastest Growing AI Companies</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Companies showing strong momentum across key growth signals.</p>
+            </div>
           </div>
           <button 
             onClick={() => {
@@ -329,7 +349,7 @@ export default function CompaniesHomePage() {
             }}
             className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer leading-none"
           >
-            View growth ladder <ArrowRight className="w-3.5 h-3.5" />
+            View all <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -349,7 +369,7 @@ export default function CompaniesHomePage() {
           <div className="rounded-2xl bg-linear-to-br from-indigo-900 to-purple-800 text-white p-6 flex flex-col justify-between shadow-xl min-h-[170px]">
             <div>
               <h3 className="text-lg font-bold leading-tight">Explore tomorrow&apos;s market leaders today.</h3>
-              <p className="text-xs text-white/70 mt-2 leading-relaxed">Discover startups showing strong momentum across key signals.</p>
+              <p className="text-xs text-white/70 mt-2 leading-relaxed">Discover companies with the highest growth potential across the AI landscape.</p>
             </div>
             <button 
               onClick={() => {
@@ -359,7 +379,7 @@ export default function CompaniesHomePage() {
               }}
               className="mt-6 flex items-center justify-between px-4 py-2.5 rounded-full bg-white text-indigo-950 hover:bg-white/95 font-semibold text-xs transition-all cursor-pointer select-none"
             >
-              Explore Growth Ladders <ArrowRight className="w-4 h-4" />
+              Explore Growth Leaders <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -369,9 +389,25 @@ export default function CompaniesHomePage() {
           SECTION 3: EMERGING AI STARTUPS
           ======================================================== */}
       <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">Emerging Startups to Watch</h2>
-          <p className="text-xs text-muted-foreground mt-1">Promising early-stage companies gaining organic market traction.</p>
+        <div className="flex items-end justify-between border-b pb-4">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+              3
+            </span>
+            <div>
+              <h2 className="text-xl font-black text-foreground">Emerging AI Startups to Watch</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Promising early-stage companies gaining real traction.</p>
+            </div>
+          </div>
+          <button 
+            onClick={() => {
+              setSortBy('trending');
+              directoryRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer leading-none"
+          >
+            View all <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -398,9 +434,16 @@ export default function CompaniesHomePage() {
           SECTION 4: BROWSE BY CATEGORY
           ======================================================== */}
       <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">Browse by Category</h2>
-          <p className="text-xs text-muted-foreground mt-1">Explore specialized companies by what they are building.</p>
+        <div className="flex items-end justify-between border-b pb-4">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+              4
+            </span>
+            <div>
+              <h2 className="text-xl font-black text-foreground">Browse by Category</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Explore companies by what they&apos;re building.</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -423,20 +466,20 @@ export default function CompaniesHomePage() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <LeaderboardCard 
           title="Breakout Companies" 
-          number="1"
-          subtitle="Startups making huge momentum jumps."
+          number="6"
+          subtitle="Companies making big moves."
           items={breakoutItems}
         />
         <LeaderboardCard 
-          title="Recently Funded AI" 
-          number="2"
-          subtitle="Latest public seed and venture rounds."
+          title="Recently Funded AI Startups" 
+          number="6"
+          subtitle="Latest funding announcements."
           items={fundingItems}
         />
         <LeaderboardCard 
           title="Startups to Watch" 
-          number="3"
-          subtitle="High-potential teams with massive buzz."
+          number="7"
+          subtitle="High-potential companies to keep an eye on."
           items={watchItems}
         />
       </section>
@@ -444,13 +487,18 @@ export default function CompaniesHomePage() {
       {/* ========================================================
           SECTION 8: AI UNICORNS
           ======================================================== */}
-      <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">AI Unicorns</h2>
-          <p className="text-xs text-muted-foreground mt-1">Private AI software companies valued at $1B+.</p>
+      <section className="p-8 rounded-3xl bg-pink-50/30 border border-pink-100/50 dark:bg-pink-950/5 dark:border-pink-900/20 space-y-6">
+        <div className="border-b border-pink-100/80 dark:border-pink-900/30 pb-4 flex items-center gap-3">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+            8
+          </span>
+          <div>
+            <h2 className="text-xl font-black text-foreground">AI Unicorns</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Private companies valued at $1B+.</p>
+          </div>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+        <div className="flex gap-4 overflow-x-auto pb-1 no-scrollbar">
           {unicorns.map((company) => (
             <UnicornCard key={company.id} company={company} />
           ))}
@@ -468,12 +516,14 @@ export default function CompaniesHomePage() {
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-lg font-black tracking-tight flex items-center gap-2">
-              <Award className="w-5 h-5 text-indigo-400" />
-              Frontier AI Labs
-            </h3>
-            <p className="text-xs text-white/50 mt-1 max-w-sm">Leading organizations research and push boundary-level foundation models.</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white text-[11px] font-black shrink-0">
+              9
+            </span>
+            <div>
+              <h3 className="text-lg font-black tracking-tight">Frontier AI Labs</h3>
+              <p className="text-xs text-white/50 mt-0.5">Organizations advancing the state-of-the-art.</p>
+            </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
@@ -500,12 +550,14 @@ export default function CompaniesHomePage() {
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-lg font-black tracking-tight flex items-center gap-2">
-              <Bot className="w-5 h-5 text-emerald-400" />
-              Open Source AI Leaders
-            </h3>
-            <p className="text-xs text-white/50 mt-1 max-w-sm">Driving decentralized innovation and sharing weights globally.</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white text-[11px] font-black shrink-0">
+              10
+            </span>
+            <div>
+              <h3 className="text-lg font-black tracking-tight">Open Source AI Leaders</h3>
+              <p className="text-xs text-white/50 mt-0.5">Leading the open source movement.</p>
+            </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
@@ -525,9 +577,14 @@ export default function CompaniesHomePage() {
           SECTION 11: CURATED COLLECTIONS
           ======================================================== */}
       <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">Curated AI Collections</h2>
-          <p className="text-xs text-muted-foreground mt-1">Handpicked compilations for deeper vertical exploration.</p>
+        <div className="border-b pb-4 flex items-center gap-3">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+            11
+          </span>
+          <div>
+            <h2 className="text-xl font-black text-foreground">Curated Collections</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Handpicked lists for faster discovery.</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -556,9 +613,14 @@ export default function CompaniesHomePage() {
           SECTION 12: NEW ON GRAPHONE
           ======================================================== */}
       <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">New on GraphOne</h2>
-          <p className="text-xs text-muted-foreground mt-1">Recently added companies in our global startup catalog.</p>
+        <div className="border-b pb-4 flex items-center gap-3">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+            12
+          </span>
+          <div>
+            <h2 className="text-xl font-black text-foreground">New on GraphOne</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Recently added companies.</p>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-6">
@@ -580,9 +642,14 @@ export default function CompaniesHomePage() {
         
         {/* Header and Controls */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center justify-between border-b pb-6">
-          <div>
-            <h2 className="text-2xl font-black text-foreground">Explore All Companies</h2>
-            <p className="text-xs text-muted-foreground mt-1">Find, filter, and sort over 60+ AI companies in the network.</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#ff385c]/10 text-[#ff385c] text-[11px] font-black shrink-0">
+              13
+            </span>
+            <div>
+              <h2 className="text-2xl font-black text-foreground">Explore All Companies</h2>
+              <p className="text-xs text-muted-foreground mt-0.5 font-medium">Find, filter, and sort over 60+ AI companies in the network.</p>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">

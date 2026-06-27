@@ -220,12 +220,77 @@ export default function InvestorsDiscoveryPage() {
       </section>
 
       {/* ========================================================
-          5. CAPITAL THEMES
+          05. INVESTORS BACKING WINNERS
           ======================================================== */}
       <section className="space-y-6">
-        <div className="border-b pb-4">
-          <h2 className="text-xl font-black text-foreground">05. Capital Themes</h2>
-          <p className="text-xs text-muted-foreground mt-1">Explore focus clusters backing thematic AI segments.</p>
+        <div className="flex items-end justify-between border-b pb-4">
+          <div>
+            <h2 className="text-xl font-black text-foreground">05. Investors Backing Winners</h2>
+            <p className="text-xs text-muted-foreground mt-1">VC funds backing the most valuable frontier labs and application leaders.</p>
+          </div>
+          <button className="text-xs font-bold text-primary hover:underline">View all</button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              name: 'OpenAI',
+              backedBy: [
+                { name: 'Microsoft', logo: 'MSFT' },
+                { name: 'Thrive Capital', logo: 'TC' },
+                { name: 'Khosla Ventures', logo: 'KV' },
+                { name: 'Founders Fund', logo: 'FF' }
+              ]
+            },
+            {
+              name: 'Anthropic',
+              backedBy: [
+                { name: 'Google Ventures', logo: 'GV' },
+                { name: 'Spark Capital', logo: 'SC' },
+                { name: 'Menlo Ventures', logo: 'MV' },
+                { name: 'Lightspeed', logo: 'LS' }
+              ]
+            },
+            {
+              name: 'Perplexity',
+              backedBy: [
+                { name: 'a16z', logo: 'a16z' },
+                { name: 'Databricks Ventures', logo: 'DB' },
+                { name: 'NEA', logo: 'NEA' },
+                { name: 'IVP', logo: 'IVP' }
+              ]
+            }
+          ].map((winner) => (
+            <div key={winner.name} className="p-6 rounded-2xl border bg-card flex flex-col justify-between hover:shadow-xs transition-shadow">
+              <div>
+                <h3 className="text-base font-black text-foreground mb-4">{winner.name}</h3>
+                <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none block mb-3">Backed by</span>
+                <div className="space-y-3">
+                  {winner.backedBy.map((backer, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <span className="w-8 h-8 rounded-lg bg-secondary border flex items-center justify-center font-bold text-[10px] text-muted-foreground select-none shrink-0">
+                        {backer.logo}
+                      </span>
+                      <span className="text-xs font-semibold text-foreground truncate">{backer.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================
+          06. CAPITAL THEMES
+          ======================================================== */}
+      <section className="space-y-6">
+        <div className="flex items-end justify-between border-b pb-4">
+          <div>
+            <h2 className="text-xl font-black text-foreground">06. Capital Themes</h2>
+            <p className="text-xs text-muted-foreground mt-1">Explore focus clusters backing thematic AI segments.</p>
+          </div>
+          <button className="text-xs font-bold text-primary hover:underline">View all</button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
@@ -247,64 +312,145 @@ export default function InvestorsDiscoveryPage() {
       </section>
 
       {/* ========================================================
-          9. CAPITAL FLOW GRAPH SIMULATION
+          07. EMERGING INVESTORS
+          ======================================================== */}
+      <section className="space-y-6">
+        <div className="flex items-end justify-between border-b pb-4">
+          <div>
+            <h2 className="text-xl font-black text-foreground">07. Emerging Investors</h2>
+            <p className="text-xs text-muted-foreground mt-1">Specialized, AI-first managers and boutique funds scaling up active portfolios.</p>
+          </div>
+          <button className="text-xs font-bold text-primary hover:underline">View all</button>
+        </div>
+
+        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+          {[
+            { name: 'Theory', type: 'Ventures', stage: 'Early stage AI first', logo: 'T' },
+            { name: 'Conviction', type: 'Partners', stage: 'Seed to A AI startups', logo: 'C' },
+            { name: 'Radical', type: 'Ventures', stage: 'Pre-seed to seed AI + Frontier', logo: 'R' },
+            { name: 'NFDG', type: 'AI-first fund', stage: 'Global early stage', logo: 'N' },
+            { name: 'South Park', type: 'Commons', stage: 'Operator led investments', logo: 'S' }
+          ].map((firm) => (
+            <div key={firm.name} className="w-[180px] p-5 rounded-2xl border bg-card flex flex-col justify-between h-[155px] shrink-0 hover:shadow-xs transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center font-black text-lg text-muted-foreground select-none">
+                {firm.logo}
+              </div>
+              <div className="mt-4">
+                <h4 className="text-sm font-black text-foreground leading-none">{firm.name}</h4>
+                <p className="text-[10px] text-muted-foreground mt-1">{firm.type}</p>
+                <p className="text-[9px] text-primary/80 font-bold mt-2.5 uppercase tracking-wide leading-none">{firm.stage}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================
+          08. INVESTOR RESEARCH
+          ======================================================== */}
+      <section className="space-y-6">
+        <div className="flex items-end justify-between border-b pb-4">
+          <div>
+            <h2 className="text-xl font-black text-foreground">08. Investor Research</h2>
+            <p className="text-xs text-muted-foreground mt-1">Market flow reports, rankings, and deep dives on syndicate movements.</p>
+          </div>
+          <button className="text-xs font-bold text-primary hover:underline">View all</button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { title: 'Top AI Investors 2024', desc: 'GraphOne Report', date: 'May 2024', bg: 'from-blue-600/10 to-indigo-600/10 border-blue-500/20' },
+            { title: 'Who Leads Most Seed Rounds?', desc: 'GraphOne Analysis', date: '2026', bg: 'from-purple-600/10 to-pink-600/10 border-purple-500/20' },
+            { title: 'The Rise of Operator Angels', desc: 'GraphOne Research', date: '2026', bg: 'from-amber-600/10 to-orange-600/10 border-amber-500/20' },
+            { title: 'State of AI Venture Capital', desc: 'GraphOne Report', date: '2026', bg: 'from-emerald-600/10 to-teal-600/10 border-emerald-500/20' },
+            { title: 'AI Capital Flows Report', desc: 'GraphOne Analysis', date: '2026', bg: 'from-rose-600/10 to-pink-600/10 border-rose-500/20' }
+          ].map((report, idx) => (
+            <div
+              key={idx}
+              onClick={() => toast(`Opening Report: ${report.title}`, 'info')}
+              className={`p-4 rounded-xl border bg-gradient-to-br ${report.bg} flex flex-col justify-between h-[180px] hover:shadow-xs transition-shadow cursor-pointer relative overflow-hidden`}
+            >
+              <div className="absolute right-0 bottom-0 w-1/2 h-1/2 opacity-20 pointer-events-none">
+                <FileText className="w-full h-full" />
+              </div>
+              <div className="space-y-2">
+                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wide leading-none">{report.desc}</span>
+                <h4 className="text-xs font-black leading-snug text-foreground">{report.title}</h4>
+              </div>
+              <span className="text-[9px] text-muted-foreground font-semibold mt-auto">{report.date}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================
+          09. EXPLORE THE CAPITAL GRAPH (Visualizer)
           ======================================================== */}
       <section className="p-8 rounded-3xl bg-zinc-950 text-white shadow-2xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-radial from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-radial from-red-500/10 via-transparent to-transparent pointer-events-none" />
         
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           <div className="lg:col-span-5 space-y-4">
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-black uppercase tracking-wider select-none leading-none">
-              Capital Visualization
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-red-500/20 text-red-300 text-[10px] font-black uppercase tracking-wider select-none leading-none">
+              Explore the Capital Graph
             </span>
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-              Visualize How Capital Moves <br />in the AI Economy
+              Visualize How Capital <br />Moves in the AI Economy
             </h3>
             <p className="text-xs text-white/55 leading-relaxed max-w-sm">
-              Explore complex interconnections mapping VC funds to founders, startups, funding stages, and upvotable consumer assets.
+              Explore the relationships between investors, founders, companies, funding rounds and products.
             </p>
             <button 
-              onClick={() => toast('Loading Capital Graph Engine...', 'info')}
-              className="mt-6 flex items-center justify-between px-5 py-3 rounded-full bg-primary text-white hover:bg-primary/95 font-semibold text-xs transition-all cursor-pointer shadow-md select-none"
+              onClick={() => toast('Initializing Capital Graph engine...', 'info')}
+              className="mt-6 flex items-center justify-between px-5 py-3 rounded-full bg-red-500 text-white hover:bg-red-600 font-semibold text-xs transition-all cursor-pointer shadow-md select-none"
             >
-              Explore Capital Graph <ArrowRight className="w-4 h-4 ml-1" />
+              Explore Capital Graph <ArrowRight className="w-4 h-4 ml-1.5" />
             </button>
           </div>
 
-          {/* Interactive node path simulation */}
+          {/* Interactive node path simulation with SVG flow */}
           <div className="lg:col-span-7 flex justify-center py-4">
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 relative w-full max-w-lg">
-              
-              {/* Step 1 */}
-              <div className="flex flex-col items-center gap-2 p-3 border border-white/10 bg-white/5 rounded-xl text-center w-24 shrink-0">
-                <span className="text-[10px] uppercase font-bold text-white/50">Investor</span>
-                <span className="text-xs font-black text-white">VC Firm</span>
-              </div>
-              <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
-
-              {/* Step 2 */}
-              <div className="flex flex-col items-center gap-2 p-3 border border-white/10 bg-white/5 rounded-xl text-center w-24 shrink-0">
-                <span className="text-[10px] uppercase font-bold text-white/50">Founder</span>
-                <span className="text-xs font-black text-white">CEO</span>
-              </div>
-              <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
-
-              {/* Step 3 */}
-              <div className="flex flex-col items-center gap-2 p-3 border border-primary/40 bg-primary/20 rounded-xl text-center w-24 shrink-0 shadow-lg shadow-primary/20">
-                <span className="text-[10px] uppercase font-bold text-white/50">Company</span>
-                <span className="text-xs font-black text-white">Startup</span>
-              </div>
-              <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
-
-              {/* Step 4 */}
-              <div className="flex flex-col items-center gap-2 p-3 border border-white/10 bg-white/5 rounded-xl text-center w-24 shrink-0">
-                <span className="text-[10px] uppercase font-bold text-white/50">Asset</span>
-                <span className="text-xs font-black text-white">Product</span>
-              </div>
-              
+            <div className="flex items-center justify-between gap-2 relative w-full max-w-lg select-none">
+              {[
+                { name: 'Investor', bg: 'bg-rose-500/10 text-rose-400 border-rose-500/30' },
+                { name: 'Founder', bg: 'bg-purple-500/10 text-purple-400 border-purple-500/30' },
+                { name: 'Company', bg: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
+                { name: 'Funding Round', bg: 'bg-teal-500/10 text-teal-400 border-teal-500/30' },
+                { name: 'Product', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' }
+              ].map((step, idx) => (
+                <React.Fragment key={step.name}>
+                  {idx > 0 && (
+                    <span className="text-white/20 font-mono text-sm shrink-0">&rarr;</span>
+                  )}
+                  <div className="flex flex-col items-center gap-2">
+                    <span className={`w-12 h-12 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 shadow-lg ${step.bg}`}>
+                      {step.name[0]}
+                    </span>
+                    <span className="text-[10px] font-bold text-white/70 text-center truncate w-16">{step.name}</span>
+                  </div>
+                </React.Fragment>
+              ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          10. JOIN NETWORK BANNER
+          ======================================================== */}
+      <section className="p-6 rounded-2xl border bg-secondary/35 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <span className="text-[9px] font-black text-primary uppercase tracking-widest leading-none">Join the GraphOne Investor Network</span>
+          <h3 className="text-lg font-black text-foreground mt-2">Unlock better opportunities. Build what&apos;s next.</h3>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link href="#" className="px-4 py-2 border rounded-lg bg-card text-xs font-bold text-foreground hover:bg-secondary transition-colors">
+            Log in
+          </Link>
+          <Link href="#" className="px-4 py-2 rounded-lg bg-red-500 text-white text-xs font-bold hover:bg-red-600 transition-colors">
+            Sign up for free
+          </Link>
         </div>
       </section>
 

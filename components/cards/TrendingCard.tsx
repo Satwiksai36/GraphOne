@@ -83,7 +83,7 @@ export function TrendingCardFeatured({ company, rank }: FeaturedProps) {
   );
 }
 
-export function TrendingCardSimple({ company }: { company: Company }) {
+export function TrendingCardSimple({ company, rank }: { company: Company; rank?: number }) {
   return (
     <Link href={`/company/${company.id}`}>
       <motion.div
@@ -91,6 +91,11 @@ export function TrendingCardSimple({ company }: { company: Company }) {
         className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-secondary transition-all shadow-xs group"
       >
         <div className="flex items-center gap-3.5 min-w-0">
+          {rank && (
+            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-900 text-white select-none shrink-0">
+              0{rank}
+            </span>
+          )}
           <div className="w-10 h-10 rounded-lg bg-secondary border flex items-center justify-center font-bold text-base text-muted-foreground shrink-0 select-none">
             {company.name[0]}
           </div>

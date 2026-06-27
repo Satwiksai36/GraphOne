@@ -129,11 +129,11 @@ export default function InvestorProfilePage({ params }: PageProps) {
           ======================================================== */}
       <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: 'Deals (90d)', value: `+${investor.stats.deals90d}`, icon: TrendingUp, color: 'text-emerald-500 bg-emerald-500/10' },
+          { label: 'Deals Last 90 Days', value: `+${investor.stats.deals90d}`, icon: TrendingUp, color: 'text-emerald-500 bg-emerald-500/10' },
           { label: 'Lead Investments', value: `+${investor.stats.leadInvestments}`, icon: Award, color: 'text-blue-500 bg-blue-500/10' },
           { label: 'Most Active Stage', value: investor.stats.mostActiveStage, icon: Briefcase, color: 'text-purple-500 bg-purple-500/10' },
-          { label: 'Top Co-Investor', value: investor.stats.topPartner, icon: Users, color: 'text-orange-500 bg-orange-500/10' },
-          { label: 'Primary Focus', value: investor.stats.topFocus, icon: Flame, color: 'text-rose-500 bg-rose-500/10' }
+          { label: 'Top Partner', value: investor.stats.topPartner, icon: Users, color: 'text-orange-500 bg-orange-500/10' },
+          { label: 'Top Focus Area', value: investor.stats.topFocus, icon: Flame, color: 'text-rose-500 bg-rose-500/10' }
         ].map((stat, idx) => {
           const Icon = stat.icon;
           return (
@@ -247,48 +247,53 @@ export default function InvestorProfilePage({ params }: PageProps) {
       </section>
 
       {/* ========================================================
-          5. VELOCITY & Evolution CHARTS
+          5. VELOCITY, FLOW & EVOLUTION (Three Columns Progress layout)
           ======================================================== */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Investment Velocity Bar Chart */}
-        <div className="p-6 rounded-2xl border bg-card shadow-xs">
-          <h3 className="text-lg font-black text-foreground mb-4">Investment Velocity</h3>
-          <div className="w-full h-[200px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={investor.investmentVelocity}>
-                <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={10} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={10} />
-                <Tooltip 
-                  contentStyle={{ 
-                    background: 'var(--card)', 
-                    borderColor: 'var(--border)', 
-                    color: 'var(--foreground)',
-                    borderRadius: '8px',
-                    fontSize: '11px'
-                  }} 
-                />
-                <Bar dataKey="dealsCount" fill="var(--primary)" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        {/* Column 1: Investment Velocity Progress Bars */}
+        <div className="p-6 rounded-2xl border bg-card shadow-xs flex flex-col justify-between min-h-[300px]">
+          <div>
+            <h3 className="text-lg font-black text-foreground mb-4">Investment Velocity</h3>
+            <div className="space-y-3">
+              {[
+                { year: 2022, count: 14, label: 'AI Deals' },
+                { year: 2023, count: 21, label: 'AI Deals' },
+                { year: 2024, count: 36, label: 'AI Deals' },
+                { year: 2025, count: 48, label: 'AI Deals' },
+                { year: 2026, count: 31, label: 'Deals YTD' }
+              ].map((row) => (
+                <div key={row.year} className="flex items-center gap-3 text-xs">
+                  <span className="w-8 text-muted-foreground font-mono">{row.year}</span>
+                  <div className="flex-1 bg-secondary rounded-full h-2.5 overflow-hidden">
+                    <div 
+                      className="bg-primary h-full rounded-full" 
+                      style={{ width: `${(row.count / 48) * 100}%` }}
+                    />
+                  </div>
+                  <span className="w-16 text-right font-bold text-foreground">
+                    {row.count} <span className="font-medium text-muted-foreground text-[10px]">{row.label.split(' ')[1]}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Capital flow indicators */}
-        <div className="p-6 rounded-2xl border bg-card shadow-xs flex flex-col justify-between">
+        {/* Column 2: Capital Flow Increasing/Decreasing */}
+        <div className="p-6 rounded-2xl border bg-card shadow-xs flex flex-col justify-between min-h-[300px]">
           <div>
-            <h3 className="text-lg font-black text-foreground mb-4">Capital Flow Trends</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">Tracking sector capitalization shifts dynamically over 12 months.</p>
-            
-            <div className="grid grid-cols-2 gap-6 mt-6">
+            <h3 className="text-lg font-black text-foreground mb-4">Capital Flow</h3>
+            <div className="grid grid-cols-2 gap-4">
               {/* Increasing */}
               <div className="space-y-3">
-                <span className="text-[10px] text-emerald-500 uppercase font-black tracking-widest flex items-center gap-1 leading-none">
-                  <TrendingUp className="w-4.5 h-4.5" /> Increasing
+                <span className="text-[10px] text-emerald-500 uppercase font-black tracking-wider flex items-center gap-1 leading-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Increasing Capital
                 </span>
                 <div className="space-y-1.5">
                   {investor.capitalFlow.increasing.map((s) => (
-                    <div key={s} className="px-2.5 py-1.5 rounded-lg border bg-emerald-500/5 text-xs font-semibold text-foreground">
-                      {s}
+                    <div key={s} className="px-2.5 py-1.5 rounded-lg border bg-emerald-500/5 text-xs font-semibold text-foreground truncate">
+                      &uarr; {s}
                     </div>
                   ))}
                 </div>
@@ -296,24 +301,43 @@ export default function InvestorProfilePage({ params }: PageProps) {
 
               {/* Decreasing */}
               <div className="space-y-3">
-                <span className="text-[10px] text-rose-500 uppercase font-black tracking-widest flex items-center gap-1 leading-none">
-                  <TrendingDown className="w-4.5 h-4.5" /> Decreasing
+                <span className="text-[10px] text-rose-500 uppercase font-black tracking-wider flex items-center gap-1 leading-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Decreasing Capital
                 </span>
                 <div className="space-y-1.5">
                   {investor.capitalFlow.decreasing.map((s) => (
-                    <div key={s} className="px-2.5 py-1.5 rounded-lg border bg-rose-500/5 text-xs font-semibold text-foreground">
-                      {s}
+                    <div key={s} className="px-2.5 py-1.5 rounded-lg border bg-rose-500/5 text-xs font-semibold text-foreground truncate">
+                      &darr; {s}
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="pt-4 border-t flex justify-end text-xs text-muted-foreground font-semibold">
-            Based on active VC syndicate reports.
+        {/* Column 3: Stage Evolution */}
+        <div className="p-6 rounded-2xl border bg-card shadow-xs flex flex-col justify-between min-h-[300px]">
+          <div>
+            <h3 className="text-lg font-black text-foreground mb-4">Stage Evolution</h3>
+            <div className="space-y-3 relative pl-4 border-l">
+              {[
+                { year: 2021, text: 'Seed Heavy' },
+                { year: 2022, text: 'Seed + Series A' },
+                { year: 2023, text: 'Series A Focus' },
+                { year: 2024, text: 'Series A + Growth' },
+                { year: 2025, text: 'Growth Equity Expansion' }
+              ].map((row) => (
+                <div key={row.year} className="relative text-xs flex flex-col gap-0.5">
+                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-primary border border-white" />
+                  <span className="font-bold text-foreground leading-none">{row.year}</span>
+                  <span className="text-muted-foreground text-[10px] leading-relaxed">{row.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
       </section>
 
       {/* ========================================================
