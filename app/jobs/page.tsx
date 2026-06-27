@@ -107,7 +107,7 @@ export default function JobsDiscoveryPage() {
   };
 
   return (
-    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
       <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
@@ -268,7 +268,7 @@ export default function JobsDiscoveryPage() {
 
                     <button
                       onClick={() => handleApply(job.title, job.companyName)}
-                      className="px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer select-none"
+                      className="px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-xs cursor-pointer select-none"
                     >
                       APPLY NOW
                     </button>

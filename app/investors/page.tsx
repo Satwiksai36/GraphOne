@@ -240,12 +240,12 @@ export default function InvestorsDiscoveryPage() {
   ];
 
   return (
-    <div className="space-y-16 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-16 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* ========================================================
           HERO BANNER
           ======================================================== */}
-      <section className="relative overflow-hidden py-16 lg:py-24 rounded-3xl bg-radial from-primary/5 via-transparent to-transparent">
+      <section className="relative overflow-hidden pt-6 pb-16 lg:pt-8 lg:pb-24 rounded-3xl bg-radial from-primary/5 via-transparent to-transparent">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-6 space-y-6">
@@ -451,7 +451,7 @@ export default function InvestorsDiscoveryPage() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
               />
               {/* Dark overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-transparent" />
               
               <div className="absolute inset-0 p-5 flex flex-col justify-between z-10">
                 <span className="text-[10px] font-black text-white/70 uppercase tracking-wide leading-none">

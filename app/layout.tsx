@@ -29,11 +29,13 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <ThemeProvider>
           <ToastProvider>
-            <Navbar />
-            <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-              {children}
-            </main>
-            <Footer />
+            <div className="flex-1 min-h-screen bg-white dark:bg-[#030303] text-zinc-900 dark:text-zinc-100 flex flex-col transition-colors duration-300">
+              <Navbar />
+              <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+                {children}
+              </main>
+              <Footer />
+            </div>
           </ToastProvider>
         </ThemeProvider>
       </body>

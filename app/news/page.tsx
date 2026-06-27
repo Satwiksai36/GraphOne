@@ -70,7 +70,7 @@ export default function NewsDiscoveryPage() {
   };
 
   return (
-    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
       <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
@@ -103,7 +103,7 @@ export default function NewsDiscoveryPage() {
                 <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
               </div>
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
-                <Icon className="w-6 h-6 stroke-[2]" />
+                <Icon className="w-6 h-6 stroke-2" />
               </div>
             </div>
           );

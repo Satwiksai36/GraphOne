@@ -61,7 +61,7 @@ export default function FundingDiscoveryPage() {
   }, [searchQuery, selectedStage]);
 
   return (
-    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
       <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
@@ -94,7 +94,7 @@ export default function FundingDiscoveryPage() {
                 <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
               </div>
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
-                <Icon className="w-6 h-6 stroke-[2]" />
+                <Icon className="w-6 h-6 stroke-2" />
               </div>
             </div>
           );
@@ -103,14 +103,14 @@ export default function FundingDiscoveryPage() {
 
       {/* Search and Filters */}
       <section className="flex flex-col md:flex-row items-center justify-between gap-5 border-b pb-6">
-        <div className="relative w-full md:max-w-md bg-white border border-zinc-200 rounded-full p-1 shadow-sm flex items-center">
+        <div className="relative w-full md:max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full p-1 shadow-sm flex items-center">
           <Search className="w-4 h-4 text-zinc-400 shrink-0 ml-3" />
           <input
             type="text"
             placeholder="Search by company name or lead investor..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 pl-2.5 pr-4 py-2 text-xs text-zinc-900 bg-transparent placeholder-muted-foreground outline-none w-full"
+            className="flex-1 pl-2.5 pr-4 py-2 text-xs text-zinc-900 dark:text-zinc-100 bg-transparent placeholder-muted-foreground outline-none w-full"
           />
         </div>
 

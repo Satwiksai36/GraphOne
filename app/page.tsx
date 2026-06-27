@@ -161,12 +161,12 @@ export default function CompaniesHomePage() {
   };
 
   return (
-    <div className="space-y-16 py-6">
+    <div className="space-y-16 pb-6 pt-0">
       
       {/* ========================================================
           HERO SECTION
           ======================================================== */}
-      <section className="relative overflow-hidden py-12 md:py-20 rounded-3xl bg-radial from-primary/5 via-transparent to-transparent">
+      <section className="relative overflow-hidden pt-4 pb-12 md:pt-6 md:pb-20 rounded-3xl bg-radial from-primary/5 via-transparent to-transparent">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Text Column */}
@@ -549,9 +549,9 @@ export default function CompaniesHomePage() {
       </section>
 
       {/* ========================================================
-          SECTION 9: FRONTIER LABS (Dark Horizontal Strip)
+          SECTION 9: FRONTIER LABS (Adaptive Horizontal Strip)
           ======================================================== */}
-      <section className="bg-zinc-950 text-white rounded-3xl p-8 overflow-hidden shadow-2xl relative">
+      <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 text-zinc-900 dark:text-white rounded-3xl p-8 overflow-hidden shadow-2xs dark:shadow-2xl relative transition-all">
         <div className="absolute right-0 bottom-0 top-0 w-1/4 opacity-15 pointer-events-none">
           <svg className="w-full h-full text-indigo-500" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M 0 100 Q 50 0 100 100 Z" fill="currentColor" />
@@ -560,19 +560,19 @@ export default function CompaniesHomePage() {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white text-[11px] font-black shrink-0">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white text-[11px] font-black shrink-0">
               9
             </span>
             <div>
-              <h3 className="text-lg font-black tracking-tight">Frontier AI Labs</h3>
-              <p className="text-xs text-white/50 mt-0.5">Organizations advancing the state-of-the-art.</p>
+              <h3 className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">Frontier AI Labs</h3>
+              <p className="text-xs text-zinc-500 dark:text-white/50 mt-0.5">Organizations advancing the state-of-the-art.</p>
             </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {frontierLabs.map((lab) => (
-              <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-white/10" />
+              <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-zinc-600 dark:text-white/70 hover:text-primary dark:hover:text-white transition-colors">
+                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-zinc-200 dark:border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
@@ -581,9 +581,9 @@ export default function CompaniesHomePage() {
       </section>
 
       {/* ========================================================
-          SECTION 10: OPEN SOURCE LEADERS (Dark Horizontal Strip)
+          SECTION 10: OPEN SOURCE LEADERS (Adaptive Horizontal Strip)
           ======================================================== */}
-      <section className="bg-zinc-950 text-white rounded-3xl p-8 overflow-hidden shadow-2xl relative">
+      <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 text-zinc-900 dark:text-white rounded-3xl p-8 overflow-hidden shadow-2xs dark:shadow-2xl relative transition-all">
         <div className="absolute left-0 bottom-0 top-0 w-1/4 opacity-15 pointer-events-none">
           <svg className="w-full h-full text-emerald-500" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M 0 0 Q 50 100 100 0 Z" fill="currentColor" />
@@ -592,19 +592,19 @@ export default function CompaniesHomePage() {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white text-[11px] font-black shrink-0">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-800 dark:text-white text-[11px] font-black shrink-0">
               10
             </span>
             <div>
-              <h3 className="text-lg font-black tracking-tight">Open Source AI Leaders</h3>
-              <p className="text-xs text-white/50 mt-0.5">Leading the open source movement.</p>
+              <h3 className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">Open Source AI Leaders</h3>
+              <p className="text-xs text-zinc-500 dark:text-white/50 mt-0.5">Leading the open source movement.</p>
             </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {openSourceLeaders.map((lab) => (
-              <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-white/10" />
+              <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-zinc-600 dark:text-white/70 hover:text-primary dark:hover:text-white transition-colors">
+                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-zinc-200 dark:border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
