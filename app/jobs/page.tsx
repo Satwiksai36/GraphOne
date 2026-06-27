@@ -140,7 +140,7 @@ export default function JobsDiscoveryPage() {
                 <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
               </div>
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
-                <Icon className="w-6 h-6 stroke-[2]" />
+                <Icon className="w-6 h-6 stroke-2" />
               </div>
             </div>
           );
