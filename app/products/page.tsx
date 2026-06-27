@@ -8,11 +8,20 @@ import {
   ChevronRight, Send, Compass, Cpu, Bot, Terminal, Code, ArrowRight
 } from 'lucide-react';
 
-import { products } from '@/data/mockDb';
+import { products, companies } from '@/data/mockDb';
 import { Product } from '@/types';
-import { LeftSidebar } from '@/components/layout/LeftSidebar';
 import { useToast } from '@/components/ui/Toast';
 import { CompanyLogo } from '@/components/common/BrandLogo';
+
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
 
 export default function ProductsPage() {
   const { toast } = useToast();
@@ -108,9 +117,6 @@ export default function ProductsPage() {
   return (
     <div className="flex gap-8 py-4 relative items-start">
       
-      {/* 1. LEFT SIDEBAR PANEL */}
-      <LeftSidebar />
-
       {/* 2. CENTER SCROLLABLE FEED */}
       <div className="flex-1 space-y-8 min-w-0">
         
@@ -247,14 +253,16 @@ export default function ProductsPage() {
         <section className="space-y-4">
           <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest leading-none">Popular Right Now</p>
           <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-            {popularRightNow.map((p) => (
-              <div 
-                key={p.id}
-                onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
-                className="w-[180px] p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors flex flex-col justify-between h-[120px] shrink-0 cursor-pointer group"
-              >
-                <div className="flex items-center justify-between">
-                  <CompanyLogo id={p.id} name={p.name} className="w-7 h-7 shrink-0" />
+            {popularRightNow.map((p) => {
+              const coObj = companies.find(c => c.id === p.companyId);
+              return (
+                <div 
+                  key={p.id}
+                  onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
+                  className="w-[180px] p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors flex flex-col justify-between h-[120px] shrink-0 cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-7 h-7 shrink-0" />
                   <span className="text-[9px] font-bold text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 leading-none">
                     <ArrowUp className="w-3 h-3" /> {p.votesCount}
                   </span>
@@ -264,7 +272,7 @@ export default function ProductsPage() {
                   <p className="text-[10px] text-muted-foreground truncate leading-none mt-1">{p.tagline}</p>
                 </div>
               </div>
-            ))}
+            ); })}
           </div>
         </section>
 
@@ -295,15 +303,17 @@ export default function ProductsPage() {
           {/* Vertical items feed */}
           {filteredProducts.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {filteredProducts.slice(0, visibleCount).map((p) => (
-                <div 
-                  key={p.id}
-                  onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
-                  className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/20 transition-all group cursor-pointer"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    {/* Logo/Icon */}
-                    <CompanyLogo id={p.id} name={p.name} className="w-10 h-10 shrink-0" />
+              {filteredProducts.slice(0, visibleCount).map((p) => {
+                const coObj = companies.find(c => c.id === p.companyId);
+                return (
+                  <div 
+                    key={p.id}
+                    onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
+                    className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/20 transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      {/* Logo/Icon */}
+                      <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-10 h-10 shrink-0" />
                     {/* Info */}
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
@@ -371,7 +381,8 @@ export default function ProductsPage() {
                     </button>
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
           ) : (
             <div className="py-16 text-center text-muted-foreground border border-dashed rounded-xl">

@@ -5,10 +5,26 @@ import React, { useState } from 'react';
 interface LogoProps {
   id: string;
   name: string;
+  domain?: string;
   className?: string;
 }
 
-// Domain mappings for pulling original brand logo files
+// Local logo image assets copied from reference folder
+const localLogos: Record<string, string> = {
+  'agentx': '/logos/agentx -logo.png',
+  'autocoder': '/logos/autocoder-logo.png',
+  'chatmatrix': '/logos/chatmatrix-logo.png',
+  'cloudbrain': '/logos/cloudbrain-logo.png',
+  'cybercorp': '/logos/cyber-corp-logo.png',
+  'deepflow': '/logos/deep flow-logo.png',
+  'matrixcompute': '/logos/matrix-logo.png',
+  'matrix': '/logos/matrix-logo.png',
+  'perplexity': '/logos/perplexity-logo.png',
+  'shieldai': '/logos/shieldai-logo.png',
+  'synapse': '/logos/synaspe-logo.png'
+};
+
+// Comprehensive domain mappings for all real AI companies
 const companyDomains: Record<string, string> = {
   'openai': 'openai.com',
   'chatgpt': 'openai.com',
@@ -52,11 +68,30 @@ const companyDomains: Record<string, string> = {
   'bria-ai': 'bria.ai',
   'characterx': 'characterx.ai',
   'linfty': 'linfty.com',
-  'palette': 'palette.fm'
+  'palette': 'palette.fm',
+  'groq': 'groq.com',
+  'scale-ai': 'scale.com',
+  'scale': 'scale.com',
+  'pinecone': 'pinecone.io',
+  'weights-biases': 'wandb.ai',
+  'wandb': 'wandb.ai',
+  'phind': 'phind.com',
+  'harvey': 'harvey.ai',
+  'luma-ai': 'lumalabs.ai',
+  'luma': 'lumalabs.ai',
+  'clarity': 'clarity.ai',
+  'rockset': 'rockset.com',
+  'global-illumination': 'globalillumination.com',
+  'safe-superintelligence': 'ssi.inc',
+  'ssi': 'ssi.inc',
+  'world-labs': 'worldlabs.ai',
+  'worldlabs': 'worldlabs.ai',
+  'unity': 'unity.com'
 };
 
 const investorDomains: Record<string, string> = {
   'sequoia': 'sequoiacap.com',
+  'sequoia-capital': 'sequoiacap.com',
   'andreessen': 'a16z.com',
   'a16z': 'a16z.com',
   'lightspeed': 'lsvp.com',
@@ -87,15 +122,99 @@ const investorDomains: Record<string, string> = {
   'spc': 'southparkcommons.com'
 };
 
-export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
+// Generates a beautiful procedurally-designed SVG corporate logo using determinism
+function AbstractLogo({ name, className = 'w-full h-full' }: { name: string; className?: string }) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  const absHash = Math.abs(hash);
+  const hue1 = absHash % 360;
+  const hue2 = (absHash + 120) % 360;
+  const shapeType = absHash % 4; // 4 different aesthetic shape styles
+  
+  const color1 = `hsl(${hue1}, 80%, 60%)`;
+  const color2 = `hsl(${hue2}, 75%, 55%)`;
+  const color3 = `hsl(${(hue1 + 240) % 360}, 90%, 65%)`;
+
+  return (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id={`bg-grad-${absHash}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={color1} stopOpacity="0.25" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <linearGradient id={`shape-grad-${absHash}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={color1} />
+          <stop offset="100%" stopColor={color2} />
+        </linearGradient>
+      </defs>
+      
+      <circle cx="50" cy="50" r="48" fill={`url(#bg-grad-${absHash})`} stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.1" />
+
+      {shapeType === 0 && (
+        // Overlapping geometric orbits
+        <>
+          <circle cx="40" cy="50" r="20" fill={`url(#shape-grad-${absHash})`} fillOpacity="0.8" />
+          <circle cx="60" cy="50" r="20" fill={color3} fillOpacity="0.65" />
+          <circle cx="50" cy="50" r="10" stroke="#fff" strokeWidth="2.5" />
+        </>
+      )}
+      {shapeType === 1 && (
+        // Abstract nodes/neural connections
+        <>
+          <line x1="25" y1="25" x2="50" y2="75" stroke={`url(#shape-grad-${absHash})`} strokeWidth="5" strokeLinecap="round" />
+          <line x1="75" y1="25" x2="50" y2="75" stroke={`url(#shape-grad-${absHash})`} strokeWidth="5" strokeLinecap="round" />
+          <line x1="25" y1="25" x2="75" y2="25" stroke={color3} strokeWidth="4" strokeLinecap="round" />
+          <circle cx="25" cy="25" r="10" fill={color1} />
+          <circle cx="75" cy="25" r="10" fill={color2} />
+          <circle cx="50" cy="75" r="12" fill={color3} />
+        </>
+      )}
+      {shapeType === 2 && (
+        // Diamond prism shape
+        <>
+          <path d="M50 15L82 50L50 85L18 50Z" fill={`url(#shape-grad-${absHash})`} fillOpacity="0.85" />
+          <path d="M50 15L50 85" stroke="#fff" strokeWidth="2" strokeOpacity="0.5" />
+          <path d="M18 50L82 50" stroke="#fff" strokeWidth="2" strokeOpacity="0.5" />
+          <circle cx="50" cy="50" r="12" fill="none" stroke="#fff" strokeWidth="3" />
+        </>
+      )}
+      {shapeType === 3 && (
+        // Intersecting futuristic curves
+        <>
+          <path d="M25 35 C 50 65, 50 65, 75 35" stroke={`url(#shape-grad-${absHash})`} strokeWidth="9" strokeLinecap="round" />
+          <path d="M25 65 C 50 35, 50 35, 75 65" stroke={color3} strokeWidth="7" strokeLinecap="round" />
+          <circle cx="50" cy="50" r="8" fill="#fff" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 
-  // Try to find domain mapping
+  // 1. Check if we have a local public logo asset
+  if (localLogos[normId]) {
+    return (
+      <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+        <img 
+          src={localLogos[normId]} 
+          alt={name} 
+          className="w-full h-full object-contain rounded-lg"
+        />
+      </div>
+    );
+  }
+
+  // 2. Verify if it is a real-world company with an actual mapped logo domain
   const matchedKey = Object.keys(companyDomains).find(key => normId.includes(key));
   const domain = matchedKey ? companyDomains[matchedKey] : null;
 
-  if (domain) {
+  if (domain && loadState !== 'fallback') {
     if (loadState === 'hunter') {
       return (
         <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
@@ -122,7 +241,7 @@ export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
     }
   }
 
-  // Fallback 1: Custom SVGs
+  // Fallback 1: Premium custom vector SVGs for core companies
   if (normId.includes('openai') || normId.includes('chatgpt')) {
     return (
       <div className={`rounded-xl bg-[#10a37f] flex items-center justify-center text-white p-1.5 shrink-0 ${className}`}>
@@ -174,23 +293,23 @@ export function CompanyLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
     );
   }
 
-  // Fallback 2: Initials text box
+  // Fallback 2: Premium dynamic abstract vector logo instead of letter initials
   return (
-    <div className={`rounded-xl bg-secondary border flex items-center justify-center font-black text-sm text-muted-foreground select-none shrink-0 ${className}`}>
-      {name[0]}
+    <div className={`rounded-xl bg-secondary/40 border flex items-center justify-center p-1.5 shrink-0 ${className}`}>
+      <AbstractLogo name={name} />
     </div>
   );
 }
 
-export function InvestorLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
+export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 
-  // Try to find domain mapping
+  // Verify if it is a real-world VC with an actual mapped logo domain
   const matchedKey = Object.keys(investorDomains).find(key => normId.includes(key));
   const domain = matchedKey ? investorDomains[matchedKey] : null;
 
-  if (domain) {
+  if (domain && loadState !== 'fallback') {
     if (loadState === 'hunter') {
       return (
         <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
@@ -257,10 +376,10 @@ export function InvestorLogo({ id, name, className = 'w-10 h-10' }: LogoProps) {
     );
   }
 
-  // Fallback 2: Initials text box
+  // Fallback 2: Premium dynamic abstract vector logo instead of letter initials
   return (
-    <div className={`rounded-xl bg-secondary border flex items-center justify-center font-black text-sm text-muted-foreground select-none shrink-0 ${className}`}>
-      {name[0]}
+    <div className={`rounded-xl bg-secondary/40 border flex items-center justify-center p-1.5 shrink-0 ${className}`}>
+      <AbstractLogo name={name} />
     </div>
   );
 }

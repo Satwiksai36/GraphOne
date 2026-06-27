@@ -12,6 +12,16 @@ interface EmergingCardProps {
   featured?: boolean;
 }
 
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
+
 export function EmergingCard({ company, featured = false }: EmergingCardProps) {
   if (featured) {
     return (
@@ -32,7 +42,7 @@ export function EmergingCard({ company, featured = false }: EmergingCardProps) {
           <div className="flex-1 flex flex-col justify-between relative z-10">
             <div>
               <div className="flex items-center gap-3">
-                <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
+                <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-10 h-10 shrink-0" />
                 <div>
                   <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-none">
                     {company.name}
@@ -72,7 +82,7 @@ export function EmergingCard({ company, featured = false }: EmergingCardProps) {
       >
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <CompanyLogo id={company.id} name={company.name} className="w-9 h-9 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-9 h-9 shrink-0" />
             <div className="min-w-0">
               <h4 className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
                 {company.name}

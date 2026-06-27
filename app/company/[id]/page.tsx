@@ -17,6 +17,16 @@ import { useToast } from '@/components/ui/Toast';
 import { formatValuation } from '@/lib/utils';
 import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -95,7 +105,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4 min-w-0">
             {/* Logo */}
-            <CompanyLogo id={company.id} name={company.name} className="w-20 h-20 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-20 h-20 shrink-0" />
             
             {/* Metadata info */}
             <div className="min-w-0 space-y-2">

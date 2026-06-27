@@ -13,6 +13,16 @@ interface CompanyListCardProps {
   viewMode: 'grid' | 'list';
 }
 
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
+
 export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
   const isGrid = viewMode === 'grid';
 
@@ -25,7 +35,7 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors"
         >
           <div className="flex items-center gap-3.5 min-w-0">
-            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-10 h-10 shrink-0" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
                 <h4 className="text-sm font-bold text-foreground truncate leading-none">
@@ -75,7 +85,7 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
         <div>
           {/* Header Row */}
           <div className="flex items-start justify-between gap-2">
-            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-10 h-10 shrink-0" />
             
             <span className="px-2 py-0.5 rounded-full bg-secondary text-[9px] font-black uppercase tracking-wider text-muted-foreground">
               {company.categories[0] || 'AI Platform'}

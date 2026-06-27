@@ -431,6 +431,21 @@ for (let i = 0; i < 28; i++) {
   }
 }
 
+// Mapped verified real-world company IDs/slugs for sorting priority
+export const realCompanyKeys = [
+  'openai', 'chatgpt', 'gpt-4o', 'codex', 'sora', 'operator', 'openai-agents',
+  'anthropic', 'claude-3-5', 'perplexity', 'cursor', 'midjourney', 'xai',
+  'huggingface', 'hugging-face', 'mistral-ai', 'mistral', 'google-deepmind',
+  'deepmind', 'gemini-1-5', 'databricks', 'cohere', 'pika', 'cognition',
+  'devin', 'adept', 'glean', 'lovable', 'reka', 'ollama', 'together-ai',
+  'character-ai', 'runway', 'synthesia', 'elevenlabs', 'deci', 'typeface',
+  'granola', 'memgpt', 'bria-ai', 'characterx', 'linfty', 'palette',
+  'groq', 'scale-ai', 'scale', 'pinecone', 'weights-biases', 'wandb',
+  'phind', 'harvey', 'luma-ai', 'luma', 'clarity', 'synthesia', 'rockset',
+  'global-illumination', 'safe-superintelligence', 'ssi', 'world-labs',
+  'worldlabs', 'unity'
+];
+
 // ==========================================
 // 3. COMPANIES (Target: 60)
 // ==========================================
@@ -852,6 +867,17 @@ if (companies.length > 60) {
   companies.splice(60);
 }
 
+// Sort companies: verified/real first, generic ones last
+companies.sort((a, b) => {
+  const aNorm = a.id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const bNorm = b.id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const aReal = realCompanyKeys.some(k => aNorm.includes(k));
+  const bReal = realCompanyKeys.some(k => bNorm.includes(k));
+  if (aReal && !bReal) return -1;
+  if (!aReal && bReal) return 1;
+  return 0;
+});
+
 // ==========================================
 // 4. PRODUCTS (Target: 40)
 // ==========================================
@@ -1047,8 +1073,31 @@ for (let i = 0; i < extraProductNames.length; i++) {
                  id.includes('scale') ? 'scale-ai' :
                  id.includes('dbrx') ? 'databricks' :
                  id.includes('pinecone') ? 'pinecone' :
-                 id.includes('w&b') ? 'weights-&-biases' :
-                 id.includes('devin') ? 'cognition' : 'openai',
+                 id.includes('w-b') ? 'weights-biases' :
+                 id.includes('devin') ? 'cognition' :
+                 id.includes('adept') ? 'adept' :
+                 id.includes('glean') ? 'glean' :
+                 id.includes('reka') ? 'reka' :
+                 id.includes('deci') ? 'deci' :
+                 id.includes('typeface') ? 'typeface' :
+                 id.includes('granola') ? 'granola' :
+                 id.includes('memgpt') ? 'memgpt' :
+                 id.includes('bria') ? 'bria-ai' :
+                 id.includes('characterx') ? 'characterx' :
+                 id.includes('unity') ? 'unity' :
+                 id.includes('palette') ? 'palette' :
+                 id.includes('ollama') ? 'ollama' :
+                 id.includes('phind') ? 'phind' :
+                 id.includes('harvey') ? 'harvey' :
+                 id.includes('luma') ? 'luma-ai' :
+                 id.includes('clarity') ? 'clarity' :
+                 id.includes('synthesia') ? 'synthesia' :
+                 id.includes('rockset') ? 'rockset' :
+                 id.includes('global') ? 'global-illumination' :
+                 id.includes('ssi') ? 'safe-superintelligence--ssi-' :
+                 id.includes('world') ? 'world-labs' :
+                 id.includes('cohere') ? 'cohere' :
+                 id.includes('mistral') ? 'mistral-ai' : 'openai',
       categories,
       votesCount: 1000 + (i * 120),
       commentsCount: 20 + (i * 4),
@@ -1064,6 +1113,17 @@ for (let i = 0; i < extraProductNames.length; i++) {
 if (products.length > 40) {
   products.splice(40);
 }
+
+// Sort products: real/verified parent companies first, generic ones last
+products.sort((a, b) => {
+  const aNorm = a.companyId.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const bNorm = b.companyId.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const aReal = realCompanyKeys.some(k => aNorm.includes(k));
+  const bReal = realCompanyKeys.some(k => bNorm.includes(k));
+  if (aReal && !bReal) return -1;
+  if (!aReal && bReal) return 1;
+  return 0;
+});
 
 // ==========================================
 // 5. NEWS ARTICLES (Target: 150)

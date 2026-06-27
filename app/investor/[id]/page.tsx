@@ -15,6 +15,16 @@ import { useToast } from '@/components/ui/Toast';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -214,11 +224,12 @@ export default function InvestorProfilePage({ params }: PageProps) {
         <div className="flex gap-6 overflow-x-auto pb-4 no-scrollbar">
           {investor.recentInvestments.map((deal, idx) => {
             const companyName = deal.companyId.replace('-', ' ');
+            const coObj = companies.find(c => c.id === deal.companyId);
             return (
               <div key={idx} className="w-[220px] p-5 rounded-xl border bg-card flex flex-col justify-between h-[150px] shrink-0">
                 <div>
                   <div className="flex items-center justify-between">
-                    <CompanyLogo id={deal.companyId} name={companyName} className="w-8 h-8 shrink-0" />
+                    <CompanyLogo id={deal.companyId} name={companyName} domain={extractDomain(coObj?.website)} className="w-8 h-8 shrink-0" />
                     {deal.lead && (
                       <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 leading-none">
                         Lead

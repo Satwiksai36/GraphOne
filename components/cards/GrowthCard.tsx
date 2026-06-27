@@ -13,6 +13,16 @@ interface GrowthCardProps {
   index: number;
 }
 
+const extractDomain = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    const cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+    return cleanUrl.split('/')[0];
+  } catch (e) {
+    return undefined;
+  }
+};
+
 export function GrowthCard({ company, index }: GrowthCardProps) {
   // Rotate wave colors for aesthetic variety
   const colors = ['#ff3366', '#06b6d4', '#8b5cf6', '#f97316', '#3b82f6'];
@@ -42,7 +52,7 @@ export function GrowthCard({ company, index }: GrowthCardProps) {
         {/* Content Area */}
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <CompanyLogo id={company.id} name={company.name} className="w-10 h-10 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-10 h-10 shrink-0" />
             <div className="min-w-0">
               <h4 className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
                 {company.name}
