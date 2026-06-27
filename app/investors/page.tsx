@@ -347,7 +347,7 @@ export default function InvestorsDiscoveryPage() {
                   >
                     <div className="flex items-center gap-1.5 min-w-0">
                       {showLeftLogo && (
-                        <InvestorLogo id={logo.id} name={logo.fullName} className="w-4.5 h-4.5 border-none bg-transparent rounded-none shrink-0" />
+                        <InvestorLogo id={logo.id} name={logo.fullName} className="w-6 h-6 border-none bg-transparent rounded-none shrink-0" />
                       )}
                       
                       <h4 className="text-sm font-black text-zinc-900 tracking-tight leading-none truncate">
@@ -355,7 +355,7 @@ export default function InvestorsDiscoveryPage() {
                       </h4>
                       
                       {showRightLogo && (
-                        <InvestorLogo id={logo.id} name={logo.fullName} className="w-4.5 h-4.5 border-none bg-transparent rounded-none shrink-0" />
+                        <InvestorLogo id={logo.id} name={logo.fullName} className="w-6 h-6 border-none bg-transparent rounded-none shrink-0" />
                       )}
                     </div>
                     <p className="text-[10px] text-zinc-400 font-bold leading-none truncate">
@@ -395,9 +395,7 @@ export default function InvestorsDiscoveryPage() {
                 <div className="absolute -right-8 -top-8 w-20 h-20 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-300" />
                 
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center p-1.5 border border-white/20">
-                    <InvestorLogo id={investor.id} name={investor.fullName} className="w-full h-full border-none bg-transparent rounded-lg" />
-                  </div>
+                  <InvestorLogo id={investor.id} name={investor.fullName} className="w-12 h-12 shrink-0 rounded-2xl" />
                   <h3 className="text-lg font-black mt-6 leading-tight group-hover:underline">
                     {investor.name}
                   </h3>
@@ -525,9 +523,7 @@ export default function InvestorsDiscoveryPage() {
             <div key={item.id} className="p-6 rounded-2xl border bg-card flex flex-col justify-between h-[280px] shadow-xs relative hover:shadow-md transition-shadow">
               <div>
                 <div className="flex items-start justify-between">
-                  <div className="w-10 h-10 rounded-xl border flex items-center justify-center p-1 bg-white dark:bg-zinc-800 shadow-xs">
-                    <InvestorLogo id={item.id} name={item.name} className="w-full h-full border-none rounded-lg" />
-                  </div>
+                  <InvestorLogo id={item.id} name={item.name} className="w-12 h-12 shrink-0 rounded-xl" />
                   <span className="text-[10px] text-muted-foreground font-black uppercase">
                     {item.count} portfolio
                   </span>
@@ -577,7 +573,7 @@ export default function InvestorsDiscoveryPage() {
                 <div className="space-y-3">
                   {winner.backedBy.map((backer, idx) => (
                     <div key={idx} className="flex items-center gap-3">
-                      <InvestorLogo id={backer.id} name={backer.name} className="w-7 h-7 shrink-0 border border-zinc-100 dark:border-zinc-800" />
+                      <InvestorLogo id={backer.id} name={backer.name} className="w-9 h-9 shrink-0 border border-zinc-100 dark:border-zinc-800" />
                       <span className="text-xs font-semibold text-foreground truncate">{backer.name}</span>
                     </div>
                   ))}
@@ -645,9 +641,7 @@ export default function InvestorsDiscoveryPage() {
         <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar items-center">
           {emerging.map((firm) => (
             <div key={firm.name} className="w-[180px] p-5 rounded-2xl border bg-card flex flex-col justify-between h-[155px] shrink-0 hover:shadow-xs transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-secondary border flex items-center justify-center p-1.5">
-                <InvestorLogo id={firm.logo} name={firm.name} className="w-full h-full border-none rounded-lg" />
-              </div>
+              <InvestorLogo id={firm.logo} name={firm.name} className="w-12 h-12 shrink-0 rounded-xl" />
               <div className="mt-4">
                 <h4 className="text-sm font-black text-foreground leading-none">{firm.name}</h4>
                 <p className="text-[10px] text-muted-foreground mt-1">{firm.type}</p>

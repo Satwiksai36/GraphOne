@@ -220,7 +220,7 @@ export default function ProductsPage() {
                     onClick={() => toast(`Opening ${orbit.label}`, 'info')}
                     className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-xl p-1.5 flex flex-col items-center justify-center w-[76px] h-[76px] cursor-pointer hover:border-zinc-350 transition-all select-none"
                   >
-                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-7 h-7 border-none shrink-0" />
+                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-9 h-9 border-none shrink-0" />
                     <span className="text-[9px] font-black text-zinc-800 mt-1 leading-none text-center truncate w-full">
                       {orbit.label}
                     </span>
@@ -287,7 +287,7 @@ export default function ProductsPage() {
                   className="w-[180px] p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors flex flex-col justify-between h-[120px] shrink-0 cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
-                    <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-7 h-7 shrink-0" />
+                    <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-9 h-9 shrink-0" />
                   <span className="text-[9px] font-bold text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 leading-none">
                     <ArrowUp className="w-3 h-3" /> {p.votesCount}
                   </span>
@@ -338,7 +338,7 @@ export default function ProductsPage() {
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       {/* Logo/Icon */}
-                      <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-10 h-10 shrink-0" />
+                      <CompanyLogo id={p.companyId} name={p.name} domain={extractDomain(coObj?.website)} className="w-12 h-12 shrink-0" />
                     {/* Info */}
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
@@ -442,9 +442,7 @@ export default function ProductsPage() {
             </div>
             
             <div className="flex items-center gap-3 mt-4">
-              <div className="w-9 h-9 rounded-lg bg-emerald-950 text-white flex items-center justify-center font-bold text-sm select-none">
-                C
-              </div>
+              <CompanyLogo id="cursor" name="Cursor" className="w-9 h-9 shrink-0 rounded-lg" />
               <div>
                 <h4 className="text-xs font-bold leading-none text-foreground">Cursor</h4>
                 <p className="text-[10px] text-muted-foreground mt-1 leading-none">AI Code Editor</p>

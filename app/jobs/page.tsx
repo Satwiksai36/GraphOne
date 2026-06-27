@@ -221,14 +221,12 @@ export default function JobsDiscoveryPage() {
                   className="p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-850 bg-white dark:bg-zinc-900 shadow-2xs hover:shadow-md hover:scale-[1.01] transition-all flex flex-col justify-between gap-5 relative overflow-hidden group"
                 >
                   <div className="flex items-start gap-4 min-w-0">
-                    <div className="p-2 border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-2xl shrink-0">
-                      <CompanyLogo 
-                        id={job.companyId} 
-                        name={job.companyName} 
-                        domain={extractDomain(company?.website)} 
-                        className="w-11 h-11 shrink-0 rounded-xl" 
-                      />
-                    </div>
+                    <CompanyLogo 
+                      id={job.companyId} 
+                      name={job.companyName} 
+                      domain={extractDomain(company?.website)} 
+                      className="w-13 h-13 shrink-0 rounded-2xl" 
+                    />
                     
                     <div className="min-w-0 space-y-1.5 flex-1">
                       <div className="flex flex-wrap items-center gap-2">

@@ -105,7 +105,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4 min-w-0">
             {/* Logo */}
-            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-20 h-20 shrink-0" />
+            <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-24 h-24 shrink-0 shadow-xs rounded-2xl" />
             
             {/* Metadata info */}
             <div className="min-w-0 space-y-2">
@@ -306,7 +306,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
             <div className="space-y-2">
               {company.investors.filter(i => i.type === 'seed').map((inv, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 p-2.5 rounded-lg border bg-secondary/30 text-xs font-bold text-foreground">
-                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-5 h-5 shrink-0" />
+                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-7 h-7 shrink-0" />
                   {inv.investorId.replace('-', ' ')}
                 </div>
               ))}
@@ -319,7 +319,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
             <div className="space-y-2">
               {company.investors.filter(i => i.type === 'series').map((inv, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 p-2.5 rounded-lg border bg-secondary/30 text-xs font-bold text-foreground">
-                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-5 h-5 shrink-0" />
+                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-7 h-7 shrink-0" />
                   {inv.investorId.replace('-', ' ')}
                 </div>
               ))}
@@ -332,7 +332,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
             <div className="space-y-2">
               {company.investors.filter(i => i.type === 'growth').map((inv, idx) => (
                 <div key={idx} className="flex items-center gap-2.5 p-2.5 rounded-lg border bg-secondary/30 text-xs font-bold text-foreground">
-                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-5 h-5 shrink-0" />
+                  <InvestorLogo id={inv.investorId} name={inv.investorId.replace('-', ' ')} className="w-7 h-7 shrink-0" />
                   {inv.investorId.replace('-', ' ')}
                 </div>
               ))}
@@ -392,7 +392,7 @@ export default function CompanyDetailPage({ params }: PageProps) {
             <div key={p.id} className="p-5 rounded-2xl border bg-card hover:shadow-xs transition-shadow flex flex-col justify-between min-h-[140px] group">
               <div>
                 <div className="flex items-center justify-between">
-                  <CompanyLogo id={p.id} name={p.name} className="w-8 h-8 shrink-0" />
+                  <CompanyLogo id={p.id} name={p.name} className="w-10 h-10 shrink-0" />
                   <span className="text-[9px] px-2 py-0.5 rounded-full font-bold bg-secondary text-muted-foreground uppercase tracking-wide leading-none">
                     {p.categories[0] || 'AI'}
                   </span>

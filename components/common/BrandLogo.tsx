@@ -151,7 +151,7 @@ function AbstractLogo({ name, className = 'w-full h-full' }: { name: string; cla
         </linearGradient>
       </defs>
       
-      <circle cx="50" cy="50" r="48" fill={`url(#bg-grad-${absHash})`} stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.1" />
+      <rect x="4" y="4" width="92" height="92" rx="20" ry="20" fill={`url(#bg-grad-${absHash})`} stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.1" />
 
       {shapeType === 0 && (
         // Overlapping geometric orbits

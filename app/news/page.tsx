@@ -192,7 +192,7 @@ export default function NewsDiscoveryPage() {
                         href={`/company/${company.id}`}
                         className="flex items-center gap-2 p-1.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 transition-colors shadow-2xs"
                       >
-                        <CompanyLogo id={company.id} name={company.name} className="w-6 h-6 border-none shrink-0 rounded-lg" />
+                        <CompanyLogo id={company.id} name={company.name} className="w-8 h-8 border-none shrink-0 rounded-lg" />
                         <span className="text-[10px] font-black text-zinc-700 dark:text-zinc-300 capitalize pr-1.5 leading-none">{company.name}</span>
                       </Link>
                     ) : (

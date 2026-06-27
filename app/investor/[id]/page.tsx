@@ -75,7 +75,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           {/* Logo & Bio Info */}
           <div className="flex flex-col sm:flex-row items-start gap-5 min-w-0 flex-1">
-            <InvestorLogo id={investor.id} name={investor.name} className="w-20 h-20 shrink-0 border shadow-xs" />
+            <InvestorLogo id={investor.id} name={investor.name} className="w-24 h-24 shrink-0 border shadow-xs rounded-2xl" />
             
             <div className="min-w-0 space-y-3">
               <div className="flex flex-wrap items-center gap-2.5">
@@ -492,7 +492,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {investor.coInvestors.map((co, idx) => (
                 <div key={idx} className="p-3.5 border rounded-xl bg-secondary/30 text-center flex flex-col items-center justify-center gap-2 shadow-xs hover:bg-secondary/50 transition-colors">
-                  <InvestorLogo id={co.name} name={co.name} className="w-9 h-9 rounded-lg" />
+                  <InvestorLogo id={co.name} name={co.name} className="w-11 h-11 rounded-lg" />
                   <span className="text-xs font-black text-foreground truncate w-full">{co.name}</span>
                   <span className="text-[10px] text-muted-foreground font-semibold leading-none">{co.count} joint deals</span>
                 </div>
@@ -600,7 +600,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
                     href={`/investor/${relId}`} 
                     className="flex flex-col items-center justify-center p-4 border rounded-xl bg-card hover:bg-secondary hover:shadow-xs transition-all text-center gap-2.5 h-[110px]"
                   >
-                    <InvestorLogo id={relId} name={relName} className="w-8 h-8 shrink-0" />
+                    <InvestorLogo id={relId} name={relName} className="w-10 h-10 shrink-0" />
                     <h4 className="text-[10px] font-black text-foreground leading-tight truncate w-full capitalize">{relName}</h4>
                   </Link>
                 );

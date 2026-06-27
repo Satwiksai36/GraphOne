@@ -85,6 +85,7 @@ export default function CompaniesHomePage() {
   const fundingItems: LeaderboardItem[] = useMemo(() => {
     return fundingRounds.slice(0, 3).map(r => ({
       id: r.id,
+      companyId: r.companyId,
       name: r.companyName,
       subtitle: `${r.amount} ${r.round}`,
       badge: 'Rounds',
@@ -305,7 +306,7 @@ export default function CompaniesHomePage() {
                     onClick={() => toast(`Opening ${orbit.label}`, 'info')}
                     className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-2xl p-2.5 flex flex-col items-center justify-center w-[96px] h-[96px] cursor-pointer hover:border-zinc-300 transition-all select-none"
                   >
-                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-10 h-10 border-none shrink-0" />
+                    <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-12 h-12 border-none shrink-0" />
                     <span className="text-[11px] font-black text-zinc-800 mt-2 leading-none text-center truncate w-full">
                       {orbit.label}
                     </span>
@@ -572,7 +573,7 @@ export default function CompaniesHomePage() {
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {frontierLabs.map((lab) => (
               <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-zinc-600 dark:text-white/70 hover:text-primary dark:hover:text-white transition-colors">
-                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-zinc-200 dark:border-white/10" />
+                <CompanyLogo id={lab.id} name={lab.name} className="w-8 h-8 shrink-0 border border-zinc-200 dark:border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
@@ -604,7 +605,7 @@ export default function CompaniesHomePage() {
           <div className="flex flex-wrap items-center gap-6 md:gap-8">
             {openSourceLeaders.map((lab) => (
               <Link key={lab.id} href={`/company/${lab.id}`} className="flex items-center gap-2 text-zinc-600 dark:text-white/70 hover:text-primary dark:hover:text-white transition-colors">
-                <CompanyLogo id={lab.id} name={lab.name} className="w-6 h-6 shrink-0 border border-zinc-200 dark:border-white/10" />
+                <CompanyLogo id={lab.id} name={lab.name} className="w-8 h-8 shrink-0 border border-zinc-200 dark:border-white/10" />
                 <span className="text-xs font-semibold">{lab.name}</span>
               </Link>
             ))}
@@ -665,7 +666,7 @@ export default function CompaniesHomePage() {
         <div className="flex flex-wrap items-center gap-6">
           {companies.slice(15, 22).map((c) => (
             <Link key={c.id} href={`/company/${c.id}`} className="flex flex-col items-center gap-2 group">
-              <CompanyLogo id={c.id} name={c.name} className="w-12 h-12 shrink-0 border" />
+              <CompanyLogo id={c.id} name={c.name} className="w-14 h-14 shrink-0 border" />
               <span className="text-[10px] font-bold text-muted-foreground group-hover:text-primary transition-colors leading-none">{c.name.split(' ')[0]}</span>
             </Link>
           ))}

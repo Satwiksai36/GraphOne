@@ -155,14 +155,12 @@ export default function FundingDiscoveryPage() {
                   className="p-6 rounded-3xl border border-zinc-150 dark:border-zinc-850 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-2xs hover:shadow-lg hover:scale-[1.01] transition-all relative overflow-hidden group flex items-start justify-between gap-5"
                 >
                   <div className="flex items-start gap-4 min-w-0">
-                    <div className="p-1.5 rounded-2xl shrink-0 border bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700">
-                      <CompanyLogo 
-                        id={deal.companyId} 
-                        name={deal.companyName} 
-                        domain={extractDomain(company?.website)} 
-                        className="w-11 h-11 shrink-0 rounded-xl" 
-                      />
-                    </div>
+                    <CompanyLogo 
+                      id={deal.companyId} 
+                      name={deal.companyName} 
+                      domain={extractDomain(company?.website)} 
+                      className="w-13 h-13 shrink-0 rounded-2xl" 
+                    />
                     
                     <div className="min-w-0 space-y-2">
                       <div className="flex items-center gap-2">

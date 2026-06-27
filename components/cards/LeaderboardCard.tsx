@@ -13,6 +13,7 @@ export interface LeaderboardItem {
   subtitle: string;
   badge?: string;
   route: string;
+  companyId?: string;
 }
 
 interface LeaderboardCardProps {
@@ -42,7 +43,7 @@ export function LeaderboardCard({ title, number, subtitle, items }: LeaderboardC
           <Link key={item.id} href={item.route} className="block group">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <CompanyLogo id={item.id} name={item.name} className="w-8 h-8 shrink-0" />
+                <CompanyLogo id={item.companyId || item.id} name={item.name} className="w-8 h-8 shrink-0" />
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors leading-none">
                     {item.name}
