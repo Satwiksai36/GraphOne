@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight } from 'lucide-react';
+import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight, Check, TrendingDown } from 'lucide-react';
 import { fundingRounds, companies } from '@/data/mockDb';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
@@ -27,11 +27,9 @@ export default function FundingDiscoveryPage() {
 
   // Aggregate Stats
   const stats = useMemo(() => {
-    // Parse round values safely
     const totalAmountFloat = fundingRounds.reduce((acc, r) => {
       const num = parseFloat(r.amount.replace(/[^0-9.]/g, ''));
       if (isNaN(num)) return acc;
-      // Handle Billions vs Millions
       const multiplier = r.amount.includes('B') ? 1000 : 1;
       return acc + (num * multiplier);
     }, 0);
@@ -63,68 +61,60 @@ export default function FundingDiscoveryPage() {
   }, [searchQuery, selectedStage]);
 
   return (
-    <div className="space-y-10 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
-      <section className="space-y-4 text-center max-w-2xl mx-auto">
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest leading-none select-none">
-          <TrendingUp className="w-3.5 h-3.5" /> Venture Capital Flow
+      <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
+        <div className="absolute inset-0 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
+        
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider leading-none select-none">
+          <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" /> Venture Capital Flow
         </span>
-        <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight leading-none">
+        <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-foreground tracking-tight leading-none mt-4">
           AI Funding Intelligence
         </h1>
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mt-3">
           Monitor seed rounds, venture backings, and major growth capital events shaping the frontier laboratories of artificial intelligence.
         </p>
       </section>
 
       {/* Aggregate Metrics Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
-            <DollarSign className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Total Capital Tracked</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.totalFunding}</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-black">
-            <Layers className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Total Deal Count</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.totalDeals} rounds</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black">
-            <Award className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Average Round Size</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.averageRound}</h3>
-          </div>
-        </div>
+        {[
+          { label: 'Total Capital Tracked', value: stats.totalFunding, icon: DollarSign, color: 'text-primary bg-primary/10', desc: 'Aggregate VC flow volume' },
+          { label: 'Total Deal Count', value: `${stats.totalDeals} rounds`, icon: Layers, color: 'text-purple-500 bg-purple-500/10', desc: 'Active rounds tracked YTD' },
+          { label: 'Average Round Size', value: stats.averageRound, icon: Award, color: 'text-emerald-500 bg-emerald-500/10', desc: 'Mean capital infusion size' }
+        ].map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div key={idx} className="p-6 rounded-2xl border bg-card shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-4 relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest leading-none block">{item.label}</span>
+                <h3 className="text-3xl font-black text-foreground leading-none">{item.value}</h3>
+                <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
+              </div>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
+                <Icon className="w-6 h-6 stroke-[2]" />
+              </div>
+            </div>
+          );
+        })}
       </section>
 
       {/* Search and Filters */}
-      <section className="flex flex-col md:flex-row items-center justify-between gap-4 border-b pb-6">
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <section className="flex flex-col md:flex-row items-center justify-between gap-5 border-b pb-6">
+        <div className="relative w-full md:max-w-md bg-white border border-zinc-200 rounded-full p-1 shadow-sm flex items-center">
+          <Search className="w-4 h-4 text-zinc-400 shrink-0 ml-3" />
           <input
             type="text"
             placeholder="Search by company name or lead investor..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs border rounded-xl bg-background text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors"
+            className="flex-1 pl-2.5 pr-4 py-2 text-xs text-zinc-900 bg-transparent placeholder-muted-foreground outline-none w-full"
           />
         </div>
 
-        <div className="flex gap-1.5 overflow-x-auto w-full md:w-auto no-scrollbar py-1">
+        <div className="flex gap-1.5 overflow-x-auto w-full md:w-auto no-scrollbar py-1 text-xs">
           {stages.map((stage) => (
             <button
               key={stage}
@@ -132,10 +122,10 @@ export default function FundingDiscoveryPage() {
                 setSelectedStage(stage);
                 toast(`Filtering by round: ${stage}`, 'info');
               }}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer whitespace-nowrap leading-none ${
+              className={`px-4 py-2 rounded-full border text-xs font-bold transition-all cursor-pointer whitespace-nowrap leading-none ${
                 selectedStage === stage
                   ? 'bg-primary border-primary text-white shadow-xs'
-                  : 'bg-card text-muted-foreground hover:text-foreground hover:bg-secondary'
+                  : 'bg-white text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 border-zinc-200'
               }`}
             >
               {stage}
@@ -145,56 +135,61 @@ export default function FundingDiscoveryPage() {
       </section>
 
       {/* Funding Deals Feed */}
-      <section className="space-y-4">
+      <section className="space-y-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
-          <span className="font-bold uppercase tracking-wider">{filteredDeals.length} Deals found</span>
-          <span>Sorting: Most Recent</span>
+          <span className="font-bold uppercase tracking-wider text-zinc-500">{filteredDeals.length} Deals found</span>
+          <span className="flex items-center gap-1.5 text-zinc-500">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+            Sorting: Most Recent
+          </span>
         </div>
 
         {filteredDeals.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredDeals.map((deal) => {
               const company = companies.find(c => c.id === deal.companyId);
+              
               return (
                 <div 
                   key={deal.id}
-                  className="p-5 rounded-2xl border bg-card flex items-start justify-between gap-4 hover:shadow-xs transition-shadow"
+                  className="p-6 rounded-3xl border border-zinc-150 dark:border-zinc-850 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-2xs hover:shadow-lg hover:scale-[1.01] transition-all relative overflow-hidden group flex items-start justify-between gap-5"
                 >
                   <div className="flex items-start gap-4 min-w-0">
-                    <CompanyLogo 
-                      id={deal.companyId} 
-                      name={deal.companyName} 
-                      domain={extractDomain(company?.website)} 
-                      className="w-12 h-12 shrink-0" 
-                    />
-                    <div className="min-w-0 space-y-1.5">
+                    <div className="p-1.5 rounded-2xl shrink-0 border bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700">
+                      <CompanyLogo 
+                        id={deal.companyId} 
+                        name={deal.companyName} 
+                        domain={extractDomain(company?.website)} 
+                        className="w-11 h-11 shrink-0 rounded-xl" 
+                      />
+                    </div>
+                    
+                    <div className="min-w-0 space-y-2">
                       <div className="flex items-center gap-2">
                         <Link 
                           href={`/company/${deal.companyId}`}
-                          className="text-sm font-black text-foreground hover:text-primary transition-colors truncate"
+                          className="text-sm font-black text-zinc-900 dark:text-zinc-100 hover:text-primary transition-colors truncate"
                         >
                           {deal.companyName}
                         </Link>
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground border uppercase tracking-wider">
+                        <span className="text-[9px] font-black px-2 py-0.5 rounded leading-none border uppercase tracking-wider bg-primary/5 text-primary border-primary/20">
                           {deal.round}
                         </span>
                       </div>
                       
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {deal.date}
-                        </span>
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500">
+                        <Calendar className="w-3.5 h-3.5 opacity-80" />
+                        <span>{deal.date}</span>
                       </div>
 
                       {/* Lead Investors */}
                       <div className="pt-2">
-                        <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">Lead Investor(s)</p>
-                        <div className="flex flex-wrap gap-1.5 mt-1">
+                        <p className="text-[9px] text-zinc-400 dark:text-zinc-500 font-black uppercase tracking-wider leading-none mb-1.5">Lead Investor(s)</p>
+                        <div className="flex flex-wrap gap-1.5">
                           {deal.leadInvestors.map((investor, idx) => (
                             <span 
                               key={idx}
-                              className="text-[10px] font-semibold px-2 py-0.5 border rounded-md bg-secondary/35 text-foreground"
+                              className="text-[9.5px] font-bold px-2 py-1 rounded-md border bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700"
                             >
                               {investor}
                             </span>
@@ -204,15 +199,19 @@ export default function FundingDiscoveryPage() {
                     </div>
                   </div>
 
-                  <div className="text-right shrink-0">
-                    <p className="text-lg font-black text-primary leading-none">
-                      {deal.amount}
-                    </p>
+                  <div className="text-right shrink-0 flex flex-col justify-between h-full min-h-[105px]">
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-zinc-400 dark:text-zinc-500 font-black uppercase tracking-wider leading-none">Deal Size</p>
+                      <p className="text-xl font-black text-primary font-mono leading-none pt-0.5">
+                        {deal.amount}
+                      </p>
+                    </div>
+                    
                     <Link 
                       href={`/company/${deal.companyId}`}
-                      className="inline-flex items-center gap-0.5 text-[10px] font-bold text-muted-foreground hover:text-primary transition-colors mt-4 select-none"
+                      className="inline-flex items-center gap-0.5 text-[9px] font-black uppercase tracking-widest mt-auto select-none hover:underline text-zinc-400 dark:text-zinc-500 hover:text-primary"
                     >
-                      Entity Profile <ArrowUpRight className="w-3.5 h-3.5" />
+                      Entity <ArrowUpRight className="w-3 h-3" />
                     </Link>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Calendar, Newspaper, ArrowUpRight, TrendingUp, Filter, Sparkles } from 'lucide-react';
+import { Search, Calendar, Newspaper, ArrowUpRight, TrendingUp, Filter, Sparkles, User, Link as LinkIcon, Compass } from 'lucide-react';
 import { news, companies } from '@/data/mockDb';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
@@ -59,69 +59,71 @@ export default function NewsDiscoveryPage() {
     });
   }, [searchQuery, selectedSource]);
 
+  // Source colors config helper
+  const getSourceBadgeStyle = (src: string) => {
+    const s = src.toLowerCase();
+    if (s.includes('crunch') || s.includes('tc')) return 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+    if (s.includes('bloomberg') || s.includes('bb')) return 'bg-blue-500/10 text-blue-600 border border-blue-500/20';
+    if (s.includes('venture') || s.includes('vb')) return 'bg-orange-500/10 text-orange-600 border border-orange-500/20';
+    if (s.includes('wired')) return 'bg-red-500/10 text-red-600 border border-red-500/20';
+    return 'bg-zinc-500/10 text-zinc-600 border border-zinc-500/20';
+  };
+
   return (
-    <div className="space-y-10 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
-      <section className="space-y-4 text-center max-w-2xl mx-auto">
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest leading-none select-none">
-          <Newspaper className="w-3.5 h-3.5" /> Intelligence Feed
+      <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
+        <div className="absolute inset-0 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
+        
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider leading-none select-none">
+          <Newspaper className="w-3.5 h-3.5 stroke-[2.5]" /> Intelligence Feed
         </span>
-        <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight leading-none">
+        <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-foreground tracking-tight leading-none mt-4">
           AI News Network
         </h1>
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mt-3">
           The global wire for artificial intelligence research announcements, product launches, corporate developments, and capital tables.
         </p>
       </section>
 
       {/* Aggregate Metrics Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
-            <Newspaper className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Stories Tracked</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.totalStories} articles</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-black">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Firms Mentioned</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.startupsMentioned} startups</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black">
-            <TrendingUp className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Trending Subject</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.trendingTopic}</h3>
-          </div>
-        </div>
+        {[
+          { label: 'Stories Tracked', value: `${stats.totalStories} articles`, icon: Newspaper, color: 'text-primary bg-primary/10', desc: 'Cumulative news headlines' },
+          { label: 'Firms Mentioned', value: `${stats.startupsMentioned} startups`, icon: Sparkles, color: 'text-purple-500 bg-purple-500/10', desc: 'Unique covered organizations' },
+          { label: 'Trending Subject', value: stats.trendingTopic, icon: TrendingUp, color: 'text-emerald-500 bg-emerald-500/10', desc: 'Highest developer discussion activity' }
+        ].map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div key={idx} className="p-6 rounded-2xl border bg-card shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-4 relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest leading-none block">{item.label}</span>
+                <h3 className="text-3xl font-black text-foreground leading-none">{item.value}</h3>
+                <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
+              </div>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
+                <Icon className="w-6 h-6 stroke-[2]" />
+              </div>
+            </div>
+          );
+        })}
       </section>
 
       {/* Search and Filters */}
-      <section className="flex flex-col md:flex-row items-center justify-between gap-4 border-b pb-6">
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <section className="flex flex-col md:flex-row items-center justify-between gap-5 border-b pb-6">
+        <div className="relative w-full md:max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full p-1 shadow-sm flex items-center">
+          <Search className="w-4 h-4 text-muted-foreground shrink-0 ml-3" />
           <input
             type="text"
             placeholder="Search news titles, publishers, or companies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs border rounded-xl bg-background text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors"
+            className="flex-1 pl-2.5 pr-4 py-2 text-xs text-foreground bg-transparent placeholder-muted-foreground outline-none w-full"
           />
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto py-1">
+        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto py-1 text-xs">
           <Filter className="w-4 h-4 text-muted-foreground shrink-0 hidden sm:block" />
           <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
             {sources.map((src) => (
@@ -131,7 +133,7 @@ export default function NewsDiscoveryPage() {
                   setSelectedSource(src);
                   toast(`Filtering by publisher: ${src}`, 'info');
                 }}
-                className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer whitespace-nowrap leading-none ${
+                className={`px-4 py-2 rounded-full border text-xs font-bold transition-all cursor-pointer whitespace-nowrap leading-none ${
                   selectedSource === src
                     ? 'bg-primary border-primary text-white shadow-xs'
                     : 'bg-card text-muted-foreground hover:text-foreground hover:bg-secondary'
@@ -145,64 +147,66 @@ export default function NewsDiscoveryPage() {
       </section>
 
       {/* Latest Feed List */}
-      <section className="space-y-4">
+      <section className="space-y-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
           <span className="font-bold uppercase tracking-wider">{filteredNews.length} Headlines Found</span>
-          <span>Sorting: Most Recent</span>
+          <span className="flex items-center gap-1.5 font-bold uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+            Live Wire Feed
+          </span>
         </div>
 
         {filteredNews.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredNews.map((article) => {
               const company = companies.find(c => c.id === article.companyId);
               return (
                 <div 
                   key={article.id}
-                  className="p-5 rounded-2xl border bg-card hover:shadow-xs transition-shadow flex flex-col justify-between gap-4"
+                  className="p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-850 bg-white dark:bg-zinc-900 shadow-2xs hover:shadow-md hover:scale-[1.01] transition-all flex flex-col justify-between gap-5 relative overflow-hidden group"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
-                      <span className="flex items-center gap-1 font-bold text-primary leading-none">
-                        <Calendar className="w-3.5 h-3.5" />
-                        {article.date}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border font-semibold">
+                  <div className="space-y-3.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className={`text-[9px] font-black px-2 py-0.5 rounded leading-none uppercase tracking-wider ${getSourceBadgeStyle(article.source)}`}>
                         {article.source}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-bold flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 opacity-80" />
+                        {article.date}
                       </span>
                     </div>
 
-                    <h3 className="text-sm font-black text-foreground leading-snug">
+                    <a 
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-base font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-snug hover:text-primary transition-colors cursor-pointer"
+                    >
                       {article.title}
-                    </h3>
+                    </a>
                   </div>
 
-                  {/* Company Tag */}
-                  <div className="flex items-center justify-between pt-3 border-t">
+                  <div className="flex items-center justify-between border-t pt-4 mt-auto">
                     {company ? (
-                      <div className="flex items-center gap-2">
-                        <CompanyLogo 
-                          id={company.id} 
-                          name={company.name} 
-                          domain={extractDomain(company.website)} 
-                          className="w-6 h-6 shrink-0" 
-                        />
-                        <Link 
-                          href={`/company/${company.id}`}
-                          className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {company.name}
-                        </Link>
-                      </div>
+                      <Link 
+                        href={`/company/${company.id}`}
+                        className="flex items-center gap-2 p-1.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 transition-colors shadow-2xs"
+                      >
+                        <CompanyLogo id={company.id} name={company.name} className="w-6 h-6 border-none shrink-0 rounded-lg" />
+                        <span className="text-[10px] font-black text-zinc-700 dark:text-zinc-300 capitalize pr-1.5 leading-none">{company.name}</span>
+                      </Link>
                     ) : (
-                      <div className="text-xs text-muted-foreground">General Intelligence</div>
+                      <span className="text-[10px] text-muted-foreground font-bold">General News</span>
                     )}
 
-                    <button 
-                      onClick={() => toast(`Navigating to ${article.source} source details for: "${article.title}"...`, 'success')}
-                      className="inline-flex items-center gap-0.5 text-xs font-bold text-primary hover:text-primary/90 transition-colors select-none cursor-pointer"
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors select-none"
                     >
-                      Read Story <ArrowUpRight className="w-4 h-4" />
-                    </button>
+                      READ STORY <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
                   </div>
                 </div>
               );
@@ -210,7 +214,7 @@ export default function NewsDiscoveryPage() {
           </div>
         ) : (
           <div className="py-20 text-center text-muted-foreground border border-dashed rounded-2xl bg-card">
-            No news articles found matching the search filters.
+            No headlines found matching the criteria.
           </div>
         )}
       </section>

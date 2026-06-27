@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Briefcase, MapPin, Users, Building, ArrowUpRight, CheckCircle } from 'lucide-react';
+import { Search, Briefcase, MapPin, Users, Building, ArrowUpRight, CheckCircle, Flame, Sparkles, Terminal, Code, Cpu, ShieldAlert, BadgeInfo } from 'lucide-react';
 import { companies } from '@/data/mockDb';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
@@ -66,7 +66,6 @@ export default function JobsDiscoveryPage() {
   const locations = useMemo(() => {
     const locs = new Set<string>();
     allJobs.forEach(j => {
-      // Split location to city for cleaner filtering
       const city = j.location.split(',')[0].trim();
       locs.add(city);
     });
@@ -103,175 +102,184 @@ export default function JobsDiscoveryPage() {
     });
   }, [allJobs, searchQuery, selectedDept, selectedLocation]);
 
+  const handleApply = (jobTitle: string, companyName: string) => {
+    toast(`Redirecting to application portal for ${jobTitle} at ${companyName}`, 'success');
+  };
+
   return (
-    <div className="space-y-10 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Overview Hero Title */}
-      <section className="space-y-4 text-center max-w-2xl mx-auto">
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest leading-none select-none">
-          <Briefcase className="w-3.5 h-3.5" /> Career Opportunities
+      <section className="relative overflow-hidden py-12 px-6 rounded-3xl border bg-card shadow-xs text-center max-w-4xl mx-auto">
+        <div className="absolute inset-0 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
+        
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider leading-none select-none">
+          <Briefcase className="w-3.5 h-3.5 stroke-[2.5]" /> Career Opportunities
         </span>
-        <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight leading-none">
+        <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-foreground tracking-tight leading-none mt-4">
           AI Talent Graph
         </h1>
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mt-3">
           Discover open technical, research, and product roles at leading foundation labs and fast-growing AI startups.
         </p>
       </section>
 
       {/* Aggregate Metrics Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Open Postings</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.totalJobs} jobs</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-black">
-            <Building className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Hiring Organizations</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.companiesHiring} companies</h3>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border bg-card shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black">
-            <MapPin className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider leading-none">Top Hiring Hub</p>
-            <h3 className="text-2xl font-black text-foreground mt-2 leading-none">{stats.hiringHub}</h3>
-          </div>
-        </div>
+        {[
+          { label: 'Active Postings', value: `${stats.totalJobs} jobs`, icon: Users, color: 'text-primary bg-primary/10', desc: 'Sourced across top AI platforms' },
+          { label: 'Hiring Organizations', value: `${stats.companiesHiring} firms`, icon: Building, color: 'text-purple-500 bg-purple-500/10', desc: 'Firms with active headcounts' },
+          { label: 'Top Hiring Hub', value: stats.hiringHub, icon: MapPin, color: 'text-emerald-500 bg-emerald-500/10', desc: 'Highest developer demand density' }
+        ].map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div key={idx} className="p-6 rounded-2xl border bg-card shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-4 relative overflow-hidden group">
+              <div className="space-y-1.5">
+                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest leading-none block">{item.label}</span>
+                <h3 className="text-3xl font-black text-foreground leading-none">{item.value}</h3>
+                <p className="text-[10px] text-muted-foreground font-medium">{item.desc}</p>
+              </div>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
+                <Icon className="w-6 h-6 stroke-[2]" />
+              </div>
+            </div>
+          );
+        })}
       </section>
 
-      {/* Search and Filters Layout */}
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b pb-6">
-        {/* Search */}
-        <div className="relative col-span-1 md:col-span-6 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search roles or hiring startups..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 text-xs border rounded-xl bg-background text-foreground placeholder-muted-foreground outline-0 focus:border-primary transition-colors"
-          />
-        </div>
+      {/* Search and Filters */}
+      <section className="space-y-4 border-b pb-6">
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="relative w-full md:flex-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full p-1 shadow-sm flex items-center">
+            <Search className="w-4 h-4 text-muted-foreground shrink-0 ml-3" />
+            <input
+              type="text"
+              placeholder="Search by job title or company name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 pl-2.5 pr-4 py-2 text-xs text-foreground bg-transparent placeholder-muted-foreground outline-none w-full"
+            />
+          </div>
 
-        {/* Department Filter */}
-        <div className="col-span-1 md:col-span-3 w-full">
-          <select
-            value={selectedDept}
-            onChange={(e) => {
-              setSelectedDept(e.target.value);
-              toast(`Department filter: ${e.target.value}`, 'info');
-            }}
-            className="w-full px-3 py-2 text-xs border rounded-xl bg-card text-foreground outline-0 focus:border-primary transition-colors"
-          >
-            <option value="All">All Departments</option>
-            {departments.filter(d => d !== 'All').map(d => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-        </div>
+          <div className="flex flex-wrap items-center gap-3 text-xs w-full md:w-auto shrink-0">
+            {/* Department Filter */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground font-bold leading-none">Dept:</span>
+              <select 
+                value={selectedDept}
+                onChange={(e) => setSelectedDept(e.target.value)}
+                className="bg-card text-foreground border border-zinc-200 dark:border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-semibold outline-none cursor-pointer"
+              >
+                {departments.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
 
-        {/* Location Filter */}
-        <div className="col-span-1 md:col-span-3 w-full">
-          <select
-            value={selectedLocation}
-            onChange={(e) => {
-              setSelectedLocation(e.target.value);
-              toast(`Location filter: ${e.target.value}`, 'info');
-            }}
-            className="w-full px-3 py-2 text-xs border rounded-xl bg-card text-foreground outline-0 focus:border-primary transition-colors"
-          >
-            <option value="All">All Locations</option>
-            {locations.filter(l => l !== 'All').map(l => (
-              <option key={l} value={l}>{l}</option>
-            ))}
-          </select>
+            {/* Location Filter */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground font-bold leading-none">Location:</span>
+              <select 
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="bg-card text-foreground border border-zinc-200 dark:border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-semibold outline-none cursor-pointer"
+              >
+                {locations.map(l => (
+                  <option key={l} value={l}>{l}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Jobs Feed List */}
-      <section className="space-y-4">
+      <section className="space-y-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
-          <span className="font-bold uppercase tracking-wider">{filteredJobs.length} Careers Found</span>
-          <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> Active Postings Only</span>
+          <span className="font-bold uppercase tracking-wider">{filteredJobs.length} Jobs listed</span>
+          <span className="flex items-center gap-1.5 font-bold uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+            Verified Opportunities
+          </span>
         </div>
 
         {filteredJobs.length > 0 ? (
-          <div className="flex flex-col gap-3">
-            {filteredJobs.map((job) => (
-              <div 
-                key={job.id}
-                className="p-5 rounded-2xl border bg-card hover:bg-secondary/15 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div className="flex items-start gap-4 min-w-0">
-                  <CompanyLogo 
-                    id={job.companyId} 
-                    name={job.companyName} 
-                    domain={extractDomain(job.website)} 
-                    className="w-11 h-11 shrink-0" 
-                  />
-                  <div className="min-w-0 space-y-1.5">
-                    <h4 className="text-sm font-black text-foreground leading-none">
-                      {job.title}
-                    </h4>
-                    
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                      <Link 
-                        href={`/company/${job.companyId}`}
-                        className="font-bold text-foreground hover:text-primary transition-colors"
-                      >
-                        {job.companyName}
-                      </Link>
-                      <span>&middot;</span>
-                      <span className="flex items-center gap-1 leading-none">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {job.location}
-                      </span>
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredJobs.map((job) => {
+              const company = companies.find(c => c.id === job.companyId);
+              
+              // Custom Department Icon / Styling
+              const isTechRole = job.department.toLowerCase().includes('eng') || job.department.toLowerCase().includes('research') || job.department.toLowerCase().includes('tech');
+              const isProductRole = job.department.toLowerCase().includes('product') || job.department.toLowerCase().includes('design');
+              
+              const DeptIcon = isTechRole ? Code : (isProductRole ? Terminal : Briefcase);
+              const deptBg = isTechRole ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : (isProductRole ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20' : 'bg-purple-500/10 text-purple-600 border border-purple-500/20');
 
-                    <div className="flex flex-wrap items-center gap-2 pt-1">
-                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground border uppercase tracking-wider">
-                        {job.department}
-                      </span>
-                      <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
-                        {job.type}
-                      </span>
+              return (
+                <div 
+                  key={job.id}
+                  className="p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-850 bg-white dark:bg-zinc-900 shadow-2xs hover:shadow-md hover:scale-[1.01] transition-all flex flex-col justify-between gap-5 relative overflow-hidden group"
+                >
+                  <div className="flex items-start gap-4 min-w-0">
+                    <div className="p-2 border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-2xl shrink-0">
+                      <CompanyLogo 
+                        id={job.companyId} 
+                        name={job.companyName} 
+                        domain={extractDomain(company?.website)} 
+                        className="w-11 h-11 shrink-0 rounded-xl" 
+                      />
+                    </div>
+                    
+                    <div className="min-w-0 space-y-1.5 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link 
+                          href={`/company/${job.companyId}`}
+                          className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors truncate"
+                        >
+                          {job.companyName}
+                        </Link>
+                        <span className={`text-[8.5px] font-black px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1 ${deptBg}`}>
+                          <DeptIcon className="w-3 h-3" /> {job.department}
+                        </span>
+                      </div>
+                      
+                      <h4 className="text-base font-black text-zinc-900 dark:text-zinc-100 leading-tight tracking-tight pt-0.5">
+                        {job.title}
+                      </h4>
+                      
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-bold text-muted-foreground pt-1">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 opacity-80" />
+                          {job.location}
+                        </span>
+                        <span className="text-zinc-300 font-normal">|</span>
+                        <span>{job.type}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-3 shrink-0 self-end md:self-center">
-                  <Link 
-                    href={`/company/${job.companyId}`}
-                    className="px-4 py-2 border rounded-xl bg-card hover:bg-secondary text-xs font-bold text-foreground transition-colors select-none"
-                  >
-                    View Startup
-                  </Link>
-                  <button 
-                    onClick={() => toast(`Opening apply flow for ${job.title} at ${job.companyName}...`, 'success')}
-                    className="px-4 py-2 rounded-xl bg-primary hover:bg-primary/95 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-0.5 select-none cursor-pointer"
-                  >
-                    Apply Now <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center justify-between border-t pt-4 mt-auto">
+                    <Link 
+                      href={`/company/${job.companyId}`}
+                      className="inline-flex items-center gap-0.5 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary select-none hover:underline"
+                    >
+                      FIRM PROFILE <ArrowUpRight className="w-3 h-3" />
+                    </Link>
+
+                    <button
+                      onClick={() => handleApply(job.title, job.companyName)}
+                      className="px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 transition-colors shadow-xs cursor-pointer select-none"
+                    >
+                      APPLY NOW
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="py-20 text-center text-muted-foreground border border-dashed rounded-2xl bg-card">
-            No careers found matching the filters.
+            No active jobs found matching the criteria.
           </div>
         )}
       </section>
