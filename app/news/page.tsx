@@ -3,7 +3,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Calendar, Newspaper, ArrowUpRight, TrendingUp, Filter, Sparkles, User, Link as LinkIcon, Compass } from 'lucide-react';
-import { news, companies } from '@/data/mockDb';
+// Import API client
+import { api } from '@/lib/api';
+import { Company, NewsArticle } from '@/types';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
 
@@ -22,12 +24,38 @@ export default function NewsDiscoveryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSource, setSelectedSource] = useState('All');
 
+  // Dynamic API states
+  const [news, setNews] = useState<NewsArticle[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadNewsData() {
+      try {
+        setLoading(true);
+        const [newsRes, compRes] = await Promise.all([
+          api.news.list(150),
+          api.companies.list({ limit: 100 })
+        ]);
+        setNews(newsRes.data);
+        setCompanies(compRes.data.items);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch intelligence wire.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadNewsData();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('search');
       if (q) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q);
       }
     }
@@ -38,7 +66,7 @@ export default function NewsDiscoveryPage() {
     const srcList = new Set<string>();
     news.forEach(art => srcList.add(art.source));
     return ['All', ...Array.from(srcList)];
-  }, []);
+  }, [news]);
 
   // Aggregate stats
   const stats = useMemo(() => {
@@ -51,7 +79,7 @@ export default function NewsDiscoveryPage() {
       startupsMentioned: uniqueStartups.size,
       trendingTopic: 'Frontier AI Agents'
     };
-  }, []);
+  }, [news]);
 
   // Filtered news feed list
   const filteredNews = useMemo(() => {
@@ -68,7 +96,31 @@ export default function NewsDiscoveryPage() {
 
       return matchesSearch && matchesSource;
     });
-  }, [searchQuery, selectedSource]);
+  }, [news, companies, searchQuery, selectedSource]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading intelligence feed...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Data Load Error</h3>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+        <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   // Source colors config helper
   const getSourceBadgeStyle = (src: string) => {

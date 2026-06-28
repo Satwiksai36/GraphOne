@@ -10,9 +10,9 @@ import {
   Brain, Zap, Play, Mic, Database, ChevronDown, Cpu
 } from 'lucide-react';
 
-// Import mock data
-import { companies, fundingRounds, news } from '@/data/mockDb';
-import { Company } from '@/types';
+// Import API client
+import { api } from '@/lib/api';
+import { Company, FundingRound, NewsArticle } from '@/types';
 
 // Import custom cards
 import { TrendingCardFeatured, TrendingCardSimple } from '@/components/cards/TrendingCard';
@@ -39,12 +39,41 @@ export default function CompaniesHomePage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [visibleCount, setVisibleCount] = useState(12);
 
+  // Dynamic API states
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [fundingRounds, setFundingRounds] = useState<FundingRound[]>([]);
+  const [news, setNews] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        setLoading(true);
+        const [compRes, fundRes, newsRes] = await Promise.all([
+          api.companies.list({ limit: 100 }),
+          api.companies.getFundingRounds(),
+          api.news.list(150),
+        ]);
+        setCompanies(compRes.data.items);
+        setFundingRounds(fundRes.data);
+        setNews(newsRes.data);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch platform intelligence data.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadDashboardData();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('search');
       if (q) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q);
         setTimeout(() => {
           directoryRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -58,23 +87,23 @@ export default function CompaniesHomePage() {
   // ----------------------------------------------------
   
   // Trending Section (top 5)
-  const trendingFeatured = useMemo(() => companies.filter(c => c.isTrending).slice(0, 3), []);
-  const trendingSimple = useMemo(() => companies.filter(c => c.isTrending).slice(3, 5), []);
+  const trendingFeatured = useMemo(() => companies.filter(c => c.isTrending).slice(0, 3), [companies]);
+  const trendingSimple = useMemo(() => companies.filter(c => c.isTrending).slice(3, 5), [companies]);
 
   // Fastest Growing Section (top 5)
-  const fastestGrowing = useMemo(() => companies.filter(c => c.growthRate && c.growthRate > 100).slice(0, 5), []);
+  const fastestGrowing = useMemo(() => companies.filter(c => c.growthRate && c.growthRate > 100).slice(0, 5), [companies]);
 
   // Emerging section
-  const emergingCompanies = useMemo(() => companies.filter(c => c.isEmerging).slice(0, 4), []);
+  const emergingCompanies = useMemo(() => companies.filter(c => c.isEmerging).slice(0, 4), [companies]);
 
   // AI Unicorns
-  const unicorns = useMemo(() => companies.filter(c => c.isUnicorn).slice(0, 8), []);
+  const unicorns = useMemo(() => companies.filter(c => c.isUnicorn).slice(0, 8), [companies]);
 
   // Frontier AI Labs
-  const frontierLabs = useMemo(() => companies.filter(c => c.isFrontierLab).slice(0, 6), []);
+  const frontierLabs = useMemo(() => companies.filter(c => c.isFrontierLab).slice(0, 6), [companies]);
 
   // Open Source Leaders
-  const openSourceLeaders = useMemo(() => companies.filter(c => c.isOpenSourceLeader).slice(0, 5), []);
+  const openSourceLeaders = useMemo(() => companies.filter(c => c.isOpenSourceLeader).slice(0, 5), [companies]);
 
   // ----------------------------------------------------
   // Dynamic categories with counts
@@ -108,7 +137,7 @@ export default function CompaniesHomePage() {
       badge: 'Rounds',
       route: `/company/${r.companyId}`
     }));
-  }, []);
+  }, [fundingRounds]);
 
   const watchItems: LeaderboardItem[] = [
     { id: 'deci', name: 'Deci', subtitle: 'AI inference optimization engine', badge: 'High Perf', route: '/company/deci' },
@@ -130,14 +159,14 @@ export default function CompaniesHomePage() {
       // Category match
       const matchesCategory = 
         selectedCategory === 'All' ||
-        c.categories.some(cat => cat.toLowerCase().includes(selectedCategory.toLowerCase().replace('ai ', '')));
+        (c.categories && c.categories.some(cat => cat.toLowerCase().includes(selectedCategory.toLowerCase().replace('ai ', ''))));
       
       // Funding stage match
       const matchesStage = 
         selectedStage === 'All' ||
-        c.fundingTimeline.some(r => r.round.toLowerCase().includes(selectedStage.toLowerCase()));
+        (c.fundingTimeline && c.fundingTimeline.some(r => r.round.toLowerCase().includes(selectedStage.toLowerCase())));
 
-      // Country/Location match (simplistic logic matching USA vs Europe)
+      // Country/Location match (USA vs International)
       const matchesCountry = 
         selectedCountry === 'All' ||
         (selectedCountry === 'USA' && c.location.toLowerCase().includes('usa')) ||
@@ -157,7 +186,7 @@ export default function CompaniesHomePage() {
       // Default: trending (views count)
       return b.views7d - a.views7d;
     });
-  }, [searchQuery, selectedCategory, selectedStage, selectedCountry, sortBy]);
+  }, [companies, searchQuery, selectedCategory, selectedStage, selectedCountry, sortBy]);
 
   // Click handler for category explorer: updates filter and scrolls to directory
   const handleCategorySelect = (categoryName: string) => {
@@ -177,6 +206,30 @@ export default function CompaniesHomePage() {
     setSearchQuery('');
     toast('Filters reset successfully', 'success');
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading GraphOne intelligence wire...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Data Load Error</h3>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+        <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-16 pb-6 pt-0">

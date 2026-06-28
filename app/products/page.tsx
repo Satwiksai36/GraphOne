@@ -9,8 +9,9 @@ import {
   ChevronRight, Send, Compass, Cpu, Bot, Terminal, Code, ArrowRight
 } from 'lucide-react';
 
-import { products, companies } from '@/data/mockDb';
-import { Product } from '@/types';
+// Import API client
+import { api } from '@/lib/api';
+import { Product, Company } from '@/types';
 import { useToast } from '@/components/ui/Toast';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 
@@ -33,19 +34,42 @@ export default function ProductsPage() {
   const [visibleCount, setVisibleCount] = useState(10);
   const [email, setEmail] = useState('');
 
+  // Dynamic API states
+  const [localProducts, setLocalProducts] = useState<Product[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProductsData() {
+      try {
+        setLoading(true);
+        const [prodRes, compRes] = await Promise.all([
+          api.products.list({ limit: 100 }),
+          api.companies.list({ limit: 100 })
+        ]);
+        setLocalProducts(prodRes.data.items);
+        setCompanies(compRes.data.items);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch products catalog.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProductsData();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('search');
       if (q) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q);
       }
     }
   }, []);
-
-  // Track upvoted states locally for rich interactive feed
-  const [localProducts, setLocalProducts] = useState<Product[]>(products);
 
   const handleVote = (productId: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,6 +156,30 @@ export default function ProductsPage() {
     toast(`Subscribed: ${email}`, 'success');
     setEmail('');
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] w-full space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading products feed...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] w-full max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Data Load Error</h3>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+        <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-8 py-4 relative items-start">

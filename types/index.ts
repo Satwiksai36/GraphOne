@@ -147,3 +147,14 @@ export interface NewsArticle {
   companyId?: string; // Associated company
   url?: string;
 }
+
+export interface FundingRound {
+  id: string;
+  companyId: string;
+  companyName: string;
+  round: string;
+  amount: string;
+  date: string;
+  leadInvestors: string[];
+}
+

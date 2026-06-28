@@ -3,7 +3,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight, Check, TrendingDown, MapPin } from 'lucide-react';
-import { fundingRounds, companies } from '@/data/mockDb';
+// Import API client
+import { api } from '@/lib/api';
+import { Company, FundingRound } from '@/types';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
 
@@ -41,12 +43,38 @@ export default function FundingDiscoveryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStage, setSelectedStage] = useState('All');
 
+  // Dynamic API states
+  const [fundingRounds, setFundingRounds] = useState<FundingRound[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadFundingData() {
+      try {
+        setLoading(true);
+        const [fundRes, compRes] = await Promise.all([
+          api.companies.getFundingRounds(),
+          api.companies.list({ limit: 100 })
+        ]);
+        setFundingRounds(fundRes.data);
+        setCompanies(compRes.data.items);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch funding transactions.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadFundingData();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('search');
       if (q) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q);
       }
     }
@@ -65,14 +93,16 @@ export default function FundingDiscoveryPage() {
     }, 0);
 
     const totalFundingStr = `$${(totalAmountFloat / 1000).toFixed(1)}B`;
-    const avgRoundStr = `$${(totalAmountFloat / fundingRounds.length).toFixed(1)}M`;
+    const avgRoundStr = fundingRounds.length > 0 
+      ? `$${(totalAmountFloat / fundingRounds.length).toFixed(1)}M`
+      : '$0M';
 
     return {
       totalFunding: totalFundingStr,
       totalDeals: fundingRounds.length,
       averageRound: avgRoundStr
     };
-  }, []);
+  }, [fundingRounds]);
 
   // Filter deals
   const filteredDeals = useMemo(() => {
@@ -88,7 +118,31 @@ export default function FundingDiscoveryPage() {
 
       return matchesSearch && matchesStage;
     });
-  }, [searchQuery, selectedStage]);
+  }, [fundingRounds, companies, searchQuery, selectedStage]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading funding transactions...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Data Load Error</h3>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+        <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

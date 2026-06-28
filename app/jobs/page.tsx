@@ -3,7 +3,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Briefcase, MapPin, Users, Building, ArrowUpRight, CheckCircle, Flame, Sparkles, Terminal, Code, Cpu, ShieldAlert, BadgeInfo } from 'lucide-react';
-import { companies } from '@/data/mockDb';
+// Import API client
+import { api } from '@/lib/api';
+import { Company } from '@/types';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
 
@@ -23,12 +25,33 @@ export default function JobsDiscoveryPage() {
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All');
 
+  // Dynamic API states
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadJobsData() {
+      try {
+        setLoading(true);
+        const compRes = await api.companies.list({ limit: 100 });
+        setCompanies(compRes.data.items);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch jobs listings.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadJobsData();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('search');
       if (q) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q);
       }
     }
@@ -65,7 +88,7 @@ export default function JobsDiscoveryPage() {
     });
 
     return list;
-  }, []);
+  }, [companies]);
 
   // Filter options
   const departments = useMemo(() => {
@@ -122,6 +145,30 @@ export default function JobsDiscoveryPage() {
       window.open(careersUrl, '_blank');
     }, 1000);
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading jobs portal...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Data Load Error</h3>
+          <p className="text-sm text-muted-foreground">{error}</p>
+        </div>
+        <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 pb-6 pt-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

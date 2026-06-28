@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { Search, Building2, User, Sparkles, UserCheck, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { companies, investors, products, founders } from '@/data/mockDb';
+import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 interface SearchResult {
@@ -22,6 +22,9 @@ export function CommandPalette() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,65 +51,82 @@ export function CommandPalette() {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedIndex(0);
     }
   }, [isOpen]);
 
-  // Search logic computed on render
-  const results = useMemo<SearchResult[]>(() => {
-    if (!query.trim()) return [];
+  // Debounced API Search logic
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
 
-    const searchTerm = query.toLowerCase();
-    
-    const matchedCompanies: SearchResult[] = companies
-      .filter((c) => c.name.toLowerCase().includes(searchTerm) || c.tagline.toLowerCase().includes(searchTerm))
-      .slice(0, 4)
-      .map((c) => ({
-        id: c.id,
-        name: c.name,
-        type: 'company',
-        taglineOrRole: c.tagline,
-        route: `/company/${c.id}`
-      }));
+    const handler = setTimeout(async () => {
+      try {
+        setLoading(true);
+        const searchRes = await api.search.global(query);
+        const data = searchRes.data;
 
-    const matchedInvestors: SearchResult[] = investors
-      .filter((i) => i.name.toLowerCase().includes(searchTerm) || i.bio.toLowerCase().includes(searchTerm))
-      .slice(0, 4)
-      .map((i) => ({
-        id: i.id,
-        name: i.name,
-        type: 'investor',
-        taglineOrRole: i.location,
-        route: `/investor/${i.id}`
-      }));
+        const mapped: SearchResult[] = [];
 
-    const matchedProducts: SearchResult[] = products
-      .filter((p) => p.name.toLowerCase().includes(searchTerm) || p.tagline.toLowerCase().includes(searchTerm))
-      .slice(0, 4)
-      .map((p) => ({
-        id: p.id,
-        name: p.name,
-        type: 'product',
-        taglineOrRole: p.tagline,
-        route: `/products?search=${encodeURIComponent(p.name)}`
-      }));
+        if (data.companies) {
+          data.companies.slice(0, 4).forEach((c: any) => {
+            mapped.push({
+              id: c.id,
+              name: c.name,
+              type: 'company',
+              taglineOrRole: c.tagline,
+              route: `/company/${c.slug || c.id}`
+            });
+          });
+        }
 
-    const matchedFounders: SearchResult[] = founders
-      .filter((f) => f.name.toLowerCase().includes(searchTerm) || f.role.toLowerCase().includes(searchTerm))
-      .slice(0, 4)
-      .map((f) => {
-        const companyId = f.companies[0] || 'openai';
-        return {
-          id: f.id,
-          name: f.name,
-          type: 'founder',
-          taglineOrRole: f.role,
-          route: `/company/${companyId}`
-        };
-      });
+        if (data.investors) {
+          data.investors.slice(0, 4).forEach((i: any) => {
+            mapped.push({
+              id: i.id,
+              name: i.name,
+              type: 'investor',
+              taglineOrRole: i.location,
+              route: `/investor/${i.slug || i.id}`
+            });
+          });
+        }
 
-    return [...matchedCompanies, ...matchedInvestors, ...matchedProducts, ...matchedFounders];
+        if (data.products) {
+          data.products.slice(0, 4).forEach((p: any) => {
+            mapped.push({
+              id: p.id,
+              name: p.name,
+              type: 'product',
+              taglineOrRole: p.tagline,
+              route: `/products?search=${encodeURIComponent(p.name)}`
+            });
+          });
+        }
+
+        if (data.founders) {
+          data.founders.slice(0, 4).forEach((f: any) => {
+            mapped.push({
+              id: f.id,
+              name: f.name,
+              type: 'founder',
+              taglineOrRole: f.role,
+              route: `/company/${f.companyId || 'openai'}`
+            });
+          });
+        }
+
+        setResults(mapped);
+      } catch (err) {
+        console.error('Search failed:', err);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+
+    return () => clearTimeout(handler);
   }, [query]);
 
   // Handle arrows and Enter inside search modal
@@ -202,7 +222,12 @@ export function CommandPalette() {
 
                 {/* Body Content */}
                 <div className="flex-1 overflow-y-auto p-2 min-h-[150px]">
-                  {results.length > 0 ? (
+                  {loading ? (
+                    <div className="flex flex-col items-center justify-center py-10 space-y-2">
+                      <div className="w-6 h-6 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+                      <span className="text-xs text-muted-foreground animate-pulse">Searching database...</span>
+                    </div>
+                  ) : results.length > 0 ? (
                     <div className="flex flex-col gap-0.5">
                       {results.map((item, index) => {
                         const isSel = index === selectedIndex;

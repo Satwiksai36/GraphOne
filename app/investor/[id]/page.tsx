@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, use } from 'react';
+import React, { useState, useMemo, use, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { 
@@ -9,7 +9,9 @@ import {
   TrendingDown, Globe, Flame, Brain, Cpu, Bot, Heart, Terminal, FileText, ChevronRight, ArrowRight, Sparkles
 } from 'lucide-react';
 
-import { investors, companies } from '@/data/mockDb';
+// Import API client
+import { api } from '@/lib/api';
+import { Investor, Company } from '@/types';
 import { OwnershipDonutChart } from '@/components/charts/OwnershipDonutChart';
 import { useToast } from '@/components/ui/Toast';
 import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
@@ -33,26 +35,78 @@ export default function InvestorProfilePage({ params }: PageProps) {
   const investorId = resolvedParams.id;
   const { toast } = useToast();
 
-  const investor = useMemo(() => {
-    return investors.find(i => i.id === investorId);
-  }, [investorId]);
-
-  if (!investor) {
-    notFound();
-  }
-
+  // Dynamic API states
+  const [investor, setInvestor] = useState<Investor | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [relatedInvestors, setRelatedInvestors] = useState<Investor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  useEffect(() => {
+    async function loadInvestorData() {
+      try {
+        setLoading(true);
+        const [invRes, compRes, relatedRes] = await Promise.all([
+          api.investors.getBySlug(investorId),
+          api.companies.list({ limit: 100 }),
+          api.investors.getRelated(investorId)
+        ]);
+        setInvestor(invRes.data);
+        setCompanies(compRes.data.items);
+        setRelatedInvestors(relatedRes.data);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch investor details.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadInvestorData();
+  }, [investorId]);
+
   const handleFollow = () => {
+    if (!investor) return;
     setIsFollowing(!isFollowing);
     toast(isFollowing ? `Unfollowed ${investor.name}` : `Following ${investor.name}`, 'success');
   };
 
   const handleBookmark = () => {
+    if (!investor) return;
     setIsBookmarked(!isBookmarked);
     toast(isBookmarked ? `Removed ${investor.name} bookmark` : `Bookmarked ${investor.name}`, 'success');
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading investor dossier...</p>
+      </div>
+    );
+  }
+
+  if (error || !investor) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Investor Not Found</h3>
+          <p className="text-sm text-muted-foreground">{error || 'The requested investor record does not exist.'}</p>
+        </div>
+        <div className="flex gap-4">
+          <Link href="/investors" className="px-5 py-2.5 bg-secondary text-foreground text-xs font-bold rounded-lg hover:bg-secondary/90 transition-all">
+            Back to Directory
+          </Link>
+          <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 py-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -592,7 +646,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
             <h3 className="text-base font-black text-foreground mb-4">Related Investors</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {investor.relatedInvestors.map((relId) => {
-                const relObj = investors.find(i => i.id === relId);
+                const relObj = relatedInvestors.find((i: any) => i.id === relId);
                 const relName = relObj ? relObj.name : relId.replace('-', ' ');
                 return (
                   <Link 

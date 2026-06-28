@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useRef, use } from 'react';
+import React, { useState, useMemo, useRef, use, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { 
@@ -9,7 +9,9 @@ import {
   Award, Briefcase, Plus, BookMarked
 } from 'lucide-react';
 
-import { companies, investors, founders, products, news, fundingRounds } from '@/data/mockDb';
+// Import API client
+import { api } from '@/lib/api';
+import { Company, Founder, Product, NewsArticle } from '@/types';
 import { CompanySubNavbar } from '@/components/company/CompanySubNavbar';
 import { OwnershipDonutChart } from '@/components/charts/OwnershipDonutChart';
 import { CompanyEcosystemGraph } from '@/components/company/CompanyEcosystemGraph';
@@ -36,27 +38,38 @@ export default function CompanyDetailPage({ params }: PageProps) {
   const companyId = resolvedParams.id;
   const { toast } = useToast();
 
-  // Find the target company
-  const company = useMemo(() => {
-    return companies.find((c) => c.id === companyId);
+  // Dynamic API states
+  const [company, setCompany] = useState<Company | null>(null);
+  const [companyFounders, setCompanyFounders] = useState<Founder[]>([]);
+  const [companyProducts, setCompanyProducts] = useState<Product[]>([]);
+  const [companyNews, setCompanyNews] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadCompanyData() {
+      try {
+        setLoading(true);
+        const [compRes, foundersRes, productsRes, newsRes] = await Promise.all([
+          api.companies.getBySlug(companyId),
+          api.companies.getFounders(companyId),
+          api.companies.getProducts(companyId),
+          api.companies.getNews(companyId),
+        ]);
+        setCompany(compRes.data);
+        setCompanyFounders(foundersRes.data);
+        setCompanyProducts(productsRes.data);
+        setCompanyNews(newsRes.data);
+        setError(null);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch company profile details.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCompanyData();
   }, [companyId]);
-
-  if (!company) {
-    notFound();
-  }
-
-  // Find related data dynamically
-  const companyFounders = useMemo(() => {
-    return founders.filter((f) => f.companies.includes(company.id));
-  }, [company.id]);
-
-  const companyProducts = useMemo(() => {
-    return products.filter((p) => p.companyId === company.id);
-  }, [company.id]);
-
-  const companyNews = useMemo(() => {
-    return news.filter((n) => n.companyId === company.id).slice(0, 5);
-  }, [company.id]);
 
   // Section Refs for scroll jumping
   const overviewRef = useRef<HTMLDivElement>(null);
@@ -84,14 +97,45 @@ export default function CompanyDetailPage({ params }: PageProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const handleFollow = () => {
+    if (!company) return;
     setIsFollowing(!isFollowing);
     toast(isFollowing ? `Unfollowed ${company.name}` : `Following ${company.name}`, 'success');
   };
 
   const handleBookmark = () => {
+    if (!company) return;
     setIsBookmarked(!isBookmarked);
     toast(isBookmarked ? `Removed ${company.name} bookmark` : `Bookmarked ${company.name}`, 'success');
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+        <p className="text-sm font-bold text-muted-foreground animate-pulse">Loading company intelligence wire...</p>
+      </div>
+    );
+  }
+
+  if (error || !company) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-md mx-auto text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-destructive/10 text-destructive flex items-center justify-center text-2xl font-black">!</div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-black text-foreground">Company Profile Not Found</h3>
+          <p className="text-sm text-muted-foreground">{error || 'The requested company record does not exist.'}</p>
+        </div>
+        <div className="flex gap-4">
+          <Link href="/" className="px-5 py-2.5 bg-secondary text-foreground text-xs font-bold rounded-lg hover:bg-secondary/90 transition-all">
+            Back to Directory
+          </Link>
+          <button onClick={() => window.location.reload()} className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/95 cursor-pointer transition-all">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 py-4">
