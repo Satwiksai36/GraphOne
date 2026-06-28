@@ -414,7 +414,7 @@ export default function InvestorsDiscoveryPage() {
             <Link key={investor.id} href={`/investor/${investor.id}`} className="shrink-0">
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
-                className={`w-[240px] h-[260px] rounded-[24px] p-6 bg-linear-to-br ${investor.bg} bg-[length:200%_200%] animate-gradient-shift text-white flex flex-col justify-between shadow-xl ${investor.shadow} relative overflow-hidden group cursor-pointer transition-all duration-300`}
+                className={`w-[240px] h-[260px] rounded-[24px] p-6 bg-linear-to-br ${investor.bg} bg-size-[200%_200%] animate-gradient-shift text-white flex flex-col justify-between shadow-xl ${investor.shadow} relative overflow-hidden group cursor-pointer transition-all duration-300`}
               >
                 {/* Glowing floating fluid circle backdrop inside the card */}
                 <span className="absolute -right-12 -top-12 w-28 h-28 rounded-full bg-white/15 blur-xl pointer-events-none animate-card-glow-1 group-hover:scale-150 transition-all duration-700" />

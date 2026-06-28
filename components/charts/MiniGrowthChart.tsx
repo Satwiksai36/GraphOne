@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface MiniGrowthChartProps {
   color?: string;
@@ -50,17 +51,26 @@ export function MiniGrowthChart({ color = '#ff3366', className, points = [50, 40
         </defs>
         {/* Fill Area */}
         {areaData && (
-          <path d={areaData} fill={`url(#grad-${color.replace('#', '')})`} />
+          <motion.path 
+            d={areaData} 
+            fill={`url(#grad-${color.replace('#', '')})`} 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          />
         )}
         {/* Stroke Line */}
         {pathData && (
-          <path
+          <motion.path
             d={pathData}
             fill="none"
             stroke={color}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
           />
         )}
       </svg>

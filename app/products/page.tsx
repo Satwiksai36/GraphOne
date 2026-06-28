@@ -350,13 +350,19 @@ export default function ProductsPage() {
           {/* Vertical items feed */}
           {filteredProducts.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {filteredProducts.slice(0, visibleCount).map((p) => {
+              {filteredProducts.slice(0, visibleCount).map((p, index) => {
                 const coObj = companies.find(c => c.id === p.companyId);
                 return (
-                  <div 
+                  <motion.div 
                     key={p.id}
+                    layout
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    whileHover={{ x: 4, scale: 1.005 }}
+                    transition={{ duration: 0.25, ease: 'easeOut', delay: Math.min(index * 0.03, 0.3) }}
                     onClick={() => router.push(`/company/${p.companyId}`)}
-                    className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/20 transition-all group cursor-pointer"
+                    className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/20 transition-colors group cursor-pointer shadow-2xs hover:shadow-xs"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       {/* Logo/Icon */}
@@ -430,7 +436,7 @@ export default function ProductsPage() {
                       <Star className={`w-3.5 h-3.5 ${p.bookmarkedByUser ? 'fill-current' : ''}`} />
                     </button>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
             </div>

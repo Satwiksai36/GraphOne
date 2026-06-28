@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/common/ThemeProvider';
 import { ToastProvider } from '@/components/ui/Toast';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { ScrollAnimator } from '@/components/common/ScrollAnimator';
 import './globals.css';
 
 const inter = Inter({
@@ -30,6 +31,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ToastProvider>
             <div className="flex-1 min-h-screen bg-white dark:bg-[#030303] text-zinc-900 dark:text-zinc-100 flex flex-col transition-colors duration-300">
+              <ScrollAnimator />
               <Navbar />
               <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
                 {children}

@@ -189,17 +189,34 @@ export default function CompaniesHomePage() {
           
           {/* Left Text Column */}
           <div className="lg:col-span-7 space-y-6">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-wider select-none leading-none">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-wider select-none leading-none"
+            >
               <Sparkles className="w-3.5 h-3.5" /> AI Companies Hub
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-foreground">
+            </motion.span>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-foreground"
+            >
               Discover the world&apos;s <br />
               <span className="bg-linear-to-r from-primary to-pink-500 bg-clip-text text-transparent">most innovative</span> <br />
               AI companies
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed"
+            >
               Explore AI startups, unicorns, frontier labs, and emerging teams shaping the future of artificial intelligence. Monitor growth velocity, funding stages, and tech stacks.
-            </p>
+            </motion.p>
 
             {/* Hero Search Box (rounded input with absolute pink search button) */}
             <div className="relative max-w-md">

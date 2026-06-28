@@ -48,6 +48,8 @@ export function OwnershipDonutChart({ data }: DonutChartProps) {
             outerRadius={85}
             paddingAngle={3}
             dataKey="value"
+            animationDuration={1200}
+            animationBegin={100}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

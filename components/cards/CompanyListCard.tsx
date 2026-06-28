@@ -31,8 +31,13 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
     return (
       <Link href={`/company/${company.id}`} className="block">
         <motion.div
-          whileHover={{ x: 2 }}
-          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors"
+          layout
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          whileHover={{ x: 4, scale: 1.005 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors shadow-2xs hover:shadow-xs"
         >
           <div className="flex items-center gap-3.5 min-w-0">
             <CompanyLogo id={company.id} name={company.name} domain={extractDomain(company.website)} className="w-10 h-10 shrink-0" />
@@ -79,8 +84,13 @@ export function CompanyListCard({ company, viewMode }: CompanyListCardProps) {
   return (
     <Link href={`/company/${company.id}`} className="block">
       <motion.div
-        whileHover={{ y: -4 }}
-        className="flex flex-col justify-between p-5 rounded-2xl border bg-card hover:shadow-md transition-all h-[210px] group"
+        layout
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.96 }}
+        whileHover={{ y: -6, scale: 1.015 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="flex flex-col justify-between p-5 rounded-2xl border bg-card hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors h-[210px] group"
       >
         <div>
           {/* Header Row */}
