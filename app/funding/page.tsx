@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight, Check, TrendingDown } from 'lucide-react';
+import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight, Check, TrendingDown, MapPin } from 'lucide-react';
 import { fundingRounds, companies } from '@/data/mockDb';
 import { CompanyLogo } from '@/components/common/BrandLogo';
 import { useToast } from '@/components/ui/Toast';
@@ -16,6 +16,25 @@ const extractDomain = (url?: string) => {
     return undefined;
   }
 };
+
+// Convert a USD amount string like "$6.6B" or "$30M" to Indian Rupees label
+function toINR(usdStr: string): string {
+  const usdRate = 83.5; // approx 1 USD = 83.5 INR
+  const numMatch = usdStr.replace(/[^0-9.]/g, '');
+  const num = parseFloat(numMatch);
+  if (isNaN(num)) return '';
+  const isB = usdStr.includes('B');
+  const isM = usdStr.includes('M');
+  const usd = isB ? num * 1_000_000_000 : isM ? num * 1_000_000 : num;
+  const inr = usd * usdRate;
+  if (inr >= 1_00_00_00_000) { // >= 1 Lakh Crore
+    return `₹${(inr / 1_00_00_00_000).toFixed(1)} L Cr`;
+  }
+  if (inr >= 1_00_00_000) { // >= 1 Crore (actually Crore = 10M)
+    return `₹${(inr / 1_00_00_000).toFixed(0)} Cr`;
+  }
+  return `₹${(inr / 1_00_000).toFixed(0)} L`;
+}
 
 export default function FundingDiscoveryPage() {
   const { toast } = useToast();
@@ -170,7 +189,8 @@ export default function FundingDiscoveryPage() {
                       id={deal.companyId} 
                       name={deal.companyName} 
                       domain={extractDomain(company?.website)} 
-                      className="w-13 h-13 shrink-0 rounded-2xl" 
+                      className="w-13 h-13 shrink-0 rounded-2xl"
+                      noScale
                     />
                     
                     <div className="min-w-0 space-y-2">
@@ -214,8 +234,18 @@ export default function FundingDiscoveryPage() {
                       <p className="text-xl font-black text-primary font-mono leading-none pt-0.5">
                         {deal.amount}
                       </p>
+                      <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 font-mono leading-none">
+                        {toINR(deal.amount)}
+                      </p>
                     </div>
                     
+                    {company?.location && (
+                      <div className="flex items-center justify-end gap-1 text-[9.5px] font-semibold text-zinc-400 dark:text-zinc-500 mt-1">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        <span className="truncate max-w-[110px]">{company.location}</span>
+                      </div>
+                    )}
+
                     <Link 
                       href={`/company/${deal.companyId}`}
                       className="inline-flex items-center gap-0.5 text-[9px] font-black uppercase tracking-widest mt-auto select-none hover:underline text-zinc-400 dark:text-zinc-500 hover:text-primary"

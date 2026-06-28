@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, ArrowUp, MessageSquare, Flame, Star, Trophy, Sparkles, 
@@ -25,6 +26,7 @@ const extractDomain = (url?: string) => {
 
 export default function ProductsPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
@@ -234,7 +236,10 @@ export default function ProductsPage() {
                       left: `calc(50% + ${x}px - 38px)`, 
                       top: `calc(50% + ${y}px - 38px)` 
                     }}
-                    onClick={() => toast(`Opening ${orbit.label}`, 'info')}
+                    onClick={() => {
+                      const id = orbit.label.toLowerCase().replace(/\s+/g, '-');
+                      router.push(`/company/${id}`);
+                    }}
                     className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-xl p-1.5 flex flex-col items-center justify-center w-[76px] h-[76px] cursor-pointer hover:border-zinc-350 transition-all select-none"
                   >
                     <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-9 h-9 border-none shrink-0" />
@@ -263,12 +268,12 @@ export default function ProductsPage() {
             </p>
           </div>
           
-          <button 
-            onClick={() => toast('Exploring Vibe Coding collection...', 'info')}
+          <Link
+            href="/products?search=code"
             className="px-4 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-xs leading-none select-none"
           >
             Explore Collection
-          </button>
+          </Link>
         </section>
 
         {/* Category Selector Tabs */}
@@ -300,7 +305,7 @@ export default function ProductsPage() {
               return (
                 <div 
                   key={p.id}
-                  onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
+                  onClick={() => router.push(`/company/${p.companyId}`)}
                   className="w-[180px] p-4 rounded-xl border bg-card hover:bg-secondary/40 transition-colors flex flex-col justify-between h-[120px] shrink-0 cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
@@ -350,7 +355,7 @@ export default function ProductsPage() {
                 return (
                   <div 
                     key={p.id}
-                    onClick={() => toast(`Opening details for: ${p.name}`, 'info')}
+                    onClick={() => router.push(`/company/${p.companyId}`)}
                     className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-card hover:bg-secondary/20 transition-all group cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
@@ -406,10 +411,13 @@ export default function ProductsPage() {
                     </button>
 
                     {/* Comment Indicator */}
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground font-semibold">
+                    <Link
+                      href={`/company/${p.companyId}`}
+                      className="flex items-center gap-1 text-xs text-muted-foreground font-semibold hover:text-primary transition-colors"
+                    >
                       <MessageSquare className="w-3.5 h-3.5" />
                       <span>{Math.floor((p.votesCount * 0.02) + 12)}</span>
-                    </div>
+                    </Link>
 
                     {/* Bookmark Star Button */}
                     <button

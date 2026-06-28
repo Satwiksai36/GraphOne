@@ -21,9 +21,10 @@ interface LeaderboardCardProps {
   number: string;
   subtitle: string;
   items: LeaderboardItem[];
+  viewAllRoute?: string;
 }
 
-export function LeaderboardCard({ title, number, subtitle, items }: LeaderboardCardProps) {
+export function LeaderboardCard({ title, number, subtitle, items, viewAllRoute = '/' }: LeaderboardCardProps) {
   return (
     <div className="flex flex-col p-6 rounded-2xl border bg-card shadow-xs min-h-[300px]">
       {/* Title Header */}
@@ -66,9 +67,9 @@ export function LeaderboardCard({ title, number, subtitle, items }: LeaderboardC
 
       {/* View All Button */}
       <div className="mt-6 pt-4 border-t flex items-center justify-end">
-        <button className="text-xs font-semibold hover:text-primary flex items-center gap-0.5 cursor-pointer leading-none">
+        <Link href={viewAllRoute} className="text-xs font-semibold hover:text-primary flex items-center gap-0.5 cursor-pointer leading-none transition-colors">
           More details <ChevronRight className="w-3.5 h-3.5" />
-        </button>
+        </Link>
       </div>
     </div>
   );

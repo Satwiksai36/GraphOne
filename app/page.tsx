@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Search, ArrowRight, Grid, List, Sparkles, Filter, 
@@ -25,6 +26,7 @@ import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
 export default function CompaniesHomePage() {
   const { toast } = useToast();
+  const router = useRouter();
   const directoryRef = useRef<HTMLDivElement>(null);
 
   // States for directory filtering and searching
@@ -317,7 +319,10 @@ export default function CompaniesHomePage() {
                       left: `calc(50% + ${x}px - 48px)`, 
                       top: `calc(50% + ${y}px - 48px)` 
                     }}
-                    onClick={() => toast(`Opening ${orbit.label}`, 'info')}
+                    onClick={() => {
+                      const id = orbit.label.toLowerCase().replace(/\s+/g, '-');
+                      router.push(`/company/${id}`);
+                    }}
                     className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg rounded-2xl p-2.5 flex flex-col items-center justify-center w-[96px] h-[96px] cursor-pointer hover:border-zinc-300 transition-all select-none"
                   >
                     <CompanyLogo id={orbit.label.toLowerCase()} name={orbit.label} className="w-12 h-12 border-none shrink-0" />
@@ -527,18 +532,21 @@ export default function CompaniesHomePage() {
           number="6"
           subtitle="Companies making big moves."
           items={breakoutItems}
+          viewAllRoute="/?search=breakout"
         />
         <LeaderboardCard 
           title="Recently Funded AI Startups" 
           number="6"
           subtitle="Latest funding announcements."
           items={fundingItems}
+          viewAllRoute="/funding"
         />
         <LeaderboardCard 
           title="Startups to Watch" 
           number="7"
           subtitle="High-potential companies to keep an eye on."
           items={watchItems}
+          viewAllRoute="/?search=emerging"
         />
       </section>
 
@@ -643,22 +651,20 @@ export default function CompaniesHomePage() {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
-            { title: 'OpenAI Alumni Startups', count: 42, bg: 'from-pink-500/10 to-rose-500/10 border-pink-500/20' },
-            { title: 'YC AI Startups', count: 260, bg: 'from-orange-500/10 to-amber-500/10 border-orange-500/20' },
-            { title: 'AI Agent Leaders', count: 121, bg: 'from-violet-500/10 to-indigo-500/10 border-violet-500/20' },
-            { title: 'AI Infrastructure Leaders', count: 196, bg: 'from-blue-500/10 to-cyan-500/10 border-blue-500/20' },
-            { title: 'Most Funded Startups', count: 184, bg: 'from-emerald-500/10 to-teal-500/10 border-emerald-500/20' }
+            { title: 'OpenAI Alumni Startups', count: 42, bg: 'from-pink-500/10 to-rose-500/10 border-pink-500/20', search: 'OpenAI' },
+            { title: 'YC AI Startups', count: 260, bg: 'from-orange-500/10 to-amber-500/10 border-orange-500/20', search: 'YC' },
+            { title: 'AI Agent Leaders', count: 121, bg: 'from-violet-500/10 to-indigo-500/10 border-violet-500/20', search: 'Agents' },
+            { title: 'AI Infrastructure Leaders', count: 196, bg: 'from-blue-500/10 to-cyan-500/10 border-blue-500/20', search: 'Infrastructure' },
+            { title: 'Most Funded Startups', count: 184, bg: 'from-emerald-500/10 to-teal-500/10 border-emerald-500/20', search: 'funded' }
           ].map((col, idx) => (
-            <div
+            <Link
               key={idx}
-              onClick={() => {
-                toast(`Loading Curated Collection: ${col.title}`, 'info');
-              }}
-              className={`rounded-xl border bg-linear-to-br ${col.bg} p-4 flex flex-col justify-between h-[120px] hover:shadow-xs transition-shadow cursor-pointer`}
+              href={`/?search=${encodeURIComponent(col.search)}`}
+              className={`rounded-xl border bg-linear-to-br ${col.bg} p-4 flex flex-col justify-between h-[120px] hover:shadow-md hover:scale-[1.02] transition-all`}
             >
-              <h4 className="text-xs font-bold leading-normal text-foreground group-hover:text-primary">{col.title}</h4>
+              <h4 className="text-xs font-bold leading-normal text-foreground">{col.title}</h4>
               <p className="text-[10px] text-muted-foreground font-semibold">{col.count} companies</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

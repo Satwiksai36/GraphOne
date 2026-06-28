@@ -7,6 +7,7 @@ interface LogoProps {
   name: string;
   domain?: string;
   className?: string;
+  noScale?: boolean;
 }
 
 // Local logo image assets copied from reference folder
@@ -224,8 +225,8 @@ function scaleClassName(className: string): string {
   }).join(' ');
 }
 
-export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
-  className = scaleClassName(className);
+export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 h-10', noScale = false }: LogoProps) {
+  if (!noScale) className = scaleClassName(className);
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 
@@ -333,8 +334,8 @@ export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 
   );
 }
 
-export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
-  className = scaleClassName(className);
+export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10 h-10', noScale = false }: LogoProps) {
+  if (!noScale) className = scaleClassName(className);
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Search, Sparkles, FileText, ArrowRight, Brain, Cpu, Bot, Heart, 
@@ -14,6 +15,7 @@ import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 
 export default function InvestorsDiscoveryPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -120,7 +122,7 @@ export default function InvestorsDiscoveryPage() {
     { 
       title: 'Healthcare AI Investors', 
       count: 58, 
-      img: 'https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?w=400&auto=format&fit=crop&q=60' 
+      img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop&q=60' 
     }
   ];
 
@@ -353,7 +355,7 @@ export default function InvestorsDiscoveryPage() {
                       width: `${logo.w}px`,
                       transform: `scale(${logo.scale})` 
                     }}
-                    onClick={() => toast(`Opening ${logo.fullName}`, 'info')}
+                    onClick={() => router.push(`/investor/${logo.id}`)}
                     className="absolute bg-white border border-zinc-200/80 shadow-md hover:shadow-lg px-4.5 py-3 rounded-[20px] flex flex-col justify-center gap-1 cursor-pointer select-none transition-all hover:border-zinc-350 h-[64px] shrink-0"
                   >
                     <div className="flex items-center gap-1.5 min-w-0">
@@ -442,16 +444,16 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">02 Investor Collections</h2>
             <p className="text-xs text-muted-foreground mt-1">Explore subsets of investors backing specific niches.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {collections.map((col, idx) => (
             <div
               key={idx}
-              onClick={() => toast(`Opening collection: ${col.title}`, 'info')}
+              onClick={() => router.push(`/investors?search=${encodeURIComponent(col.title)}`)}
               className="relative rounded-2xl overflow-hidden group shadow-xs h-[160px] cursor-pointer"
             >
               <img 
@@ -487,9 +489,9 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">03 Browse by Investor Type</h2>
             <p className="text-xs text-muted-foreground mt-1">Narrow down investors by asset class and ticket sizes.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         {/* 3-Column Grid for Browse by Investor Type, matching mockup's two rows of 3 columns */}
@@ -497,9 +499,9 @@ export default function InvestorsDiscoveryPage() {
           {types.map((type, idx) => {
             const Icon = type.icon;
             return (
-              <div
+              <Link
                 key={idx}
-                onClick={() => toast(`Filtering by: ${type.name}`, 'info')}
+                href={`/investors?search=${encodeURIComponent(type.name)}`}
                 className="p-5 rounded-2xl border bg-card hover:bg-secondary cursor-pointer transition-colors flex items-center gap-4 select-none"
               >
                 <span className={`p-2.5 rounded-xl shrink-0 ${type.color}`}>
@@ -509,7 +511,7 @@ export default function InvestorsDiscoveryPage() {
                   <h4 className="text-xs font-black truncate leading-none text-foreground">{type.name}</h4>
                   <p className="text-[10px] text-muted-foreground mt-1.5 leading-none">{type.count}</p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -570,9 +572,9 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">05 Investors Backing Winners</h2>
             <p className="text-xs text-muted-foreground mt-1">VC funds backing the most valuable frontier labs and application leaders.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -592,7 +594,7 @@ export default function InvestorsDiscoveryPage() {
               </div>
               <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-6">
                 <button 
-                  onClick={() => toast(`Opening details for ${winner.name}`, 'info')}
+                  onClick={() => router.push(`/investor/${winner.backedBy[0]?.id || 'andreessen-horowitz'}`)}
                   className="text-xs font-bold text-primary flex items-center gap-0.5 hover:underline"
                 >
                   View portfolio <ArrowRight className="w-3 h-3" />
@@ -612,24 +614,24 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">06 Capital Themes</h2>
             <p className="text-xs text-muted-foreground mt-1">Explore focus clusters backing thematic AI segments.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4">
           {themes.map((theme, idx) => {
             const Icon = theme.icon;
             return (
-              <div
+              <Link
                 key={idx}
-                onClick={() => toast(`Thematic cluster: ${theme.name}`, 'info')}
+                href={`/investors?search=${encodeURIComponent(theme.name)}`}
                 className="p-4 rounded-xl border bg-card text-center hover:shadow-xs transition-shadow cursor-pointer flex flex-col items-center justify-center h-[120px]"
               >
                 <Icon className={`w-6 h-6 mb-3 ${theme.color}`} />
                 <h4 className="text-xs font-black leading-tight text-foreground truncate w-full">{theme.name}</h4>
                 <span className="text-[9px] text-muted-foreground font-semibold mt-1.5">{theme.count}</span>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -644,26 +646,30 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">07 Emerging Investors</h2>
             <p className="text-xs text-muted-foreground mt-1">Specialized, AI-first managers and boutique funds scaling up active portfolios.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar items-center">
           {emerging.map((firm) => (
-            <div key={firm.name} className="w-[180px] p-5 rounded-2xl border bg-card flex flex-col justify-between h-[155px] shrink-0 hover:shadow-xs transition-shadow">
+            <Link
+              key={firm.name}
+              href={`/investors?search=${encodeURIComponent(firm.name)}`}
+              className="w-[180px] p-5 rounded-2xl border bg-card flex flex-col justify-between h-[155px] shrink-0 hover:shadow-md hover:scale-[1.02] transition-all"
+            >
               <InvestorLogo id={firm.logo} name={firm.name} className="w-12 h-12 shrink-0 rounded-xl" />
               <div className="mt-4">
                 <h4 className="text-sm font-black text-foreground leading-none">{firm.name}</h4>
                 <p className="text-[10px] text-muted-foreground mt-1">{firm.type}</p>
                 <p className="text-[9px] text-primary/80 font-bold mt-2.5 uppercase tracking-wide leading-none">{firm.stage}</p>
               </div>
-            </div>
+            </Link>
           ))}
           {/* Slider Arrow */}
-          <button className="w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center shadow-xs text-foreground hover:bg-secondary shrink-0 cursor-pointer">
+          <Link href="/investors" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center shadow-xs text-foreground hover:bg-secondary shrink-0">
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -676,16 +682,16 @@ export default function InvestorsDiscoveryPage() {
             <h2 className="text-xl font-black text-foreground">08 Investor Research</h2>
             <p className="text-xs text-muted-foreground mt-1">Market flow reports, rankings, and deep dives on syndicate movements.</p>
           </div>
-          <button className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+          <Link href="/investors" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
             View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {research.map((report, idx) => (
             <div
               key={idx}
-              onClick={() => toast(`Opening Report: ${report.title}`, 'info')}
+              onClick={() => router.push(`/investors?search=${encodeURIComponent(report.title)}`)}
               className="group p-4 rounded-xl border bg-card hover:shadow-xs transition-shadow cursor-pointer flex flex-col justify-between h-[180px] relative overflow-hidden"
             >
               {/* background graphic */}
@@ -720,12 +726,12 @@ export default function InvestorsDiscoveryPage() {
             <p className="text-xs text-white/55 leading-relaxed max-w-sm">
               Explore the relationships between investors, founders, companies, funding rounds and products.
             </p>
-            <button 
-              onClick={() => toast('Initializing Capital Graph engine...', 'info')}
-              className="mt-6 flex items-center justify-between px-5 py-3 rounded-full bg-primary text-white hover:bg-primary/90 font-semibold text-xs transition-all cursor-pointer shadow-md select-none"
+            <Link
+              href="/funding"
+              className="mt-6 inline-flex items-center justify-between px-5 py-3 rounded-full bg-primary text-white hover:bg-primary/90 font-semibold text-xs transition-all cursor-pointer shadow-md select-none"
             >
               Explore Capital Graph <ArrowRight className="w-4 h-4 ml-1.5" />
-            </button>
+            </Link>
           </div>
 
           {/* Interactive node path simulation with SVG flow */}
