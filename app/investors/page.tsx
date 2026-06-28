@@ -825,11 +825,11 @@ export default function InvestorsDiscoveryPage() {
           <span className="text-[9px] font-black text-primary uppercase tracking-widest leading-none">Join the GraphOne Investor Network</span>
           <h3 className="text-xl font-black text-foreground mt-2">Unlock better opportunities. Build what&apos;s next.</h3>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="#" className="px-5 py-2.5 border rounded-lg bg-card text-xs font-bold text-foreground hover:bg-secondary transition-colors">
+        <div className="flex items-center gap-3 shrink-0">
+          <Link href="#" className="px-5 py-2.5 border rounded-lg bg-card text-xs font-bold text-foreground hover:bg-secondary transition-colors whitespace-nowrap shrink-0">
             Log in
           </Link>
-          <Link href="#" className="px-5 py-2.5 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary/95 transition-colors">
+          <Link href="#" className="px-5 py-2.5 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary/95 transition-colors whitespace-nowrap shrink-0">
             Sign up for free
           </Link>
         </div>

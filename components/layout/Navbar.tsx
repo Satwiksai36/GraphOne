@@ -33,7 +33,7 @@ export function Navbar() {
               </svg>
             </span>
             <span className="text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary leading-none">
-              graphone
+              GraphOne
             </span>
           </Link>
 
@@ -77,11 +77,11 @@ export function Navbar() {
           </button>
 
           {/* Auth Actions */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer px-3 py-2">
+          <div className="hidden sm:flex items-center gap-3 shrink-0">
+            <button className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer px-3 py-2 whitespace-nowrap shrink-0">
               Log in
             </button>
-            <button className="text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/95 transition-all shadow-sm rounded-full px-4 py-2 cursor-pointer select-none">
+            <button className="text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/95 transition-all shadow-sm rounded-full px-4 py-2 cursor-pointer select-none whitespace-nowrap shrink-0">
               Sign up
             </button>
           </div>

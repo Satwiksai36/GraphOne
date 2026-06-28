@@ -29,7 +29,7 @@ export function Footer() {
                 </svg>
               </span>
               <span className="text-xl font-bold tracking-tight text-foreground">
-                graphone
+                GraphOne
               </span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">

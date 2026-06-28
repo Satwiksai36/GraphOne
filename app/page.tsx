@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Search, ArrowRight, Grid, List, Sparkles, Filter, 
-  RefreshCw, TrendingUp, DollarSign, Award, Bot, Code, Info
+  RefreshCw, TrendingUp, DollarSign, Award, Bot, Code, Info,
+  Brain, Zap, Play, Mic, Database, ChevronDown, Cpu
 } from 'lucide-react';
 
 // Import mock data
@@ -233,14 +234,15 @@ export default function CompaniesHomePage() {
                       handleCategorySelect(badge);
                     }
                   }}
-                  className="px-3.5 py-1.5 rounded-full border bg-card hover:bg-secondary text-xs text-muted-foreground font-semibold transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+                  className="px-3.5 py-1.5 rounded-full border bg-card hover:bg-secondary text-xs text-muted-foreground font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
                 >
-                  {badge === 'AI Agents' && <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />}
-                  {badge === 'AI Coding' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />}
-                  {badge === 'AI Search' && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
-                  {badge === 'AI Video' && <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />}
-                  {badge === 'AI Voice' && <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />}
-                  {badge === 'AI Infrastructure' && <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />}
+                  {badge === 'AI Agents' && <Cpu className="w-3.5 h-3.5 text-purple-500 shrink-0" />}
+                  {badge === 'AI Coding' && <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0 fill-amber-500/10" />}
+                  {badge === 'AI Search' && <Search className="w-3.5 h-3.5 text-blue-500 shrink-0" />}
+                  {badge === 'AI Video' && <Play className="w-3.5 h-3.5 text-rose-500 shrink-0 fill-rose-500/10" />}
+                  {badge === 'AI Voice' && <Mic className="w-3.5 h-3.5 text-emerald-500 shrink-0" />}
+                  {badge === 'AI Infrastructure' && <Database className="w-3.5 h-3.5 text-indigo-500 shrink-0" />}
+                  {badge === 'More' && <ChevronDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
                   {badge}
                 </button>
               ))}
