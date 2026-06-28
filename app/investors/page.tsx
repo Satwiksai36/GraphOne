@@ -43,42 +43,54 @@ export default function InvestorsDiscoveryPage() {
       id: 'andreessen-horowitz',
       name: 'a16z',
       fullName: 'Andreessen Horowitz',
-      gradient: 'from-[#ff4600] to-[#ff007f] shadow-orange-500/10',
+      bg: 'bg-linear-to-br from-[#ff4600] to-[#ff007f]',
+      shadow: 'shadow-orange-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['AI Infrastructure', 'AI Agents', 'Developer Tools']
     },
     {
       id: 'sequoia-capital',
       name: 'SEQUOIA',
       fullName: 'Sequoia Capital',
-      gradient: 'from-[#004d3d] to-[#002f23] shadow-emerald-500/10',
+      bg: 'bg-linear-to-br from-[#004d3d] to-[#002f23]',
+      shadow: 'shadow-emerald-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['AI Infra', 'Enterprise AI', 'Global Scale']
     },
     {
       id: 'lightspeed-venture-partners',
       name: 'Lightspeed',
       fullName: 'Lightspeed Venture Partners',
-      gradient: 'from-[#1e293b] to-[#0f172a] shadow-blue-500/10',
+      bg: 'bg-linear-to-br from-[#1e293b] to-[#0f172a]',
+      shadow: 'shadow-blue-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['Early Stage', 'AI/ML', 'Enterprise']
     },
     {
       id: 'khosla-ventures',
       name: 'Khosla Ventures',
       fullName: 'Khosla Ventures',
-      gradient: 'from-[#111111] to-[#222222] shadow-zinc-500/10',
+      bg: 'bg-linear-to-br from-[#111111] to-[#222222]',
+      shadow: 'shadow-zinc-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['Deep Tech', 'AI', 'Frontier']
     },
     {
       id: 'accel',
       name: 'Accel',
       fullName: 'Accel Partners',
-      gradient: 'from-[#df1921] to-[#f43f5e] shadow-rose-500/10',
+      bg: 'bg-linear-to-br from-[#df1921] to-[#f43f5e]',
+      shadow: 'shadow-rose-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['Early Stage', 'Consumer AI', 'Enterprise']
     },
     {
       id: 'general-catalyst',
       name: 'General Catalyst',
       fullName: 'General Catalyst',
-      gradient: 'from-[#4b2f89] to-[#6d28d9] shadow-purple-500/10',
+      bg: 'bg-linear-to-br from-[#4b2f89] to-[#6d28d9]',
+      shadow: 'shadow-purple-500/20',
+      badgeStyle: 'bg-white/10 text-white border-white/20',
       tags: ['Seed to Growth', 'AI First', 'Platform']
     }
   ];
@@ -401,37 +413,45 @@ export default function InvestorsDiscoveryPage() {
           {trendingInvestors.map((investor) => (
             <Link key={investor.id} href={`/investor/${investor.id}`} className="shrink-0">
               <motion.div
-                whileHover={{ y: -4, scale: 1.01 }}
-                className={`w-[240px] h-[260px] rounded-[24px] p-6 bg-linear-to-br ${investor.gradient} text-white flex flex-col justify-between shadow-xl relative overflow-hidden group`}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className={`w-[240px] h-[260px] rounded-[24px] p-6 bg-linear-to-br ${investor.bg} bg-[length:200%_200%] animate-gradient-shift text-white flex flex-col justify-between shadow-xl ${investor.shadow} relative overflow-hidden group cursor-pointer transition-all duration-300`}
               >
-                {/* Glow element */}
-                <div className="absolute -right-8 -top-8 w-20 h-20 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-300" />
+                {/* Glowing floating fluid circle backdrop inside the card */}
+                <span className="absolute -right-12 -top-12 w-28 h-28 rounded-full bg-white/15 blur-xl pointer-events-none animate-card-glow-1 group-hover:scale-150 transition-all duration-700" />
+                <span className="absolute -left-12 -bottom-12 w-24 h-24 rounded-full bg-black/10 blur-xl pointer-events-none animate-card-glow-2 group-hover:scale-150 transition-all duration-700" />
                 
-                <div>
-                  <InvestorLogo id={investor.id} name={investor.fullName} className="w-12 h-12 shrink-0 rounded-2xl" />
-                  <h3 className="text-lg font-black mt-6 leading-tight group-hover:underline">
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-md overflow-hidden shrink-0">
+                      <InvestorLogo id={investor.id} name={investor.fullName} className="w-10 h-10 border-none bg-transparent" />
+                    </div>
+                    <span className="w-2.5 h-2.5 rounded-full bg-white/95 animate-pulse" />
+                  </div>
+                  
+                  <h3 className="text-base font-black mt-5 leading-tight group-hover:underline text-white">
                     {investor.name}
                   </h3>
-                  <div className="flex flex-col gap-1 mt-4">
-                    {investor.tags.map((tag, idx) => (
-                      <span key={idx} className="text-[10px] text-white/70 leading-none">
+                  
+                  <div className="flex flex-wrap gap-1.5 mt-3.5">
+                    {investor.tags.slice(0, 2).map((tag, idx) => (
+                      <span key={idx} className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${investor.badgeStyle}`}>
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold">
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold relative z-10 text-white/80 group-hover:text-white transition-colors">
                   <span>View portfolio</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 transition-all group-hover:translate-x-1.5 text-white" />
                 </div>
               </motion.div>
             </Link>
           ))}
           {/* Slider Arrow */}
-          <button className="w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center shadow-xs text-foreground hover:bg-secondary shrink-0 cursor-pointer">
+          <Link href="/investors" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center shadow-xs text-foreground hover:bg-secondary shrink-0">
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -748,14 +768,47 @@ export default function InvestorsDiscoveryPage() {
                 return (
                   <React.Fragment key={step.name}>
                     {idx > 0 && (
-                      <span className="text-white/20 font-mono text-xs shrink-0 flex items-center justify-center">&rarr;</span>
+                      <div className="w-8 h-4 shrink-0 flex items-center justify-center">
+                        <svg className="w-full h-full text-white/20 overflow-visible" viewBox="0 0 32 16" fill="none">
+                          <path
+                            id={`flow-path-${idx}`}
+                            d="M0 8h32"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeDasharray="4 4"
+                          />
+                          {/* Pulsing light particle flowing along the path */}
+                          <circle r="3" fill="#ff3366">
+                            <animateMotion
+                              path="M0 8h32"
+                              dur="1.8s"
+                              repeatCount="indefinite"
+                              begin={`${idx * 0.3}s`}
+                            />
+                          </circle>
+                        </svg>
+                      </div>
                     )}
-                    <div className="flex flex-col items-center gap-2">
-                      <span className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 shadow-lg ${step.color}`}>
-                        <Icon className="w-5 h-5" />
-                      </span>
+                    <motion.div 
+                      className="flex flex-col items-center gap-2 cursor-pointer"
+                      animate={{ y: [0, -6, 0] }}
+                      transition={{
+                        duration: 3.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: idx * 0.4
+                      }}
+                    >
+                      <motion.span 
+                        className={`w-12 h-12 rounded-full border flex items-center justify-center shrink-0 shadow-lg ${step.color}`}
+                        whileHover={{ scale: 1.2, rotate: 8, borderColor: '#ff3366' }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <Icon className="w-5 h-5 animate-pulse" style={{ animationDuration: '3s' }} />
+                      </motion.span>
                       <span className="text-[10px] font-bold text-white/70 text-center truncate w-16">{step.name}</span>
-                    </div>
+                    </motion.div>
                   </React.Fragment>
                 );
               })}

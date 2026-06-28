@@ -113,8 +113,14 @@ export default function JobsDiscoveryPage() {
     });
   }, [allJobs, searchQuery, selectedDept, selectedLocation]);
 
-  const handleApply = (jobTitle: string, companyName: string) => {
-    toast(`Redirecting to application portal for ${jobTitle} at ${companyName}`, 'success');
+  const handleApply = (jobTitle: string, companyName: string, website?: string) => {
+    toast(`Redirecting to application portal for ${jobTitle} at ${companyName}...`, 'success');
+    setTimeout(() => {
+      const careersUrl = website 
+        ? (website.startsWith('http') ? website : `https://${website}`) 
+        : `https://google.com/search?q=${encodeURIComponent(jobTitle + " " + companyName + " careers")}`;
+      window.open(careersUrl, '_blank');
+    }, 1000);
   };
 
   return (
@@ -276,7 +282,7 @@ export default function JobsDiscoveryPage() {
                     </Link>
 
                     <button
-                      onClick={() => handleApply(job.title, job.companyName)}
+                      onClick={() => handleApply(job.title, job.companyName, company?.website)}
                       className="px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-xs cursor-pointer select-none"
                     >
                       APPLY NOW

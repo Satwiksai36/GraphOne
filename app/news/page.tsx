@@ -169,8 +169,9 @@ export default function NewsDiscoveryPage() {
 
         {filteredNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredNews.map((article) => {
+             {filteredNews.map((article) => {
               const company = companies.find(c => c.id === article.companyId);
+              const storyUrl = article.url || `https://google.com/search?q=${encodeURIComponent(article.title + " " + article.source)}`;
               return (
                 <div 
                   key={article.id}
@@ -188,7 +189,7 @@ export default function NewsDiscoveryPage() {
                     </div>
 
                     <a 
-                      href={article.url}
+                      href={storyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block text-base font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-snug hover:text-primary transition-colors cursor-pointer"
@@ -211,7 +212,7 @@ export default function NewsDiscoveryPage() {
                     )}
 
                     <a
-                      href={article.url}
+                      href={storyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors select-none"
