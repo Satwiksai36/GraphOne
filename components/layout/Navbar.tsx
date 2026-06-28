@@ -26,13 +26,13 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Brand Area */}
         <div className="flex items-center gap-6 sm:gap-8">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/20 transition-transform group-hover:scale-105 duration-200">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/20 transition-transform group-hover:scale-105 duration-200">
+              <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                 <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z" />
               </svg>
             </span>
-            <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary leading-none">
+            <span className="text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary leading-none">
               graphone
             </span>
           </Link>

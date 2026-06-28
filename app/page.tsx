@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
@@ -35,6 +35,20 @@ export default function CompaniesHomePage() {
   const [sortBy, setSortBy] = useState<string>('trending');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [visibleCount, setVisibleCount] = useState(12);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+        setTimeout(() => {
+          directoryRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 200);
+      }
+    }
+  }, []);
 
   // ----------------------------------------------------
   // Static lists based on mock database properties

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Calendar, Newspaper, ArrowUpRight, TrendingUp, Filter, Sparkles, User, Link as LinkIcon, Compass } from 'lucide-react';
 import { news, companies } from '@/data/mockDb';
@@ -21,6 +21,17 @@ export default function NewsDiscoveryPage() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSource, setSelectedSource] = useState('All');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+      }
+    }
+  }, []);
 
   // Available sources list
   const sources = useMemo(() => {

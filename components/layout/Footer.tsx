@@ -22,13 +22,13 @@ export function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           {/* Brand & Bio */}
           <div className="space-y-6">
-            <Link href="/" className="flex items-center gap-2 group">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white shadow-md shadow-primary/20">
-                <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white shadow-md shadow-primary/20">
+                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                   <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z"/>
                 </svg>
               </span>
-              <span className="text-lg font-bold tracking-tight text-foreground">
+              <span className="text-xl font-bold tracking-tight text-foreground">
                 graphone
               </span>
             </Link>

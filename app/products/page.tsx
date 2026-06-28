@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -30,6 +30,17 @@ export default function ProductsPage() {
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [visibleCount, setVisibleCount] = useState(10);
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+      }
+    }
+  }, []);
 
   // Track upvoted states locally for rich interactive feed
   const [localProducts, setLocalProducts] = useState<Product[]>(products);
@@ -82,9 +93,15 @@ export default function ProductsPage() {
   // Filter & Sort list
   const filteredProducts = useMemo(() => {
     return localProducts.filter((p) => {
+      const coObj = companies.find(c => c.id === p.companyId);
+      const companyName = coObj ? coObj.name : '';
+
       const matchesSearch = 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.tagline.toLowerCase().includes(searchQuery.toLowerCase());
+        p.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        p.categories.some(c => c.toLowerCase().includes(searchQuery.toLowerCase()));
       
       const matchesCategory = 
         selectedCategory === 'All' ||
@@ -148,7 +165,7 @@ export default function ProductsPage() {
             {/* Most searched */}
             <div className="flex flex-wrap items-center gap-2 pt-2 text-[10px] text-muted-foreground">
               <span className="font-bold">Most searched:</span>
-              {['Databricks', 'Notion', 'Pinecone', 'Weaviate', 'LangChain'].map(tag => (
+              {['OpenAI', 'Cursor', 'Perplexity', 'Pinecone', 'Lovable', 'Groq'].map(tag => (
                 <button
                   key={tag}
                   onClick={() => setSearchQuery(tag)}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, DollarSign, Calendar, TrendingUp, Award, Layers, ArrowUpRight, Check, TrendingDown } from 'lucide-react';
 import { fundingRounds, companies } from '@/data/mockDb';
@@ -21,6 +21,17 @@ export default function FundingDiscoveryPage() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStage, setSelectedStage] = useState('All');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+      }
+    }
+  }, []);
 
   // Stages filter options
   const stages = ['All', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'];

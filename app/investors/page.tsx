@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
@@ -15,6 +15,17 @@ import { CompanyLogo, InvestorLogo } from '@/components/common/BrandLogo';
 export default function InvestorsDiscoveryPage() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+      }
+    }
+  }, []);
 
   // Filtering list based on search
   const filteredInvestors = useMemo(() => {

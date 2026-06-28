@@ -1161,7 +1161,7 @@ for (let i = 0; i < 144; i++) {
   const companyObj = companies[i % companies.length] || companies[0];
   const company = companyObj.name;
   const template = newsTemplates[i % newsTemplates.length];
-  let title = template
+  const title = template
     .replace('{company}', company)
     .replace('{number}', templateNumbers[i % templateNumbers.length])
     .replace('{round}', templateRounds[i % templateRounds.length])

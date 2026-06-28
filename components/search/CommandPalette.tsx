@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Building2, User, Sparkles, UserCheck, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -18,7 +18,6 @@ interface SearchResult {
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   
   const router = useRouter();
@@ -43,16 +42,14 @@ export function CommandPalette() {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedIndex(0);
     }
   }, [isOpen]);
 
-  // Search logic
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
+  // Search logic computed on render
+  const results = useMemo<SearchResult[]>(() => {
+    if (!query.trim()) return [];
 
     const searchTerm = query.toLowerCase();
     
@@ -103,8 +100,7 @@ export function CommandPalette() {
         };
       });
 
-    setResults([...matchedCompanies, ...matchedInvestors, ...matchedProducts, ...matchedFounders]);
-    setSelectedIndex(0);
+    return [...matchedCompanies, ...matchedInvestors, ...matchedProducts, ...matchedFounders];
   }, [query]);
 
   // Handle arrows and Enter inside search modal
@@ -182,7 +178,10 @@ export function CommandPalette() {
                   type="text"
                   placeholder="Search companies, founders, products, investors..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSelectedIndex(0);
+                  }}
                   onKeyDown={handleKeyDown}
                   className="bg-transparent border-0 outline-0 ring-0 w-full text-foreground placeholder-muted-foreground text-sm md:text-base focus:outline-hidden"
                 />

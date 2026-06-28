@@ -193,18 +193,50 @@ function AbstractLogo({ name, className = 'w-full h-full' }: { name: string; cla
   );
 }
 
+// Safelist classes to ensure Tailwind compiles the dynamically generated scaled sizing utilities:
+// w-5 h-5 w-6 h-6 w-8 h-8 w-9 h-9 w-10 h-10 w-11 h-11 w-12 h-12 w-14 h-14 w-16 h-16 w-20 h-20 w-28 h-28 w-32 h-32
+
+// Helper to scale logo sizing classes by approximately 20-30%
+function scaleClassName(className: string): string {
+  if (!className) return className;
+  return className.split(/\s+/).map(cls => {
+    const match = cls.match(/^(w|h)-(\d+(\.\d+)?)$/);
+    if (match) {
+      const [, side, sizeStr] = match;
+      const size = parseFloat(sizeStr);
+      let newSize = size;
+      if (size === 4) newSize = 5;
+      else if (size === 6) newSize = 8;
+      else if (size === 7) newSize = 9;
+      else if (size === 8) newSize = 10;
+      else if (size === 9) newSize = 11;
+      else if (size === 10) newSize = 12;
+      else if (size === 11) newSize = 14;
+      else if (size === 12) newSize = 14;
+      else if (size === 14) newSize = 16;
+      else if (size === 24) newSize = 28;
+      else {
+        newSize = Math.ceil(size * 1.25);
+      }
+      return `${side}-${newSize}`;
+    }
+    return cls;
+  }).join(' ');
+}
+
 export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
+  className = scaleClassName(className);
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 
   // 1. Check if we have a local public logo asset
   if (localLogos[normId]) {
     return (
-      <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+      <div className={`rounded-xl bg-white border flex items-center justify-center overflow-hidden shrink-0 select-none ${className}`}>
         <img 
           src={localLogos[normId]} 
           alt={name} 
-          className="w-full h-full object-contain rounded-lg"
+          className="w-full h-full object-contain"
         />
       </div>
     );
@@ -217,24 +249,24 @@ export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 
   if (domain && loadState !== 'fallback') {
     if (loadState === 'hunter') {
       return (
-        <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+        <div className={`rounded-xl bg-white border flex items-center justify-center overflow-hidden shrink-0 select-none ${className}`}>
           <img 
             src={`https://logos.hunter.io/${domain}`} 
             alt={name} 
             onError={() => setLoadState('google')}
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-contain"
           />
         </div>
       );
     }
     if (loadState === 'google') {
       return (
-        <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+        <div className={`rounded-xl bg-white border flex items-center justify-center overflow-hidden shrink-0 select-none ${className}`}>
           <img 
             src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} 
             alt={name} 
             onError={() => setLoadState('fallback')}
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-contain"
           />
         </div>
       );
@@ -254,8 +286,8 @@ export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 
 
   if (normId.includes('anthropic')) {
     return (
-      <div className={`rounded-xl bg-[#191919] flex items-center justify-center text-[#cc9f7a] font-extrabold border border-[#cc9f7a]/25 shrink-0 ${className}`}>
-        <svg className="w-6 h-6 stroke-current fill-none stroke-2.5" viewBox="0 0 24 24">
+      <div className={`rounded-xl bg-[#191919] flex items-center justify-center text-[#cc9f7a] font-extrabold border border-[#cc9f7a]/25 shrink-0 p-1.5 ${className}`}>
+        <svg className="w-[60%] h-[60%] stroke-current fill-none stroke-2.5" viewBox="0 0 24 24">
           <path d="M4 20L12 4L20 20M6 16H18" />
         </svg>
       </div>
@@ -302,6 +334,7 @@ export function CompanyLogo({ id, name, domain: passedDomain, className = 'w-10 
 }
 
 export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10 h-10' }: LogoProps) {
+  className = scaleClassName(className);
   const normId = id.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const [loadState, setLoadState] = useState<'hunter' | 'google' | 'fallback'>('hunter');
 
@@ -312,24 +345,24 @@ export function InvestorLogo({ id, name, domain: passedDomain, className = 'w-10
   if (domain && loadState !== 'fallback') {
     if (loadState === 'hunter') {
       return (
-        <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+        <div className={`rounded-xl bg-white border flex items-center justify-center overflow-hidden shrink-0 select-none ${className}`}>
           <img 
             src={`https://logos.hunter.io/${domain}`} 
             alt={name} 
             onError={() => setLoadState('google')}
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-contain"
           />
         </div>
       );
     }
     if (loadState === 'google') {
       return (
-        <div className={`rounded-xl bg-white border flex items-center justify-center p-1.5 overflow-hidden shrink-0 select-none ${className}`}>
+        <div className={`rounded-xl bg-white border flex items-center justify-center overflow-hidden shrink-0 select-none ${className}`}>
           <img 
             src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`} 
             alt={name} 
             onError={() => setLoadState('fallback')}
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-contain"
           />
         </div>
       );

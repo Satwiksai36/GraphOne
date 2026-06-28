@@ -112,7 +112,7 @@ export function CompanyEcosystemGraph({ company }: EcosystemGraphProps) {
           {/* Connection Lines */}
           {nodes
             .filter((node) => node.category !== 'core')
-            .map((node) => {
+            .map((node, idx) => {
               const isSelected = activeCategory === null || activeCategory === node.category;
               const isHovered = hoveredNode?.id === node.id;
               
@@ -141,7 +141,7 @@ export function CompanyEcosystemGraph({ company }: EcosystemGraphProps) {
                         duration: 3,
                         repeat: Infinity,
                         ease: 'easeInOut',
-                        delay: Math.random() * 2
+                        delay: (idx * 0.4) % 2
                       }}
                     />
                   )}

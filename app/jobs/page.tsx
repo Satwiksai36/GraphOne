@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Briefcase, MapPin, Users, Building, ArrowUpRight, CheckCircle, Flame, Sparkles, Terminal, Code, Cpu, ShieldAlert, BadgeInfo } from 'lucide-react';
 import { companies } from '@/data/mockDb';
@@ -22,6 +22,17 @@ export default function JobsDiscoveryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('search');
+      if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSearchQuery(q);
+      }
+    }
+  }, []);
 
   // Retrieve all jobs across all companies dynamically
   const allJobs = useMemo(() => {
