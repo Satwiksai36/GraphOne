@@ -110,11 +110,30 @@ $$\text{Trending Score} = (\text{views7d} \times 1.5) + (\text{growthRate} \time
 
 ---
 
-## 🔮 What would you build next if you had 2 more days?
+## 🕸️ Graph Database Modeling & Relationship Layer
 
-If granted an additional two days, I would implement the following high-impact features:
+GraphOne implements a relational-to-graph mapping layer that bridges the **Supabase PostgreSQL** relational tables with the interactive frontend SVG **Ecosystem Graph**:
 
-1. **AI Market Search Assistant (RAG)**: Integrate an LLM agent that processes user questions like *"Which generative AI startups in SF raised Series A recently?"* using Vector Search embeddings (via pgvector) over company profiles, news items, and patents.
-2. **Real-Time Notification Gateways**: Implement WebSockets (`Socket.io`) to stream instant updates (new funding announcements, product launches) directly to the user dashboard.
-3. **Interactive Graph Sandbox**: Expand the SVG AI Ecosystem Graph into an editable canvas, allowing verified analysts to drag-and-drop links, add new competitor edges, and propose modifications.
-4. **Compare Mode**: Build a comparison dashboard allowing users to overlay multiple startups' capitalization tables, headcount metrics, and funding histories on a single multi-line Recharts chart.
+1. **Relation Modeling**:
+   - **Competitors**: Modeled as a self-referential many-to-many relationship on `Company` via the `Competitor` junction table, supporting both direct and adjacent classifications (`isAdjacent: boolean`).
+   - **Investors**: Modeled as a many-to-many link between `Company` and `Investor` via the `CompanyInvestor` junction table, categorizing funding round types (e.g. `seed`, `series`, `growth`).
+   - **Founders & Products**: Modeled as one-to-many structures mapped dynamically inside the schema.
+
+2. **The 1-Hop Ecosystem API (`GET /api/companies/:slug/graph`)**:
+   - The query automatically maps nested relations (co-investors, competitors, founders, and products) of a given target company node, returning a clean graph layout of vertices and connection edges in a single request:
+     ```json
+     {
+       "nodes": [
+         { "id": "openai", "label": "OpenAI", "type": "company" },
+         { "id": "anthropic", "label": "Anthropic", "type": "competitor" }
+       ],
+       "links": [
+         { "source": "openai", "target": "anthropic", "type": "competitor" }
+       ]
+     }
+     ```
+
+3. **Frontend Vector Projection**:
+   - The React ecosystem graph maps these nodes onto dynamic SVG nodes and edges, drawing spring-like animations with Framer Motion, and enabling hover cards for interactive relationship queries.
+
+
