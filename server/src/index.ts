@@ -23,7 +23,15 @@ app.use(helmet({
 
 // 2. Enable CORS
 app.use(cors({
-  origin: env.CORS_ORIGIN === '*' ? '*' : env.CORS_ORIGIN.split(','),
+  origin: (origin, callback) => {
+    // Allow all origins (reflect the request origin), required for cross-origin + credentials support
+    const allowedOrigins = env.CORS_ORIGIN === '*' ? null : env.CORS_ORIGIN.split(',').map(o => o.trim());
+    if (!origin || !allowedOrigins || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      callback(null, origin || '*');
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
