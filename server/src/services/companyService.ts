@@ -2,11 +2,21 @@ import { CompanyRepository } from '../repositories/companyRepository';
 
 export function mapCompanyToFrontend(dbCompany: any) {
   if (!dbCompany) return null;
+  
+  const productVotes = (dbCompany.products || []).reduce((sum: number, p: any) => sum + (p.votesCount || 0), 0);
+  const trendingScore = Math.round(
+    (dbCompany.views7d || 0) * 1.5 + 
+    (dbCompany.growthRate || 0) * 2.0 + 
+    productVotes * 0.4 + 
+    (dbCompany.confidenceScore || 0) * 15
+  );
+
   return {
     ...dbCompany,
     logoUrl: dbCompany.logo,
     location: dbCompany.hq,
     categories: dbCompany.category ? [dbCompany.category] : [],
+    trendingScore,
     fundingTimeline: (dbCompany.fundingRounds || []).map((r: any) => ({
       round: r.round,
       date: r.date,

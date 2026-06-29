@@ -91,4 +91,30 @@ Open another terminal in the root directory:
 npm install
 npm run dev
 ```
-*The user interface will start at `http://localhost:3000`.*
+*The application will be served locally at `http://localhost:3000`.*
+
+---
+
+## 📈 Open-Ended Challenge: Trending Score Formula
+
+We compute a dynamic `trendingScore` for each company inside the backend service mapper layer (`mapCompanyToFrontend`). 
+
+### Formula
+$$\text{Trending Score} = (\text{views7d} \times 1.5) + (\text{growthRate} \times 2.0) + (\text{productVotes} \times 0.4) + (\text{confidenceScore} \times 15)$$
+
+### Reasoning:
+- **`views7d` (1.5x weight)**: Represents immediate user interest and velocity of traffic on the platform.
+- **`growthRate` (2.0x weight)**: Heavily weights operational momentum (employee headcount growth velocity), which is the strongest signal of commercial scale.
+- **`productVotes` (0.4x weight)**: Factors in developer and community interest in products launched by the company.
+- **`confidenceScore` (15x weight)**: Acts as a quality modifier, rewarding verified, high-confidence profiles to prevent unverified entries from spamming the top trending feed.
+
+---
+
+## 🔮 What would you build next if you had 2 more days?
+
+If granted an additional two days, I would implement the following high-impact features:
+
+1. **AI Market Search Assistant (RAG)**: Integrate an LLM agent that processes user questions like *"Which generative AI startups in SF raised Series A recently?"* using Vector Search embeddings (via pgvector) over company profiles, news items, and patents.
+2. **Real-Time Notification Gateways**: Implement WebSockets (`Socket.io`) to stream instant updates (new funding announcements, product launches) directly to the user dashboard.
+3. **Interactive Graph Sandbox**: Expand the SVG AI Ecosystem Graph into an editable canvas, allowing verified analysts to drag-and-drop links, add new competitor edges, and propose modifications.
+4. **Compare Mode**: Build a comparison dashboard allowing users to overlay multiple startups' capitalization tables, headcount metrics, and funding histories on a single multi-line Recharts chart.
