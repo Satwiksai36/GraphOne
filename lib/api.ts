@@ -35,7 +35,10 @@ apiClient.interceptors.response.use(
       code: 'NETWORK_ERROR',
       message: 'Failed to communicate with the GraphOne server.',
     };
-    return Promise.reject(errorData);
+    // Reject with a proper Error object to ensure it logs cleanly in consoles (not as empty `{}`)
+    const apiError = new Error(errorData.message) as any;
+    apiError.code = errorData.code;
+    return Promise.reject(apiError);
   }
 );
 

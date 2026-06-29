@@ -13,6 +13,9 @@ import { rateLimiter } from './middlewares/rateLimiter';
 
 const app = express();
 
+// Enable trust proxy so express-rate-limit can detect client IPs correctly behind reverse proxies (like Vercel, Render)
+app.set('trust proxy', 1);
+
 // 1. Security Headers (Helmet)
 app.use(helmet({
   contentSecurityPolicy: false, // Keep it disabled to allow swagger ui assets to load easily
