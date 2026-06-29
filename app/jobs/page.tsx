@@ -289,7 +289,7 @@ export default function JobsDiscoveryPage() {
                       id={job.companyId} 
                       name={job.companyName} 
                       domain={extractDomain(company?.website)} 
-                      className="w-13 h-13 shrink-0 rounded-2xl" 
+                      className="w-12 h-12 shrink-0 rounded-2xl" 
                     />
                     
                     <div className="min-w-0 space-y-1.5 flex-1">

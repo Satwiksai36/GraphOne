@@ -243,7 +243,7 @@ export default function FundingDiscoveryPage() {
                       id={deal.companyId} 
                       name={deal.companyName} 
                       domain={extractDomain(company?.website)} 
-                      className="w-13 h-13 shrink-0 rounded-2xl"
+                      className="w-12 h-12 shrink-0 rounded-2xl"
                       noScale
                     />
                     
