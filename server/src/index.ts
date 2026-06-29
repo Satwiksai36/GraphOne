@@ -21,20 +21,11 @@ app.use(helmet({
   contentSecurityPolicy: false, // Keep it disabled to allow swagger ui assets to load easily
 }));
 
-// 2. Enable CORS
+// 2. Enable CORS - use wildcard to allow all origins (JWT auth uses Authorization headers, not cookies)
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow all origins (reflect the request origin), required for cross-origin + credentials support
-    const allowedOrigins = env.CORS_ORIGIN === '*' ? null : env.CORS_ORIGIN.split(',').map(o => o.trim());
-    if (!origin || !allowedOrigins || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
-      callback(null, origin || '*');
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
 }));
 
 // 3. Rate Limiter
