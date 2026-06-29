@@ -27,13 +27,16 @@ export function Navbar() {
         {/* Left Brand Area */}
         <div className="flex items-center gap-6 sm:gap-8">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/20 transition-transform group-hover:scale-105 duration-200">
-              <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                <path d="M12 2L2 22h20L12 2zm0 4.8l6.4 12.4H5.6L12 6.8z" />
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-primary shadow-xs transition-transform group-hover:scale-105 duration-200">
+              <svg className="w-6 h-6 fill-none" viewBox="0 0 24 24">
+                <path d="M5 18H19 M10 11V18 M14 15V18" className="stroke-zinc-200 dark:stroke-zinc-800" strokeWidth="1" strokeLinecap="round" />
+                <path d="M5 17L10 11L14 15L19 7" className="stroke-primary" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="19" cy="7" r="2.5" className="fill-primary" />
+                <circle cx="19" cy="7" r="1" className="fill-background" />
               </svg>
             </span>
             <span className="text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary leading-none">
-              GraphOne
+              Graph<span className="text-primary">One</span>
             </span>
           </Link>
 
