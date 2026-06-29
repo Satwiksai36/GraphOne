@@ -142,6 +142,12 @@ async function main() {
       foundedYear: 1972,
       type: ['VC', 'Growth Equity', 'Private Equity'],
       isVerified: true,
+      keyPeople: [
+        { name: 'Roelof Botha', role: 'Managing Partner', avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&auto=format&fit=crop&q=80' },
+        { name: 'Pat Grady', role: 'Managing Partner', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&auto=format&fit=crop&q=80' },
+        { name: 'Doug Leone', role: 'Managing Partner', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' },
+        { name: 'Alfred Lin', role: 'Partner', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80' }
+      ],
       thesis: 'We partner early with builders. In AI, we believe the infrastructure layer is setting the foundation, but the true breakout value will live in specialized vertical agents and integrated cognitive developer workflows.',
       preferredStages: ['Seed', 'Series A', 'Series B', 'Growth'],
       portfolioConcentration: [
@@ -235,6 +241,10 @@ async function main() {
       foundedYear: 2009,
       type: ['VC', 'Growth', 'Crypto'],
       isVerified: true,
+      keyPeople: [
+        { name: 'Marc Andreessen', role: 'Co-founder & GP', avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&auto=format&fit=crop&q=80' },
+        { name: 'Ben Horowitz', role: 'Co-founder & GP', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' }
+      ],
       thesis: 'Software is eating the world, and AI is digesting it. We invest heavily in open-source AI, foundation models, and AI agent frameworks.',
       preferredStages: ['Seed', 'Series A', 'Series B', 'Growth'],
       portfolioConcentration: [
@@ -336,6 +346,10 @@ async function main() {
         foundedYear: 1980 + (i * 2),
         type: ['VC', 'Growth Equity'],
         isVerified: i % 3 === 0,
+        keyPeople: [
+          { name: 'Sarah Guo', role: 'General Partner', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80' },
+          { name: 'Elad Gil', role: 'Super Angel', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' }
+        ],
         thesis: 'We believe AI is transforming every industry vertical. We invest in both foundational models and application software layers.',
         preferredStages: ['Seed', 'Series A', 'Series B'],
         portfolioConcentration: [

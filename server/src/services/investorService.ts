@@ -5,6 +5,7 @@ export function mapInvestorToFrontend(dbInvestor: any) {
   if (!dbInvestor) return null;
   return {
     ...dbInvestor,
+    keyPeople: dbInvestor.keyPeople || [],
     portfolioConcentration: dbInvestor.portfolioConcentration || [],
     investmentVelocity: dbInvestor.investmentVelocity || [],
     capitalFlow: dbInvestor.capitalFlow || { increasing: [], decreasing: [] },

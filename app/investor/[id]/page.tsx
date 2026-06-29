@@ -169,7 +169,7 @@ export default function InvestorProfilePage({ params }: PageProps) {
           <div className="flex flex-col gap-2 shrink-0">
             <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest leading-none">Key people</p>
             <div className="flex items-center gap-2 mt-1">
-              {investor.keyPeople.map((person, idx) => (
+              {(investor.keyPeople || []).map((person, idx) => (
                 <div key={idx} className="w-10 h-10 rounded-full border bg-secondary overflow-hidden shadow-xs shrink-0" title={`${person.name} (${person.role})`}>
                   <img src={person.avatarUrl} alt={person.name} className="w-full h-full object-cover" />
                 </div>
