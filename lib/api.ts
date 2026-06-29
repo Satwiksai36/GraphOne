@@ -1,10 +1,8 @@
 import axios from 'axios';
 import { Company, Investor, Product, NewsArticle, Founder, FundingRound } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-if (typeof window !== 'undefined') {
-  console.log('[GraphOne Client] Base API URL:', API_BASE_URL);
-}
+// Always use /api as the base — Next.js rewrites proxy this to the backend (no CORS issues)
+const API_BASE_URL = '/api';
 
 // Create Axios Instance
 export const apiClient = axios.create({
